@@ -49,7 +49,14 @@ public class Vector extends Point{
     }
 
     public Vector crossProduct(Vector rightVec){
-        return new Vector(
+        //Check if right vector is zero
+        if(rightVec.equals(Point.ZERO)) throw new IllegalArgumentException("Cross-Product of zero vectors is not allowed");
+
+        //Check if vectors are parallel
+        if(this.xyz.d1() / rightVec.xyz.d1() == this.xyz.d2() / rightVec.xyz.d2() && this.xyz.d2() / rightVec.xyz.d2() == this.xyz.d3() / rightVec.xyz.d3())
+            throw new IllegalArgumentException("Cross-Product of parallel vectors is not allowed");
+
+        return  new Vector(
                 this.xyz.d2()*rightVec.xyz.d3() - this.xyz.d3()*rightVec.xyz.d2(),
                 this.xyz.d2()* rightVec.xyz.d1() - this.xyz.d1()* rightVec.xyz.d3(),
                 this.xyz.d1()*rightVec.xyz.d2() - this.xyz.d2()*rightVec.xyz.d1()
