@@ -1,5 +1,8 @@
 package primitives;
 
+/**
+ * Represents a ray in 3D space, defined by a starting point and a direction vector.
+ */
 public class Ray {
     private final Point head;
     private final Vector direction;

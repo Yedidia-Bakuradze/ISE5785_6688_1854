@@ -1,5 +1,9 @@
 package primitives;
 
+/**
+ * Represents a vector in 3D space.
+ * Provides methods for vector arithmetic and operations such as dot product and cross product.
+ */
 public class Vector extends Point{
 
     public Vector(double x, double y, double z) {
