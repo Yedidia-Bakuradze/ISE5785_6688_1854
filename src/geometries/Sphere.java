@@ -20,11 +20,6 @@ public class Sphere extends RadialGeometry {
         this.center = center;
     }
 
-    /**
-     * Calculates the normal vector to the sphere at a given point.
-     * @param point The point on the sphere's surface.
-     * @return The normal vector at the given point.
-     */
     @Override
     public Vector getNormal(Point point) {
         return null; // Implementation to be added.

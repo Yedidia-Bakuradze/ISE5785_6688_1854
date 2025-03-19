@@ -34,12 +34,6 @@ public class Plane extends Geometry {
         this.q = q;
     }
 
-    /**
-     * Returns the normal vector to the plane at a given point.
-     * 
-     * @param point The point on the plane.
-     * @return The normal vector to the plane.
-     */
     @Override
     public Vector getNormal(Point point) {
         return normal;
