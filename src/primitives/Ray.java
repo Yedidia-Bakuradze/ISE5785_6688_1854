@@ -7,7 +7,7 @@ public class Ray {
     private final Point head;
     private final Vector direction;
 
-    Ray(Point head, Vector direction) {
+    public Ray(Point head, Vector direction) {
         this.head = head;
         this.direction = direction.normalize();
     }
@@ -22,6 +22,6 @@ public class Ray {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Ray: " + super.toString();
     }
 }

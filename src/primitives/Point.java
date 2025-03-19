@@ -55,9 +55,7 @@ public class Point {
      * @param addVec The vector to add.
      * @return A new Point resulting from the addition.
      */
-    public Point add(Vector addVec) {
-        return new Point(this.xyz.add(addVec.xyz));
-    }
+    public Point add(Vector addVec) {return new Point(this.xyz.add(addVec.xyz));}
 
     /**
      * Subtracts another point from this point and returns a Vector.
