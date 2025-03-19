@@ -55,7 +55,7 @@ public class Point {
      * @param addVec The vector to add.
      * @return A new Point resulting from the addition.
      */
-    public Point add(Vector addVec) {return new Point(this.xyz.add(addVec.xyz));}
+    public Point add(Vector addVec) { return new Point(this.xyz.add(addVec.xyz));}
 
     /**
      * Subtracts another point from this point and returns a Vector.
@@ -72,8 +72,9 @@ public class Point {
      * @return The squared distance.
      */
     public double distanceSquared(Point rightPoint) {
-        Double3 tmp = this.xyz.subtract(rightPoint.xyz);
-        return tmp.d1() * tmp.d1() + tmp.d2() * tmp.d2() + tmp.d3() * tmp.d3();
+        return (this.xyz.d1() - rightPoint.xyz.d1()) * (this.xyz.d1() - rightPoint.xyz.d1())
+                + (this.xyz.d2() - rightPoint.xyz.d2()) * (this.xyz.d2() - rightPoint.xyz.d2())
+                + (this.xyz.d3() - rightPoint.xyz.d3()) * (this.xyz.d3() - rightPoint.xyz.d3());
     }
 
     /**
