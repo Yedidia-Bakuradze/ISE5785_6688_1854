@@ -8,7 +8,14 @@ import primitives.Vector;
  * Extends the {@link Geometry} class.
  */
 public class Plane extends Geometry {
+    /**
+     * The normal vector to the plane.
+     */
     private final Vector normal;
+    
+    /**
+     * A point on the plane.
+     */
     private final Point q;
 
     /**
@@ -34,6 +41,12 @@ public class Plane extends Geometry {
         this.q = q;
     }
 
+    /**
+     * Calculates the normal vector to the plane at a given point.
+     * 
+     * @param point The point on the plane.
+     * @return The normal vector at the given point.
+     */
     @Override
     public Vector getNormal(Point point) {
         return normal;

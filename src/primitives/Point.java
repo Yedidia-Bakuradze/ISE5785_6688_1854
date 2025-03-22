@@ -7,9 +7,14 @@ import java.security.InvalidParameterException;
  * Provides methods for point arithmetic and distance calculations.
  */
 public class Point {
+    /**
+     * The coordinates of the point.
+     */
     protected final Double3 xyz;
 
-    // A constant representing the origin point (0, 0, 0).
+    /**
+     * A constant representing the origin point (0, 0, 0).
+     */
     public static Point ZERO = new Point(Double3.ZERO);
 
     /**
@@ -38,7 +43,7 @@ public class Point {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        return  obj instanceof Point point && point.xyz.equals(xyz);
+        return obj instanceof Point point && point.xyz.equals(xyz);
     }
 
     /**
@@ -72,9 +77,8 @@ public class Point {
      * @return The squared distance.
      */
     public double distanceSquared(Point rightPoint) {
-        return (this.xyz.d1() - rightPoint.xyz.d1()) * (this.xyz.d1() - rightPoint.xyz.d1())
-                + (this.xyz.d2() - rightPoint.xyz.d2()) * (this.xyz.d2() - rightPoint.xyz.d2())
-                + (this.xyz.d3() - rightPoint.xyz.d3()) * (this.xyz.d3() - rightPoint.xyz.d3());
+        Double3 tmp = this.xyz.subtract(rightPoint.xyz);
+        return tmp.d1() * tmp.d1() + tmp.d2() * tmp.d2() + tmp.d3() * tmp.d3();
     }
 
     /**

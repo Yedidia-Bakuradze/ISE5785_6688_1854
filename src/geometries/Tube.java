@@ -9,6 +9,9 @@ import primitives.Vector;
  * Extends the {@link RadialGeometry} class.
  */
 public class Tube extends RadialGeometry {
+    /**
+     * The axis ray of the tube.
+     */
     protected final Ray axis;
 
     /**
@@ -22,6 +25,12 @@ public class Tube extends RadialGeometry {
         this.axis = axis;
     }
 
+    /**
+     * Calculates the normal vector to the tube at a given point.
+     * 
+     * @param point The point on the tube.
+     * @return The normal vector at the given point.
+     */
     @Override
     public Vector getNormal(Point point) {
         return null;

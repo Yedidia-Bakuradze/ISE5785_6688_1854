@@ -5,6 +5,9 @@ package geometries;
  * Extends the {@link Geometry} class.
  */
 abstract public class RadialGeometry extends Geometry {
+    /**
+     * The radius of the radial geometry.
+     */
     protected final double radius;
 
     /**

@@ -9,6 +9,9 @@ import primitives.Vector;
  * Extends the {@link Tube} class.
  */
 public class Cylinder extends Tube {
+    /**
+     * The height of the cylinder.
+     */
     private final double height;
 
     /**
@@ -23,6 +26,12 @@ public class Cylinder extends Tube {
         this.height = height;
     }
 
+    /**
+     * Calculates the normal vector to the cylinder at a given point.
+     * 
+     * @param point The point on the cylinder.
+     * @return The normal vector at the given point.
+     */
     @Override
     public Vector getNormal(Point point) {
         return null;

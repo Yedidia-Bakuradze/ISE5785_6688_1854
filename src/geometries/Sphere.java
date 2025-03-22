@@ -8,6 +8,9 @@ import primitives.Vector;
  * Extends RadialGeometry to include a center point and radius.
  */
 public class Sphere extends RadialGeometry {
+    /**
+     * The center point of the sphere.
+     */
     private final Point center;
 
     /**
@@ -20,6 +23,12 @@ public class Sphere extends RadialGeometry {
         this.center = center;
     }
 
+    /**
+     * Calculates the normal vector to the sphere at a given point.
+     * 
+     * @param point The point on the sphere.
+     * @return The normal vector at the given point.
+     */
     @Override
     public Vector getNormal(Point point) {
         return null; // Implementation to be added.
