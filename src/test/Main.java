@@ -4,6 +4,7 @@ import static java.lang.System.out;
 
 import static primitives.Util.isZero;
 
+import geometries.Triangle;
 import primitives.*;
 
 /**
