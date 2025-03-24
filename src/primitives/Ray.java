@@ -43,6 +43,6 @@ public class Ray {
      */
     @Override
     public String toString() {
-        return "Ray: ( " + head.toString() + ", " + direction.toString() + " )";
+        return "Ray: " + super.toString();
     }
 }
