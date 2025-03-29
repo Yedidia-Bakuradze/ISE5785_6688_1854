@@ -119,11 +119,27 @@ class VectorTests {
     void testDotProduct() {
         // ============ Equivalence Partitions Tests ==============
 
+        //TC01: test that length of the dot-product of vectors with less than 90 degrees angle (45d) is correct
+        Vector vec1 = new Vector(1,0,0);
+        Vector vec2 = new Vector(1,0,-1);
+        assertEquals(1, vec1.dotProduct(vec2), "ERROR: dotProduct() result on vectors with angle less than 90d is not correct");
+
+        //TC02: test that length of the dot-product of vectors with a degree higher than 90 degrees angle (135d) is correct
+        vec1 = new Vector(1,0,1);
+        vec2 = new Vector(-1,0,-1);
+        assertEquals(-2, vec1.dotProduct(vec2), "ERROR: dotProduct() result on vectors with angle more than 90d is not correct");
 
         // =============== Boundary Values Tests ==================
 
+        //TC11: test that a dot-product of orthogonal vectors is zero
+        vec1 = new Vector(1,4,-2);
+        vec2 = new Vector(4,0,2);
+        assertEquals(0, vec1.dotProduct(vec2), "ERROR: dotProduct() result of orthogonal vectors is not zero");
 
-        fail("No test implementation in Vector:testDotProduct");
+        //TC12: test that a dot-product of vectors which one of them is a unit vector
+        vec1 = new Vector(1,0,0);
+        vec2 = new Vector(4,12,3);
+        assertEquals(4, vec1.dotProduct(vec2), "ERROR: dotProduct() result of unit vector and random vector is not correct");
     }
 
     /**
@@ -133,24 +149,22 @@ class VectorTests {
     void testCrossProduct() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01: test that length of the cross-product of vectors with less than 90 degrees angle (45d) is correct
+        //TC01: test that the result of the cross-product of vectors with less than 90 degrees angle (45d) is correct (length and orthogonality)
         Vector vec1 = new Vector(1,0,0);
         Vector vec2 = new Vector(1,0,-1);
         Vector vr = vec1.crossProduct(vec2);
         assertEquals(vec1.length()*vec2.length()*Math.sin(45), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
+        assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
+        assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
-        //TC02: test that length of the cross-product of vectors with a degree higher than 90 degrees angle is correct
+
+        //TC02: test that the result of the cross-product of vectors with more than 90 degrees angle (135d) is correct (length and orthogonality)
         vec1 = new Vector(1,0,1);
         vec2 = new Vector(-1,0,-1);
         vr = vec1.crossProduct(vec2);
         assertEquals(vec1.length()*vec2.length()*Math.sin(135), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
-
-        //TC02: test that length of the cross-product of vectors with a degree equally 90 degrees angle is correct
-        vec1 = new Vector(1,0,0);
-        vec2 = new Vector(1,1,0);
-        vr = vec1.crossProduct(vec2);
-        assertEquals(vec1.length()*vec2.length()*1, vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
-
+        assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
+        assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
         // =============== Boundary Values Tests ==================
 
