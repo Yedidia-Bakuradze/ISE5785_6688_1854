@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for {@link primitives.Vector}.
  */
 class VectorTests {
-
+    float DELTA = 0.00001f;
     /**
      * Test method for {@link primitives.Vector#length()}.
      */
@@ -16,11 +16,20 @@ class VectorTests {
     void testLength() {
         // ============ Equivalence Partitions Tests ==============
 
+        // TC01: Vector (4,0,3) should have length 5
+        Vector v1 = new Vector(4,0,3);
+        assertEquals(5, v1.length(), DELTA, "ERROR: length() is incorrect");
+
+        // TC02: Vector with negative values should return the correct length
+        Vector v2 = new Vector(-3, -4, 0);
+        assertEquals(5, v2.length(), DELTA, "ERROR: length() is incorrect");
+
+        // TC03: Large values vector
+        Vector v3 = new Vector(3000, 4000, 0);
+        assertEquals(5000, v3.length(), DELTA, "ERROR: length() for large numbers is incorrect");
 
         // =============== Boundary Values Tests ==================
 
-
-        fail("No test implementation in Vector:testLength");
     }
 
     /**
@@ -30,6 +39,17 @@ class VectorTests {
     void testLengthSquared() {
         // ============ Equivalence Partitions Tests ==============
 
+        // TC01: Vector (4,0,3) should have LengthSquared 25
+        Vector v1 = new Vector(4,0,3);
+        assertEquals(25, v1.lengthSquared(), "ERROR: lengthSquared() is incorrect");
+
+        // TC02: Vector with negative values should return the correct LengthSquared
+        Vector v2 = new Vector(-3, -4, 0);
+        assertEquals(25, v2.lengthSquared(), "ERROR: lengthSquared() is incorrect");
+
+        // TC03: Large values vector
+        Vector v3 = new Vector(300, 400, 0);
+        assertEquals(250000, v3.lengthSquared(), "ERROR: lengthSquared() for large numbers is incorrect");
 
         // =============== Boundary Values Tests ==================
 
@@ -44,12 +64,25 @@ class VectorTests {
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
 
+        // TC01: Adding two vectors with an angle less than 90 degrees
+        Vector vec1 = new Vector(1, 0, 0);
+        Vector vec2 = new Vector(1, 0, -1);
+        Vector expected = new Vector(2, 0, -1);
+        assertEquals(expected, vec1.add(vec2), "ERROR: vectors addition is Wrong");
+
+        // TC02: Adding two vectors with an angle greater than 90 degrees
+        vec1 = new Vector(1, 0, 1);
+        vec2 = new Vector(-1, 0, -1);
+        assertEquals(Vector.ZERO, vec1.add(vec2), "ERROR: vectors addition is Wrong");//Expected is zero
 
         // =============== Boundary Values Tests ==================
 
-
-        fail("No test implementation in Vector:testAdd");
+        // TC11: Adding a vector and its negative should give zero
+        Vector v1 = new Vector(1, 2, 3);
+        Vector v2 = new Vector(-1, -2, -3);
+        assertEquals(Vector.ZERO, v1.add(v2), "ERROR: opposite vectors addition is not zero");
     }
+
 
     /**
      * Test method for {@link primitives.Vector#add(primitives.Vector)}.
@@ -98,7 +131,6 @@ class VectorTests {
      */
     @Test
     void testCrossProduct() {
-        float DELTA = 0.00001f;
         // ============ Equivalence Partitions Tests ==============
 
         //TC01: test that length of the cross-product of vectors with less than 90 degrees angle (45d) is correct
