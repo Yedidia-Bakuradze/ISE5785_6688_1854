@@ -85,17 +85,36 @@ class VectorTests {
 
 
     /**
-     * Test method for {@link primitives.Vector#add(primitives.Vector)}.
+     * Test method for {@link primitives.Point#subtract(Point)}.
      */
     @Test
     void testSubtract() {
         // ============ Equivalence Partitions Tests ==============
 
+        // TC01: Subtracting two vectors with an angle less than 90 degrees
+        Vector vec1 = new Vector(3, 2, 1);
+        Vector vec2 = new Vector(1, 0, -1);
+        Vector expected = new Vector(2, 2, 2);
+        assertEquals(expected, vec1.subtract(vec2), "ERROR: two vectors with angle higher less than 90d subtraction is incorrect");
+
+        // TC02: Subtracting two vectors with an angle greater than 90 degrees
+        vec1 = new Vector(1, 0, 1);
+        vec2 = new Vector(-1, 0, -1);
+        expected = new Vector(2, 0, 2);
+        assertEquals(expected, vec1.subtract(vec2), "ERROR: two vectors with angle higher more than 90d subtraction is incorrect");
 
         // =============== Boundary Values Tests ==================
 
+        // TC11: Subtracting a vector from itself should give zero
+        Vector v1 = new Vector(1, 2, 3);
+        assertEquals(Vector.ZERO, v1.subtract(v1), "ERROR: subtracting a vector from itself is not zero");
 
-        fail("No test implementation in Vector:testSubtract");
+        // TC12: Subtracting a zero vector should return the same vector
+        assertEquals(v1, v1.subtract(Vector.ZERO), "ERROR: subtracting zero vector does not return the same vector");
+
+        // TC13: Subtracting a vector from zero should return the negated vector
+        Vector zero = new Vector(0,0,0);
+        assertEquals(new Vector(-1, -2, -3), zero.subtract(v1), "ERROR: subtracting a vector from zero is incorrect");
     }
 
     /**
