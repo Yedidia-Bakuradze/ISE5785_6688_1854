@@ -29,7 +29,6 @@ class VectorTests {
         assertEquals(5000, v3.length(), DELTA, "ERROR: length() for large numbers is incorrect");
 
         // =============== Boundary Values Tests ==================
-
     }
 
     /**
@@ -52,8 +51,6 @@ class VectorTests {
         assertEquals(250000, v3.lengthSquared(), "ERROR: lengthSquared() for large numbers is incorrect");
 
         // =============== Boundary Values Tests ==================
-
-
         fail("No test implementation in Vector:testLengthSquared");
     }
 
