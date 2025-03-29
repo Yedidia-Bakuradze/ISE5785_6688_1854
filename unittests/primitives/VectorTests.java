@@ -87,6 +87,7 @@ class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
 
+
         // =============== Boundary Values Tests ==================
 
 
@@ -101,24 +102,22 @@ class VectorTests {
         float DELTA = 0.00001f;
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01: test that length of the cross-product of vectors with less than 90 degrees angle (45d) is correct
+        //TC01: test that the result of the cross-product of vectors with less than 90 degrees angle (45d) is correct (length and orthogonality)
         Vector vec1 = new Vector(1,0,0);
         Vector vec2 = new Vector(1,0,-1);
         Vector vr = vec1.crossProduct(vec2);
         assertEquals(vec1.length()*vec2.length()*Math.sin(45), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
+        assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
+        assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
-        //TC02: test that length of the cross-product of vectors with a degree higher than 90 degrees angle is correct
+
+        //TC02: test that the result of the cross-product of vectors with more than 90 degrees angle (45d) is correct (length and orthogonality)
         vec1 = new Vector(1,0,1);
         vec2 = new Vector(-1,0,-1);
         vr = vec1.crossProduct(vec2);
         assertEquals(vec1.length()*vec2.length()*Math.sin(135), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
-
-        //TC02: test that length of the cross-product of vectors with a degree equally 90 degrees angle is correct
-        vec1 = new Vector(1,0,0);
-        vec2 = new Vector(1,1,0);
-        vr = vec1.crossProduct(vec2);
-        assertEquals(vec1.length()*vec2.length()*1, vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
-
+        assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
+        assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
         // =============== Boundary Values Tests ==================
 
