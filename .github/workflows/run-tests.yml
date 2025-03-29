@@ -18,7 +18,7 @@ jobs:
       - name: Find test classes
         id: set-test-classes
         run: |
-          TEST_CLASSES=$(find unittests -name "*Tests.java" | sed 's/unittests\///g' | sed 's/\.java//g' | sed 's/\//\./g' | jq -R -s -c 'split("\n")[:-1]')
+          TEST_CLASSES=$(find unittests -name "*Tests.java" | sed 's|/|.|g' | sed 's|.java$||' | sed 's|^unittests.||' | jq -R -s -c 'split("\n")[:-1]')
           echo "test-classes=${TEST_CLASSES}" >> $GITHUB_OUTPUT
           echo "Found test classes: ${TEST_CLASSES}"
 
