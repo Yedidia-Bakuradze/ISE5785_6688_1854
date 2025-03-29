@@ -17,11 +17,20 @@ class PlaneTests {
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
 
+        // TC01: Test that the normal of the plane is orthogonal to the plane
+        Point p1 = new Point(0, 0, 0);
+        Point p2 = new Point(1, 0, 0);
+        Point p3 = new Point(0, 1, 0);
+        Plane plane = new Plane(p1, p2, p3);
 
-        // =============== Boundary Values Tests ==================
+        Vector normal = plane.getNormal(p1);
 
+        // Ensure the normal is orthogonal to the vectors formed by the points
+        assertEquals(0, normal.dotProduct(p2.subtract(p1)), "ERROR: Normal is not orthogonal to the first vector");
+        assertEquals(0, normal.dotProduct(p3.subtract(p1)), "ERROR: Normal is not orthogonal to the second vector");
 
-        fail("No test implementation in Plane:testGetNormal");
+        // Ensure the normal has length 1
+        assertEquals(1, normal.length(), "ERROR: Normal is not a unit vector");
     }
 
     /**

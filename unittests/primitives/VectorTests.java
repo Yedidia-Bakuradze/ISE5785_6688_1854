@@ -126,6 +126,13 @@ class VectorTests {
         //TC02: test that length of the dot-product of vectors with a degree higher than 90 degrees angle (135d) is correct
         vec1 = new Vector(1,2,3);
         assertEquals(new Vector(-5,-2*5,-3*5), vec1.scale(-5), "ERROR: scale() result on negative scalar is not correct");
+    
+        // =============== Boundary Values Tests ==================
+
+        //TC11: test that it throws an exception when trying to scale by zero
+        assertThrows(IllegalArgumentException.class ,()-> vec1.scale(0), "ERROR: scale() results vector zero and doesn't throws an exception");
+    
+    
     }
 
     /**

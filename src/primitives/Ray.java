@@ -38,9 +38,21 @@ public class Ray {
     }
 
     /**
-     * Returns a string representation of the ray.
-     * @return a string representation of the ray
+     * Returns the starting point of the ray.
+     * @return the starting point of the ray
      */
+    public Point getHead() {
+        return head;
+    }
+
+    /**
+     * Returns the vector of the ray.
+     * @return the vector of the ray
+     */
+    public Vector getDirection() {
+        return direction;
+    }
+
     @Override
     public String toString() {
         return "Ray: " + super.toString();
