@@ -71,12 +71,13 @@ class VectorTests {
     @Test
     void testScale() {
         // ============ Equivalence Partitions Tests ==============
+        //TC01: test that length of the dot-product of vectors with less than 90 degrees angle (45d) is correct
+        Vector vec1 = new Vector(1,2,3);
+        assertEquals(new Vector(5,2*5,3*5), vec1.scale(5), "ERROR: scale() result on positive scalar is not correct");
 
-
-        // =============== Boundary Values Tests ==================
-
-
-        fail("No test implementation in Vector:testScale");
+        //TC02: test that length of the dot-product of vectors with a degree higher than 90 degrees angle (135d) is correct
+        vec1 = new Vector(1,2,3);
+        assertEquals(new Vector(-5,-2*5,-3*5), vec1.scale(-5), "ERROR: scale() result on negative scalar is not correct");
     }
 
     /**
@@ -86,12 +87,12 @@ class VectorTests {
     void testDotProduct() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01: test that length of the dot-product of vectors with less than 90 degrees angle (45d) is correct
+        //TC01: test that result of the dot-product of vectors with less than 90 degrees angle (45d) is correct
         Vector vec1 = new Vector(1,0,0);
         Vector vec2 = new Vector(1,0,-1);
         assertEquals(1, vec1.dotProduct(vec2), "ERROR: dotProduct() result on vectors with angle less than 90d is not correct");
 
-        //TC02: test that length of the dot-product of vectors with a degree higher than 90 degrees angle (135d) is correct
+        //TC02: test that result of the dot-product of vectors with a degree higher than 90 degrees angle (135d) is correct
         vec1 = new Vector(1,0,1);
         vec2 = new Vector(-1,0,-1);
         assertEquals(-2, vec1.dotProduct(vec2), "ERROR: dotProduct() result on vectors with angle more than 90d is not correct");
