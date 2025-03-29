@@ -13,6 +13,12 @@ class PlaneTests {
      */
     @Test
     void testGetNormal() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Plane:testGetNormal");
     }
 }

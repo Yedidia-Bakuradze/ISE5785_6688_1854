@@ -13,6 +13,12 @@ class RadialGeometryTests {
      */
     @Test
     void test() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in RadialGeometryTests");
     }
 }

@@ -13,6 +13,12 @@ class VectorTests {
      */
     @Test
     void testLength() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testLength");
     }
 
@@ -21,6 +27,12 @@ class VectorTests {
      */
     @Test
     void testLengthSquared() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testLengthSquared");
     }
 
@@ -29,14 +41,26 @@ class VectorTests {
      */
     @Test
     void testAdd() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testAdd");
     }
 
     /**
-     * Test method for {@link primitives.Vector#subtract(primitives.Vector)}.
+     * Test method for {@link primitives.Vector#add(primitives.Vector)}.
      */
     @Test
     void testSubtract() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testSubtract");
     }
 
@@ -45,6 +69,12 @@ class VectorTests {
      */
     @Test
     void testScale() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testScale");
     }
 
@@ -53,6 +83,12 @@ class VectorTests {
      */
     @Test
     void testDotProduct() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testDotProduct");
     }
 
@@ -61,6 +97,12 @@ class VectorTests {
      */
     @Test
     void testCrossProduct() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testCrossProduct");
     }
 
@@ -69,6 +111,14 @@ class VectorTests {
      */
     @Test
     void testNormalize() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Vector:testNormalize");
     }
+
+
 }

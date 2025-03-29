@@ -9,10 +9,44 @@ import static org.junit.jupiter.api.Assertions.fail;
 class PointTests {
 
     /**
+     * Test method for {@link primitives.Point#equals(Object)}.
+     */
+    @Test
+    void testEquals() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
+        fail("No test implementation in Point:testEquals");
+    }
+
+    /**
+     * Test method for {@link primitives.Point#toString()}.
+     */
+    @Test
+    void testToString() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
+        fail("No test implementation in Point:testToString");
+    }
+
+    /**
      * Test method for {@link primitives.Point#add(primitives.Vector)}.
      */
     @Test
     void testAdd() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Point:testAdd");
     }
 
@@ -21,6 +55,12 @@ class PointTests {
      */
     @Test
     void testSubtract() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Point:testSubtract");
     }
 
@@ -29,6 +69,12 @@ class PointTests {
      */
     @Test
     void testDistanceSquared() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Point:testDistanceSquared");
     }
 
@@ -37,6 +83,12 @@ class PointTests {
      */
     @Test
     void testDistance() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("No test implementation in Point:testDistance");
     }
 }
