@@ -57,27 +57,28 @@ class PointTests {
     @Test
     void testSubtract() {
         // ============ Equivalence Partitions Tests ==============
-
+        Point p1 = new Point(3, 2, 1);
+        Point p2 = new Point(1, 1, 1);
+        Vector expected = new Vector(2, 1, 0);
+        assertEquals(expected, p1.subtract(p2), "ERROR: subtract() does not return the correct result");
 
         // =============== Boundary Values Tests ==================
-
-
-        fail("No test implementation in Point:testSubtract");
+        assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), "ERROR: subtract() should throw exception for identical points");
     }
-
     /**
      * Test method for {@link primitives.Point#distanceSquared(primitives.Point)}.
      */
     @Test
     void testDistanceSquared() {
         // ============ Equivalence Partitions Tests ==============
-
+        Point p1 = new Point(1, 2, 3);
+        Point p2 = new Point(4, 6, 3);
+        assertEquals(25, p1.distanceSquared(p2), "ERROR: distanceSquared() is incorrect");
 
         // =============== Boundary Values Tests ==================
-
-
-        fail("No test implementation in Point:testDistanceSquared");
+        assertEquals(0, p1.distanceSquared(p1), "ERROR: distanceSquared() for the same point should be 0");
     }
+
 
     /**
      * Test method for {@link primitives.Point#distance(primitives.Point)}.
