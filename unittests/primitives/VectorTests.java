@@ -51,7 +51,6 @@ class VectorTests {
         assertEquals(250000, v3.lengthSquared(), "ERROR: lengthSquared() for large numbers is incorrect");
 
         // =============== Boundary Values Tests ==================
-        fail("No test implementation in Vector:testLengthSquared");
     }
 
     /**
@@ -211,11 +210,29 @@ class VectorTests {
     void testNormalize() {
         // ============ Equivalence Partitions Tests ==============
 
+        // TC01: Normalizing a regular vector
+        Vector v1 = new Vector(3, 4, 0);
+        Vector u = v1.normalize();
 
-        // =============== Boundary Values Tests ==================
+        // 1. The normalized vector should be a unit vector (length 1)
+        assertEquals(1d, u.length(), "ERROR: the normalized vector is not a unit vector");
+
+        // 2. The normalized vector should be parallel to the original one
+        assertThrows(Throwable.class, () -> v1.crossProduct(u), "ERROR: the normalized vector is not parallel to the original one");
+
+        // 3. The normalized vector should not be opposite in direction
+        assertTrue(v1.dotProduct(u) > 0, "ERROR: the normalized vector is opposite to the original one");
 
 
-        fail("No test implementation in Vector:testNormalize");
+        // TC02: Normalizing a zero vector (should throw an exception)
+        Vector zeroVector = new Vector(0, 0, 0);
+        assertThrows(ArithmeticException.class, zeroVector::normalize, "ERROR: normalize() should throw an exception for zero vector");
+
+        // TC03: Normalizing a unit vector (should return the same vector)
+        Vector v2 = new Vector(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3));
+        Vector normalizedV2 = v2.normalize();
+        assertEquals(v2, normalizedV2, "ERROR: normalize() should return the same unit vector");
+
     }
 
 
