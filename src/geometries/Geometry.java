@@ -8,6 +8,13 @@ import primitives.Vector;
  * Provides a method to calculate the normal vector at a given point.
  */
 abstract public class Geometry {
+
+    /**
+     * Default constructor - only to dismiss errors in JavaDoc generator.
+     */
+    private Geometry() {}
+
+
     /**
      * Abstract method to calculate the normal vector to the geometry at a given point.
      * 

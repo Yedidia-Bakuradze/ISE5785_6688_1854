@@ -8,7 +8,11 @@ import primitives.Vector;
 /**
  * Unit tests for {@link geometries.Plane}.
  */
-class PlaneTests {
+public class PlaneTests {
+    /**
+     * Default constructor - only to dismiss errors in JavaDoc generator.
+     */
+    public PlaneTests() {}
 
     /**
      * Test method for {@link geometries.Plane#getNormal(primitives.Point)}.

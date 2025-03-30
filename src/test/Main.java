@@ -12,6 +12,13 @@ import primitives.*;
  * @author Dan Zilberstein
  */
 public final class Main {
+
+   /**
+    * Default constructor - only to dismiss errors in JavaDoc generator.
+    */
+   private Main() {}
+
+
    /** A point for tests at (1,2,3) */
    private static final Point  P1          = new Point(1, 2, 3);
    /** A point for tests at (2,4,6) */

@@ -13,12 +13,17 @@ import primitives.*;
  * Testing Polygons
  * @author Dan
  */
-class PolygonTests {
+public class PolygonTests {
    /**
-    * Delta value for accuracy when comparing the numbers of type 'double' in
-    * assertEquals
+    * Delta value for accuracy when comparing decimal numbers.
+    * Allows for a small margin of error in floating-point calculations.
     */
    private static final double DELTA = 0.000001;
+
+   /**
+    * Default constructor - only to dismiss errors in JavaDoc generator.
+    */
+   public PolygonTests() {}
 
    /** Test method for {@link geometries.Polygon#Polygon(primitives.Point...)}. */
    @Test

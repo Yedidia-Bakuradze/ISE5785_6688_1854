@@ -9,7 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Unit tests for {@link geometries.Cylinder}.
  */
-class CylinderTests {
+public class CylinderTests {
+    /**
+     * Default constructor - only to dismiss errors in JavaDoc generator.
+     */
+    public CylinderTests() {}
 
     /**
      * Test method for {@link geometries.Cylinder#getNormal(primitives.Point)}.

@@ -1,14 +1,22 @@
 package primitives;
-
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link primitives.Vector}.
  */
-class VectorTests {
-    float DELTA = 0.00001f;
+public class VectorTests {
+    /**
+     * Delta value for accuracy when comparing decimal numbers.
+     * Allows for a small margin of error in floating-point calculations.
+     */
+    private final float DELTA = 0.00001f;
+    
+    /**
+     * Default constructor - only to dismiss errors in JavaDoc generator.
+     */
+    public VectorTests() {}
+
     /**
      * Test method for {@link primitives.Vector#length()}.
      */

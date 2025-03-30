@@ -8,7 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Unit tests for {@link geometries.Sphere}.
  */
-class SphereTests {
+public class SphereTests {
+
+    /**
+     * Default constructor - only to dismiss errors in JavaDoc generator.
+     */
+    public SphereTests() {}
 
     /**
      * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.

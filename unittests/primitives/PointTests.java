@@ -5,7 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit tests for {@link primitives.Point}.
  */
-class PointTests {
+public class PointTests {
+    /**
+     * Default constructor - only to dismiss errors in JavaDoc generator.
+     */
+    public PointTests() {}
+
     /**
      * Test method for {@link primitives.Point#add(primitives.Vector)}.
      */
