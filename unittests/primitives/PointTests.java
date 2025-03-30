@@ -28,7 +28,7 @@ class PointTests {
         // =============== Boundary Values Tests ==================
 
         // TC11: Test that adding opposite coordinate vector to a point results the origin point
-        assertThrows(IllegalArgumentException.class,()-> new Point(1, 2, 3).add(new Vector(-1,-2,-3)), "ERROR: Adding a zero vector to a point does not return the same point");
+        assertEquals(Point.ZERO, new Point(1, 2, 3).add(new Vector(-1,-2,-3)), "ERROR: Adding a zero vector to a point does not return the same point");
     }
 
     /**
