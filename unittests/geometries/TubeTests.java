@@ -20,7 +20,9 @@ class TubeTests {
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Test that the normal of the tube is orthogonal to the tube
-        Ray axis = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+        Vector axisVector = new Vector(0, 0, 1);
+        Point axisPoint = new Point(0, 0, 0);
+        Ray axis = new Ray(axisPoint, axisVector);
         Tube tube = new Tube(axis, 2);
 
         Point p = new Point(2, 0, 2); // Point on the surface of the tube, not on the same line of the origin
@@ -30,7 +32,7 @@ class TubeTests {
         assertEquals(1, normal.length(), DELTA,"ERROR: Normal is not a unit vector");
 
         // Ensure the normal is orthogonal to the tube
-        assertEquals(new Vector(1,0,0), normal, "ERROR: Normal is not correct");
+        assertEquals(0, normal.dotProduct(axisVector), "ERROR: Normal is not correct");
 
         // =============== Boundary Values Tests ==================
 
