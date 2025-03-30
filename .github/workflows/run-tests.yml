@@ -4,34 +4,13 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  # First job to discover all test classes
-  discover-tests:
+  build-and-test:
     runs-on: ubuntu-latest
-    outputs:
-      test-classes: ${{ steps.set-test-classes.outputs.test-classes }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Find test classes
-        id: set-test-classes
-        run: |
-          TEST_CLASSES=$(find unittests -name "*Tests.java" | sed 's|/|.|g' | sed 's|.java$||' | sed 's|^unittests.||' | jq -R -s -c 'split("\n")[:-1]')
-          echo "test-classes=${TEST_CLASSES}" >> $GITHUB_OUTPUT
-          echo "Found test classes: ${TEST_CLASSES}"
-
-  # Second job to run each test class separately as a matrix job
-  run-tests:
-    needs: discover-tests
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false # Continue with other tests even if one fails
-      matrix:
-        test-class: ${{ fromJson(needs.discover-tests.outputs.test-classes) }}
-
-    name: Test ${{ matrix.test-class }}
 
     steps:
       - name: Checkout code
@@ -42,65 +21,18 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "21"
+          cache: maven
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - name: Build with Maven
+        run: mvn -B compile
 
-      - name: Update pom.xml for detailed test reports
-        run: |
-          echo "Adding Surefire plugin configuration to pom.xml"
-          # Make sure build section exists
-          if ! grep -q "<build>" pom.xml; then
-            sed -i '/<\/dependencies>/a \
-            <build>\
-              <plugins>\
-              </plugins>\
-            </build>' pom.xml
-          fi
-
-          # Add Surefire plugin if not already present
-          if ! grep -q "maven-surefire-plugin" pom.xml; then
-            sed -i '/<plugins>/a \
-              <plugin>\
-                <groupId>org.apache.maven.plugins</groupId>\
-                <artifactId>maven-surefire-plugin</artifactId>\
-                <version>3.1.2</version>\
-                <configuration>\
-                  <trimStackTrace>false</trimStackTrace>\
-                </configuration>\
-              </plugin>' pom.xml
-          fi
-
-      - name: Run specific test class
-        run: mvn test -Dtest=${{ matrix.test-class }}
-
-      - name: Archive test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ matrix.test-class }}
-          path: target/surefire-reports/*.xml
-          retention-days: 7
-
-  # Summary job to collect all test results
-  report:
-    needs: run-tests
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download all test results
-        uses: actions/download-artifact@v4
-        with:
-          path: test-results
+      - name: Run tests with Maven
+        run: mvn -B test
 
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
+        if: always() # Always run this step to publish test results even when there are test failures
         with:
-          report_paths: "test-results/**/TEST-*.xml"
+          report_paths: "target/surefire-reports/TEST-*.xml"
           detailed_summary: true
           check_name: "JUnit Test Results"
