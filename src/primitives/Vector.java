@@ -53,7 +53,7 @@ public class Vector extends Point{
      * @return the length of the vector
      */
     public double length() {
-        return Math.sqrt(lengthSquared());
+        return (double) Math.sqrt(lengthSquared());
     }
 
     /**
@@ -107,11 +107,11 @@ public class Vector extends Point{
         if(this.xyz.d1() / rightVec.xyz.d1() == this.xyz.d2() / rightVec.xyz.d2() && this.xyz.d2() / rightVec.xyz.d2() == this.xyz.d3() / rightVec.xyz.d3())
             throw new IllegalArgumentException("Cross-Product of parallel vectors is not allowed");
 
-        return  new Vector(
-                this.xyz.d2()*rightVec.xyz.d3() - this.xyz.d3()*rightVec.xyz.d2(),
-                this.xyz.d2()* rightVec.xyz.d1() - this.xyz.d1()* rightVec.xyz.d3(),
-                this.xyz.d1()*rightVec.xyz.d2() - this.xyz.d2()*rightVec.xyz.d1()
-                );
+        return new Vector(
+                this.xyz.d2()*rightVec.xyz.d3() - this.xyz.d3()*rightVec.xyz.d2(),  // x component
+                this.xyz.d3()*rightVec.xyz.d1() - this.xyz.d1()*rightVec.xyz.d3(),  // y component (fixed)
+                this.xyz.d1()*rightVec.xyz.d2() - this.xyz.d2()*rightVec.xyz.d1()   // z component
+        );
     }
 
     /**
@@ -119,6 +119,6 @@ public class Vector extends Point{
      * @return a new vector that is the normalized version of this vector
      */
     public Vector normalize(){
-        return new Vector(xyz.scale(1/this.length()));
+        return new Vector(xyz.reduce(this.length()));
     }
 }

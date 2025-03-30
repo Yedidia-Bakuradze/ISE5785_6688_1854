@@ -20,20 +20,15 @@ class PointTests {
         assertEquals(expected, p1.add(v1), "ERROR: Adding a positive vector to a point is incorrect");
 
         // TC02: Test that adding a negative vector to a point results the right coordinate point
-        p1 = new Point(1, 2, 3);
+
         v1 = new Vector(-1, -1, -1);
         expected = new Point(0, 1, 2);
         assertEquals(expected, p1.add(v1), "ERROR: Adding a negative vector to a point is incorrect");
 
         // =============== Boundary Values Tests ==================
 
-        // TC11: Test that adding a zero vector to a point results the point itself
-        assertEquals(p1, p1.add(new Vector(0,0,0)), "ERROR: Adding a zero vector to a point does not return the same point");
-
-        fail("No test implementation in Point:testAdd");
-        // TC12: Test that adding opposite coordinate vector to a point results the origin point
-        v1 = new Vector(-1,-2,-3);
-        assertEquals(Vector.ZERO, p1.add(v1), "ERROR: Adding a zero vector to a point does not return the same point");
+        // TC11: Test that adding opposite coordinate vector to a point results the origin point
+        assertThrows(IllegalArgumentException.class,()-> new Point(1, 2, 3).add(new Vector(-1,-2,-3)), "ERROR: Adding a zero vector to a point does not return the same point");
     }
 
     /**

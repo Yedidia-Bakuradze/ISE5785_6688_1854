@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Unit tests for {@link geometries.Tube}.
  */
 class TubeTests {
-
+    protected final double DELTA = 0.00001;
     /**
      * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
      */
@@ -27,10 +27,10 @@ class TubeTests {
         Vector normal = tube.getNormal(p);
 
         // Ensure the normal has length 1
-        assertEquals(1, normal.length(), "ERROR: Normal is not a unit vector");
+        assertEquals(1, normal.length(), DELTA,"ERROR: Normal is not a unit vector");
 
         // Ensure the normal is orthogonal to the tube
-        assertEquals(new Vector(0,0,1), normal, "ERROR: Normal is not correct");
+        assertEquals(new Vector(1,0,0), normal, "ERROR: Normal is not correct");
 
         // =============== Boundary Values Tests ==================
 

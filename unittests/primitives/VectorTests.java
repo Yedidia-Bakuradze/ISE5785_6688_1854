@@ -67,16 +67,17 @@ class VectorTests {
         assertEquals(expected, vec1.add(vec2), "ERROR: vectors addition is Wrong");
 
         // TC02: Adding two vectors with an angle greater than 90 degrees
-        vec1 = new Vector(1, 0, 1);
-        vec2 = new Vector(-1, 0, -1);
-        assertEquals(Vector.ZERO, vec1.add(vec2), "ERROR: vectors addition is Wrong");//Expected is zero
+        vec1 = new Vector(1, 0, 0);
+        vec2 = new Vector(0, 1, 0);
+        expected = new Vector(1,1,0);
+        assertEquals(expected, vec1.add(vec2), "ERROR: vectors addition is Wrong"); //Expected is zero
 
         // =============== Boundary Values Tests ==================
 
         // TC11: Adding a vector and its negative should give zero
         Vector v1 = new Vector(1, 2, 3);
         Vector v2 = new Vector(-1, -2, -3);
-        assertEquals(Vector.ZERO, v1.add(v2), "ERROR: opposite vectors addition is not zero");
+        assertThrows(IllegalArgumentException.class,()-> v1.add(v2), "ERROR: opposite vectors addition is not zero");
     }
 
 
@@ -103,14 +104,13 @@ class VectorTests {
 
         // TC11: Subtracting a vector from itself should give zero
         Vector v1 = new Vector(1, 2, 3);
-        assertEquals(Vector.ZERO, v1.subtract(v1), "ERROR: subtracting a vector from itself is not zero");
+        assertThrows(IllegalArgumentException.class,()-> v1.subtract(v1), "ERROR: subtracting a vector from itself is not zero");
 
         // TC12: Subtracting a zero vector should return the same vector
         assertEquals(v1, v1.subtract(Vector.ZERO), "ERROR: subtracting zero vector does not return the same vector");
 
         // TC13: Subtracting a vector from zero should return the negated vector
-        Vector zero = new Vector(0,0,0);
-        assertEquals(new Vector(-1, -2, -3), zero.subtract(v1), "ERROR: subtracting a vector from zero is incorrect");
+        assertEquals(new Vector(-1, -2, -3), Vector.ZERO.subtract(v1), "ERROR: subtracting a vector from zero is incorrect");
     }
 
     /**
@@ -130,7 +130,7 @@ class VectorTests {
         // =============== Boundary Values Tests ==================
 
         //TC11: test that it throws an exception when trying to scale by zero
-        assertThrows(IllegalArgumentException.class ,()-> vec1.scale(0), "ERROR: scale() results vector zero and doesn't throws an exception");
+        assertThrows(IllegalArgumentException.class ,()-> new Vector(1,2,3).scale(0), "ERROR: scale() results vector zero and doesn't throws an exception");
     
     
     }
@@ -176,16 +176,16 @@ class VectorTests {
         Vector vec1 = new Vector(1,0,0);
         Vector vec2 = new Vector(1,0,-1);
         Vector vr = vec1.crossProduct(vec2);
-        assertEquals(vec1.length()*vec2.length()*Math.sin(45), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
+        assertEquals(vec1.length()*vec2.length()*Math.sin(Math.toRadians(45)), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
         assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
         assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
 
         //TC02: test that the result of the cross-product of vectors with more than 90 degrees angle (135d) is correct (length and orthogonality)
-        vec1 = new Vector(1,0,1);
+        vec1 = new Vector(1,0,0);
         vec2 = new Vector(-1,0,-1);
         vr = vec1.crossProduct(vec2);
-        assertEquals(vec1.length()*vec2.length()*Math.sin(135), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
+        assertEquals(vec1.length()*vec2.length()*Math.sin(Math.toRadians(135)), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
         assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
         assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
@@ -195,19 +195,16 @@ class VectorTests {
         assertThrows(IllegalArgumentException.class ,()->new Vector(1,0,0).crossProduct(new Vector(3,0,0)), "ERROR: crossProduct() for parallel vectors does not throw an exception");
 
         //TC12: test that a cross-product of negating vectors with the same size equals to zero
-        Vector vec3 = new Vector(1,2,3);
-        Vector vec4 = new Vector(-1,-2,-3);
-        assertEquals(Vector.ZERO,vec3.crossProduct(vec4), "ERROR: crossProduct() for negating vectors with same sizes is not a zero vector");
+        assertThrows(IllegalArgumentException.class,()-> new Vector(1,2,3).crossProduct(new Vector(-1,-2,-3)), "ERROR: crossProduct() for negating vectors with same sizes is not a zero vector");
 
         //TC13: test that a cross-product of negating vectors with the different sizes equals to zero
-        vec3 = new Vector(7,0,0);
-        vec4 = new Vector(-5,0,0);
-        assertEquals(Vector.ZERO,vec3.crossProduct(vec4), "ERROR: crossProduct() for negating vectors with different sizes is not a zero vector");
+
+        assertThrows(IllegalArgumentException.class,()->new Vector(7,0,0).crossProduct(new Vector(-5,0,0)), "ERROR: crossProduct() for negating vectors with different sizes is not a zero vector");
 
         //TC14: test that a cross-product of negating vectors with the different sizes equals to zero
-        vec3 = new Vector(7,7,0);
-        vec4 = new Vector(7,7,0);
-        assertEquals(Vector.ZERO,vec3.crossProduct(vec4), "ERROR: crossProduct() for vectors with same sizes and same direction is not a zero vector");
+        Vector vec3 = new Vector(7,7,0);
+        Vector vec4 = new Vector(7,7,0);
+        assertThrows(IllegalArgumentException.class,()->vec3.crossProduct(vec4), "ERROR: crossProduct() for vectors with same sizes and same direction is not a zero vector");
     }
 
     /**
@@ -225,17 +222,12 @@ class VectorTests {
         assertEquals(1d, u.length(), "ERROR: the normalized vector is not a unit vector");
 
         // 2. The normalized vector should be parallel to the original one
-        assertThrows(Throwable.class, () -> v1.crossProduct(u), "ERROR: the normalized vector is not parallel to the original one");
+        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(u), "ERROR: the normalized vector is not parallel to the original one");
 
         // 3. The normalized vector should not be opposite in direction
         assertTrue(v1.dotProduct(u) > 0, "ERROR: the normalized vector is opposite to the original one");
 
-
-        // TC02: Normalizing a zero vector (should throw an exception)
-        Vector zeroVector = new Vector(0, 0, 0);
-        assertThrows(ArithmeticException.class, zeroVector::normalize, "ERROR: normalize() should throw an exception for zero vector");
-
-        // TC03: Normalizing a unit vector (should return the same vector)
+        // TC02: Normalizing a unit vector (should return the same vector)
         Vector v2 = new Vector(1 / Math.sqrt(3), 1 / Math.sqrt(3), 1 / Math.sqrt(3));
         Vector normalizedV2 = v2.normalize();
         assertEquals(v2, normalizedV2, "ERROR: normalize() should return the same unit vector");
