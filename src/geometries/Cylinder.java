@@ -34,6 +34,52 @@ public class Cylinder extends Tube {
      */
     @Override
     public Vector getNormal(Point point) {
-        return null;
+        double t = this.axis
+                .getDirection()
+                .dotProduct(point.subtract(this.axis.getHead()));
+
+        // If the point is on a base
+
+        // Case 1: If the point is on the bottom base
+        if (t == 0 ){
+            double distance = point.distance(this.axis.getHead());
+
+            // If the point is on the Cylinder body
+            if(distance == this.radius)
+                return point.subtract(this.axis.getHead()).normalize();
+
+            // If the point is on the bottom base
+            if(distance < this.radius)
+                return this.axis.getDirection().normalize();
+
+            // If the point is outside the Cylinder
+            throw new IllegalArgumentException("The point is outside the Cylinder");
+        }
+
+        // Case 2: If the point is on the top base
+        if (t == this.height){
+            Point o = this.axis
+                    .getHead()
+                    .add(this.axis.getDirection().scale(t));
+            double distance = point.distance(o);
+
+            // If the point is on the Cylinder body
+            if(distance == this.radius)
+                return point.subtract(o).normalize();
+
+            // If the point is on the top base
+            if(distance < this.radius)
+                return this.axis.getDirection().normalize();
+
+            // If the point is outside the Cylinder
+            throw new IllegalArgumentException("The point is outside the Cylinder");
+        }
+
+        // If the point is on the lateral surface
+        Point o = this.axis
+                .getHead()
+                .add(this.axis.getDirection().scale(t));
+
+        return point.subtract(o).normalize();
     }
 }
