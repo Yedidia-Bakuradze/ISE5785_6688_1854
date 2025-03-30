@@ -12,7 +12,7 @@ abstract public class Geometry {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    private Geometry() {}
+    protected Geometry() {}
 
 
     /**
