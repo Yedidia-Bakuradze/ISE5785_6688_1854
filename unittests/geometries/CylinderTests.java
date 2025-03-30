@@ -41,14 +41,14 @@ class CylinderTests {
         // TC03: Test that the normal on the top base is correct
         Point topBasePoint = new Point(0.5, 0.5, 2); // Point on the top base
         normal = cylinder.getNormal(topBasePoint);
-        assertEquals(axisBase, normal, "ERROR: Normal on the top base is not correct");
+        assertEquals(axisVec, normal, "ERROR: Normal on the top base is not correct");
 
         // =============== Boundary Values Tests ==================
 
         // TC11: Test that the normal at the center of the bottom base is correct
         Point bottomCenter = new Point(0, 0, 0); // Center of the bottom base
         normal = cylinder.getNormal(bottomCenter);
-        assertEquals(axisBase, normal, "ERROR: Normal at the center of the bottom base is not correct");
+        assertEquals(axisVec, normal, "ERROR: Normal at the center of the bottom base is not correct");
 
         // TC12: Test that the normal at the center of the top base is correct
         Point topCenter = new Point(0, 0, 2); // Center of the top base
@@ -58,11 +58,11 @@ class CylinderTests {
         // TC13: Test that the normal at the edge between the lateral surface and the bottom base is correct
         Point bottomEdge = new Point(1, 0, 0); // Edge point
         normal = cylinder.getNormal(bottomEdge);
-        assertEquals(axisVec, normal, "ERROR: Normal at the edge between the lateral surface and the bottom base is not correct");
+        assertEquals(new Vector(1,0,0), normal, "ERROR: Normal at the edge between the lateral surface and the bottom base is not correct");
 
         // TC14: Test that the normal at the edge between the lateral surface and the top base is correct
         Point topEdge = new Point(1, 0, 2); // Edge point
         normal = cylinder.getNormal(topEdge);
-        assertEquals(axisBase, normal, "ERROR: Normal at the edge between the lateral surface and the top base is not correct");
+        assertEquals(new Vector(1,0,0), normal, "ERROR: Normal at the edge between the lateral surface and the top base is not correct");
     }
 }

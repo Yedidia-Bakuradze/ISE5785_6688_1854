@@ -34,6 +34,11 @@ public class Cylinder extends Tube {
      */
     @Override
     public Vector getNormal(Point point) {
+
+        // If the point is on the origin point
+        if(point.equals(this.axis.getHead()))
+            return this.axis.getDirection().normalize();
+
         double t = this.axis
                 .getDirection()
                 .dotProduct(point.subtract(this.axis.getHead()));
