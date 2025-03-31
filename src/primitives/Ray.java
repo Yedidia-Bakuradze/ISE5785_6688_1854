@@ -16,7 +16,8 @@ public class Ray {
 
     /**
      * Constructs a Ray with a given starting point and direction vector.
-     * @param head the starting point of the ray
+     *
+     * @param head      the starting point of the ray
      * @param direction the direction vector of the ray
      */
     public Ray(Point head, Vector direction) {
@@ -26,12 +27,13 @@ public class Ray {
 
     /**
      * Checks if this ray is equal to another object.
+     *
      * @param obj the object to compare with
      * @return true if the object is a Ray with the same head and direction, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) return true;
+        if (this == obj) return true;
         return (obj instanceof Ray ray) &&
                 this.head.equals(ray.head) &&
                 this.direction.equals(ray.direction);
@@ -39,6 +41,7 @@ public class Ray {
 
     /**
      * Returns the starting point of the ray.
+     *
      * @return the starting point of the ray
      */
     public Point getHead() {
@@ -47,6 +50,7 @@ public class Ray {
 
     /**
      * Returns the vector of the ray.
+     *
      * @return the vector of the ray
      */
     public Vector getDirection() {
@@ -55,6 +59,6 @@ public class Ray {
 
     @Override
     public String toString() {
-        return "Ray: " + super.toString();
+        return head + "" + direction;
     }
 }

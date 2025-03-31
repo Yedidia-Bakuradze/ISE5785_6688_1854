@@ -1,7 +1,9 @@
 package geometries;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import primitives.Point;
 import primitives.Vector;
 
@@ -12,7 +14,8 @@ public class PlaneTests {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public PlaneTests() {}
+    public PlaneTests() {
+    }
 
     /**
      * Test method for {@link geometries.Plane#getNormal(primitives.Point)}.

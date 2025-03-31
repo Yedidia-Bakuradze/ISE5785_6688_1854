@@ -4,6 +4,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import static primitives.Util.isZero;
+
 /**
  * Represents a tube in 3D space, which is a cylinder with infinite height.
  * Extends the {@link RadialGeometry} class.
@@ -16,7 +18,7 @@ public class Tube extends RadialGeometry {
 
     /**
      * Constructs a tube with a given axis and radius.
-     * 
+     *
      * @param axis   The axis ray of the tube.
      * @param radius The radius of the tube.
      */
@@ -27,28 +29,16 @@ public class Tube extends RadialGeometry {
 
     /**
      * Calculates the normal vector to the tube at a given point.
-     * 
+     *
      * @param point The point on the tube.
      * @return The normal vector at the given point.
      */
     @Override
     public Vector getNormal(Point point) {
-        double t = this.axis
-                .getDirection()
-                .dotProduct(point.subtract(this.axis.getHead()));
-
-        // If the point is on the axis
-        if(t == 0)
-            return point
-                    .subtract(this.axis.getHead())
-                    .normalize();
-
-
-        Point o = this.axis
-                .getHead()
-                .add(this.axis.getDirection().scale(t));
-        return point
-                .subtract(o)
-                .normalize();
+        var p0 = this.axis.getHead();
+        Vector u = this.axis.getDirection();
+        double t = u.dotProduct(point.subtract(p0));
+        Point o = isZero(t) ? p0 : p0.add(u.scale(t));
+        return point.subtract(o).normalize();
     }
 }

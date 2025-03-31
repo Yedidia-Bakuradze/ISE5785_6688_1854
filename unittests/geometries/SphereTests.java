@@ -3,6 +3,7 @@ package geometries;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -13,7 +14,8 @@ public class SphereTests {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public SphereTests() {}
+    public SphereTests() {
+    }
 
     /**
      * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.

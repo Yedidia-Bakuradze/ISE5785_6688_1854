@@ -15,6 +15,7 @@ public class Sphere extends RadialGeometry {
 
     /**
      * Constructor to create a Sphere with a center point and radius.
+     *
      * @param center The center point of the sphere.
      * @param radius The radius of the sphere.
      */
@@ -25,7 +26,7 @@ public class Sphere extends RadialGeometry {
 
     /**
      * Calculates the normal vector to the sphere at a given point.
-     * 
+     *
      * @param point The point on the sphere.
      * @return The normal vector at the given point.
      */
