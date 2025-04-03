@@ -30,10 +30,10 @@ class GeometriesTests {
             new Sphere(new Point(2, 0, 0), 1),
             
             // Plane at x=4 perpendicular to X-axis
-            new Plane(new Vector(1, 0, 0),new Point(4, 0, 0)),
+            new Plane(new Vector(1, 0, 0),new Point(-4, 0, 0)),
             
             // Triangle at x=6 in YZ plane
-            new Triangle(new Point(6, -1, -1), new Point(6, 1, -1), new Point(6, 0, 1)),
+            new Triangle(new Point(7, 1, 1), new Point(6, 0, -1), new Point(5, -1, 1)),
             
             // Polygon at x=8 in YZ plane
             new Polygon(
@@ -42,8 +42,7 @@ class GeometriesTests {
                 new Point(8, 1, 1),
                 new Point(8, -1, 1)
             ),
-
-//TODO: Add after implementing the Tube class
+            //TODO: Add after implementing the Tube class
 //            // Tube along X-axis centered at y=3, z=0 with radius 0.5
 //            new Tube(new Ray(new Point(0, 3, 0), new Vector(0, -1, 0)), 0.5),
 
