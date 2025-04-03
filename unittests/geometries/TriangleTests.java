@@ -24,11 +24,12 @@ class TriangleTests {
 
         // =============== Boundary Values Tests ==================
 
-        // TC11: Ray is interacting the vertix of the triangle
+        // TC11: Ray is interacting the vertex of the triangle
 
         // TC12: Ray is interacting the edge of the triangle
 
         // TC13: Ray is interacting the line of the edge of the triangle where its not a part of the edge
 
+        fail("Test not implemented yet");
     }
 }

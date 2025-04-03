@@ -99,6 +99,12 @@ public class PolygonTests {
     */
    @Test
    void testFindIntersections() {
+      // ============ Equivalence Partitions Tests ==============
+
+
+      // =============== Boundary Values Tests ==================
+
+
       fail("Test not implemented yet");
    }
 }

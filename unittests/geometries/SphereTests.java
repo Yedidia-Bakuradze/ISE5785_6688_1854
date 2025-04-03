@@ -43,15 +43,25 @@ public class SphereTests {
      */
     @Test
     void testFindIntersections() {
+        Sphere sphere = new Sphere(new Point(0,0,1),2);
         // ============ Equivalence Partitions Tests ==============
-
+        Ray ray;
+        
         // TC01: Ray that starts before the sphere and intersects it twice
-
+        ray = new Ray(new Point(2,2,1),new Vector(-2,-2,0));
+        assertEquals(2, sphere.findIntersections(ray).size(), "Error: Ray that starts before the sphere and intersects it twice has not found two points");
+        
         // TC02: Ray that starts inside the sphere and intersects it once
+        ray = new Ray(new Point(0,0,1.5),new Vector(1,1,-0.5));
+        assertEquals(1, sphere.findIntersections(ray).size(), "Error: Ray starts from inside and didn't find one point");
 
         // TC03: Ray that starts outside the sphere and the ray goes exactly in the opposite direction of the object
+        ray = new Ray(new Point(2,2,1),new Vector(2,2,0));
+        assertEquals(0, sphere.findIntersections(ray).size(), "Error: Ray starts outside of the sphere and goes in the opposite direction found some intersections");
 
         // TC04: Ray that starts outside the sphere and the ray line doesn't intersect the object on any side
+        ray = new Ray(new Point(0,3,0),new Vector(0,0,1));
+        assertEquals(0, sphere.findIntersections(ray).size(), "Error: Ray starts outside of the sphere and doesn't direct at all to the sphere, found some intersections");
 
         // =============== Boundary Values Tests ==================
 
@@ -65,28 +75,31 @@ public class SphereTests {
 
         // *** Group 2: Ray's starting point is orthogonal to line between it and the center of the sphere ***
 
-        // TC14: Ray's starting point is outside the sphere
+        // TC21: Ray's starting point is outside the sphere
 
-        // TC15: Ray's starting point is on the sphere
+        // TC22: Ray's starting point is on the sphere
 
 
         // *** Group 3: Ray's line crosses the sphere twice ***
-        // TC16: Ray's starting point is on the sphere and goes into the sphere
+        // TC31: Ray's starting point is on the sphere and goes into the sphere
 
-        // TC17: Ray's starting point is on the sphere and goes out of the sphere
+        // TC32: Ray's starting point is on the sphere and goes out of the sphere
 
 
         // *** Group 4: Ray's line crosses the center of the sphere ***
-        // TC18: Ray's starting point is outside the sphere and goes out of the sphere
+        // TC41: Ray's starting point is outside the sphere and goes out of the sphere
 
-        // TC19: Ray's starting point is the center of the sphere
+        // TC42: Ray's starting point is the center of the sphere
 
-        // TC20: Ray's starting point is on the sphere and goes out of the sphere
+        // TC43: Ray's starting point is on the sphere and goes out of the sphere
 
-        // TC21: Ray's starting point is on the sphere and goes inside the sphere
+        // TC44: Ray's starting point is on the sphere and goes inside the sphere
 
-        // TC22: Ray's starting point is inside the sphere and goes out of the sphere
+        // TC45: Ray's starting point is inside the sphere and goes out of the sphere
 
-        // TC23: Ray's starting point is inside the sphere and goes inside the sphere
+        // TC46: Ray's starting point is inside the sphere and goes inside the sphere
+
+
+        fail("Test not implemented yet");
     }
 }

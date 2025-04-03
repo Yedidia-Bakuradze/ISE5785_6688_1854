@@ -77,6 +77,12 @@ public class CylinderTests {
      */
     @Test
     void testFindIntersections() {
+        // ============ Equivalence Partitions Tests ==============
+
+
+        // =============== Boundary Values Tests ==================
+
+
         fail("Test for findIntersections in Cylinder is not implemented yet");
     }
 }
