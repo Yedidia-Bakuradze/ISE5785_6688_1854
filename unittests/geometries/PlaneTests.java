@@ -83,6 +83,34 @@ public class PlaneTests {
      */
     @Test
     void testFindIntersections() {
+        // ============ Equivalence Partitions Tests ==============
+
+        // *** Group 1: Ray is not orthogonal and not parallel to the plane ***
+        // TC01: Ray's directional vector is to the plane
+
+        // TC02: Ray's directional vector is to the opposite direction of the plane
+
+        // =============== Boundary Values Tests ==================
+        // *** Group 1: Ray is parallel to the plane ***
+        // TC11: Ray is included in the plane
+
+        // TC12: Ray is not included in the plane
+
+        // *** Group 2: Ray is orthogonal to the plane ***
+        // TC13: Ray starts before the plane
+
+        // TC14: Ray starts in the plane
+
+        // TC15: Ray starts after the plane
+
+        // *** Group 3: General tests ***
+
+        // TC16: Ray starts from the plane and isn't parallel or orthogonal to it
+
+        // TC17: Ray starts from the q point of the plane, and it isn't nigher parallel nor orthogonal to it
+
+
+
         fail("Test not implemented yet");
     }
 }
