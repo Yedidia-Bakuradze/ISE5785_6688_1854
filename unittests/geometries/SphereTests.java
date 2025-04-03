@@ -3,8 +3,8 @@ package geometries;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit tests for {@link geometries.Sphere}.
@@ -14,8 +14,7 @@ public class SphereTests {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public SphereTests() {
-    }
+    public SphereTests() {}
 
     /**
      * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.
@@ -36,5 +35,14 @@ public class SphereTests {
 
         // Ensure the normal has length 1
         assertEquals(1, normal.length(), "ERROR: Normal is not a unit vector");
+    }
+
+    /**
+     * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
+     * Tests ray intersections with the sphere.
+     */
+    @Test
+    void testFindIntersections() {
+        fail("Test not implemented yet");
     }
 }

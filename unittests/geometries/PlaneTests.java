@@ -1,9 +1,7 @@
 package geometries;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import primitives.Point;
 import primitives.Vector;
 
@@ -14,8 +12,7 @@ public class PlaneTests {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public PlaneTests() {
-    }
+    public PlaneTests() {}
 
     /**
      * Test method for {@link geometries.Plane#getNormal(primitives.Point)}.
@@ -78,5 +75,14 @@ public class PlaneTests {
         // TC15: All points are collinear but not identical
         Point p4 = new Point(2, 0, 0);
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p2, p4), "ERROR: Constructor does not throw an exception for collinear points");
+    }
+
+    /**
+     * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
+     * Tests ray intersections with the plane.
+     */
+    @Test
+    void testFindIntersections() {
+        fail("Test not implemented yet");
     }
 }

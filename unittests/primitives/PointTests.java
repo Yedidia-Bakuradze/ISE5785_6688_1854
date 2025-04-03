@@ -1,7 +1,5 @@
 package primitives;
-
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -11,8 +9,7 @@ public class PointTests {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public PointTests() {
-    }
+    public PointTests() {}
 
     /**
      * Test method for {@link primitives.Point#add(primitives.Vector)}.
@@ -36,7 +33,7 @@ public class PointTests {
         // =============== Boundary Values Tests ==================
 
         // TC11: Test that adding opposite coordinate vector to a point results the origin point
-        assertEquals(Point.ZERO, new Point(1, 2, 3).add(new Vector(-1, -2, -3)), "ERROR: Adding a zero vector to a point does not return the same point");
+        assertEquals(Point.ZERO, new Point(1, 2, 3).add(new Vector(-1,-2,-3)), "ERROR: Adding a zero vector to a point does not return the same point");
     }
 
     /**
@@ -53,7 +50,6 @@ public class PointTests {
         // =============== Boundary Values Tests ==================
         assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), "ERROR: subtract() should throw exception for identical points");
     }
-
     /**
      * Test method for {@link primitives.Point#distanceSquared(primitives.Point)}.
      */
