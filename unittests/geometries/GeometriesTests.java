@@ -42,10 +42,11 @@ class GeometriesTests {
                 new Point(8, 1, 1),
                 new Point(8, -1, 1)
             ),
-            
-            // Tube along X-axis centered at y=3, z=0 with radius 0.5
-            new Tube(new Ray(new Point(0, 3, 0), new Vector(0, -1, 0)), 0.5),
-            
+
+//TODO: Add after implementing the Tube class
+//            // Tube along X-axis centered at y=3, z=0 with radius 0.5
+//            new Tube(new Ray(new Point(0, 3, 0), new Vector(0, -1, 0)), 0.5),
+
             // Cylinder along X-axis from x=10 to x=12, centered at y=0, z=0 with radius 1
             new Cylinder(new Ray(new Point(10, 0, 0), new Vector(1, 0, 0)), 1, 2)
         );
