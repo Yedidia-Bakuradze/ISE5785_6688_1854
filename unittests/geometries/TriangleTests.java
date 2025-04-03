@@ -1,35 +1,65 @@
 package geometries;
 
 import org.junit.jupiter.api.Test;
+import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TriangleTests {
 
+    private final Vector v1 = new Vector(0, 0, -1);
+    private final Vector v2 = new Vector(0, 0, 1);
+    private final Point p1 = new Point(0, 0, 1);
+    private final Point p2 = new Point(0, 1, 0);
+    private final Point p3 = new Point(1, 0, 0);
+
+
     /**
-     * Test method for {@link geometries.Triangle#findIntersections(Ray)}.
-     * Tests ray intersections with the triangle.
+     * Test method for {@link geometries.Triangle#Triangle(primitives.Point, primitives.Point, primitives.Point)}.
      */
     @Test
     void testFindIntersections() {
+        Triangle triangle = new Triangle(new Point(1, 1, 0), p3, p2);
         // ============ Equivalence Partitions Tests ==============
+        // TC01: the intersection point is inside the triangle
+        assertEquals(1, triangle.findIntersections(
+                        new Ray(new Point(1.8, 1.8, 1), new Vector(-1, -1, -1))).size(),
+                "Failed to find the intersection point when the intersection point is inside the triangle");
 
-        // TC01: Ray intersects the triangle
+        // TC02: the intersection point is outside the triangle and against an edge
+        assertNull(triangle.findIntersections(
+                        new Ray(new Point(0.5, 2, 1), v1)),
+                "Failed to find the intersection point when the intersection point is outside the triangle and against an edge");
 
-        // TC02: Ray does not intersect the triangle
+        // TC03: the intersection point is outside the triangle and against a vertex
+        assertNull(triangle.findIntersections(
+                        new Ray(new Point(2, 2, 1), v1)),
+                "Failed to find the intersection point when the intersection point is outside the triangle and against an edge");
 
-        // TC03: Ray does not intersect the triangle and its in front of a vertex of the triangle
+        // ================= Boundary Values Tests =================
+        // TC04: the intersection point is on the edge of the triangle
+        assertNull(triangle.findIntersections(
+                        new Ray(new Point(0.5, 1, -1), v2)),
+                "Failed to find the intersection point when the intersection point is on the edge of the triangle");
 
+        // TC05: the intersection point is on the vertex of the triangle
+        assertNull(triangle.findIntersections(
+                        new Ray(new Point(1, 1, 1), new Vector(0, 0, -1))),
+                "Failed to find the intersection point when the intersection point is on the vertex of the triangle");
 
-        // =============== Boundary Values Tests ==================
+        // TC06: the intersection point is outside the triangle but in the path of the edge
+        assertNull(triangle.findIntersections(
+                        new Ray(new Point(2, 1, -1), v2)),
+                "Failed to find the intersection point when the intersection point is outside the triangle but in the path of the edge");
 
-        // TC11: Ray is interacting the vertex of the triangle
-
-        // TC12: Ray is interacting the edge of the triangle
-
-        // TC13: Ray is interacting the line of the edge of the triangle where its not a part of the edge
-
-        fail("Test not implemented yet");
+        // ================= external Tests =================
+        // TC07: the triangle is in an angle
+        Triangle triangle2 = new Triangle(p3, p2, p1);
+        assertEquals(1, triangle2.findIntersections(
+                        new Ray(new Point(-1, -1, -1), new Vector(1, 1, 1))).size(),
+                "Failed to find the intersection point when the intersection point is inside the triangle");
     }
+
 }
