@@ -17,6 +17,11 @@ public class Sphere extends RadialGeometry {
     private final Point center;
 
     /**
+     * The radius squared of the sphere.
+     */
+    private final double radiusSquared;
+
+    /**
      * Constructor to create a Sphere with a center point and radius.
      *
      * @param center The center point of the sphere.
@@ -24,6 +29,7 @@ public class Sphere extends RadialGeometry {
      */
     public Sphere(Point center, double radius) {
         super(radius);
+        this.radiusSquared = radius * radius;
         this.center = center;
     }
 
@@ -40,6 +46,16 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        Vector u = this.center.subtract(ray.getHead());
+        double tm = ray.getDirection().dotProduct(u);
+        double d = Math.sqrt(u.lengthSquared() - tm * tm);
+
+        if(d >= radius) return null;
+
+        double th = Math.sqrt(radiusSquared - d * d);
+        double t1 = tm - th;
+        double t2 = tm + th;
+
+        return List.of(ray.getHead().add(ray.getDirection().scale(t1)), ray.getHead().add(ray.getDirection().scale(t2)));
     }
 }
