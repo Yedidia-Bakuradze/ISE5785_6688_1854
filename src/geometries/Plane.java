@@ -3,6 +3,8 @@ package geometries;
 import primitives.Point;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Represents a plane in 3D space defined by a point and a normal vector.
  * Extends the {@link Geometry} class.
@@ -53,5 +55,10 @@ public class Plane extends Geometry {
     @Override
     public Vector getNormal(Point point) {
         return normal;
+    }
+
+    @Override
+    public List<Point> findIntersections() {
+        return null;
     }
 }

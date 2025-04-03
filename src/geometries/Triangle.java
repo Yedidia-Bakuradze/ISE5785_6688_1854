@@ -2,6 +2,8 @@ package geometries;
 
 import primitives.Point;
 
+import java.util.List;
+
 /**
  * Represents a triangle in 3D space.
  * A triangle is a special case of a polygon with three vertices.
@@ -18,5 +20,10 @@ public class Triangle extends Polygon {
      */
     public Triangle(Point point, Point point1, Point point2) {
         super(point, point1, point2);
+    }
+
+    @Override
+    public List<Point> findIntersections() {
+        return null;
     }
 }

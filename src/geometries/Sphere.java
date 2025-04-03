@@ -3,6 +3,8 @@ package geometries;
 import primitives.Point;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Represents a sphere in 3D space.
  * Extends RadialGeometry to include a center point and radius.
@@ -33,5 +35,10 @@ public class Sphere extends RadialGeometry {
     @Override
     public Vector getNormal(Point point) {
         return point.subtract(center).normalize();
+    }
+
+    @Override
+    public List<Point> findIntersections() {
+        return null;
     }
 }
