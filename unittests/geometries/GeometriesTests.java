@@ -52,17 +52,17 @@ class GeometriesTests {
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Some shapes (but not all) intersect
-        Ray ray = new Ray(new Point(6, 4, 0), new Vector(-4, -4, 0));
-        assertEquals(5, geometries.findIntersections(ray).size(), "EP: Ray intersects some but not all geometries");
+        Ray ray = new Ray(new Point(9, -1, 0), new Vector(-4, 2, 0));
+        assertEquals(3, geometries.findIntersections(ray).size(), "EP: Ray intersects some but not all geometries");
 
         // =============== Boundary Values Tests ==================
         // TC11: Empty collection
         ray = new Ray(new Point(0, 0.5, 0), new Vector(1, 0, 0));
-        assertEquals(0,emptyGeometries.findIntersections(ray).size(), "BVA: The ray should have been intersected with zero objects");
+        assertNull(emptyGeometries.findIntersections(ray), "BVA: The ray should have been intersected with zero objects");
 
         // TC12: No shape intersects
         ray = new Ray(new Point(-1, 0, 0), new Vector(0, 0, 1));
-        assertEquals(0,geometries.findIntersections(ray).size(), "BVA: The ray should have been intersected with zero objects");
+        assertNull(geometries.findIntersections(ray), "BVA: The ray should have been intersected with zero objects");
 
         // TC13: Only one shape intersects (The plane)
         ray = new Ray(new Point(-2, 0, 0), new Vector(-1, 0, 0));
@@ -70,6 +70,6 @@ class GeometriesTests {
 
         // TC14: All shapes intersect
         ray = new Ray(new Point(15, 0, 0), new Vector(-1, 0, 0));
-        assertEquals(9, geometries.findIntersections(ray).size(), "BVA: Ray intersects all geometries");
+        assertEquals(5, geometries.findIntersections(ray).size(), "BVA: Ray intersects all geometries");
     }
 }

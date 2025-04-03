@@ -32,8 +32,7 @@ public class Geometries implements Intersectable{
             List<Point> intersections = i.findIntersections(ray);
             if (intersections != null) {
                 if(resList == null) {
-                    resList = new LinkedList<Point>();
-                    intersections.addAll(resList);
+                    resList = new LinkedList<Point>(intersections);
                     continue;
                 }
                 resList.addAll(intersections);
