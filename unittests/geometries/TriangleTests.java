@@ -24,8 +24,7 @@ class TriangleTests {
         Triangle triangle = new Triangle(new Point(1, 1, 0), p3, p2);
         // ============ Equivalence Partitions Tests ==============
         // TC01: the intersection point is inside the triangle
-        assertEquals(1, triangle.findIntersections(
-                        new Ray(new Point(1.8, 1.8, 1), new Vector(-1, -1, -1))).size(),
+        assertEquals(1, triangle.findIntersections(new Ray(new Point(1.8, 1.8, 1), new Vector(-1, -1, -1))).size(),
                 "Failed to find the intersection point when the intersection point is inside the triangle");
 
         // TC02: the intersection point is outside the triangle and against an edge
