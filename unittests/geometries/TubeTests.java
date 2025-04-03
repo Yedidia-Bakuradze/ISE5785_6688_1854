@@ -36,7 +36,7 @@ public class TubeTests {
         Ray axis = new Ray(axisPoint, axisVector);
         Tube tube = new Tube(axis, 2);
 
-        Point p = new Point(2, 2, 1); // Point on the surface of the tube, not on the same line of the origin
+        Point p = new Point(2, 0, 2); // Point on the surface of the tube, not on the same line of the origin
         Vector normal = tube.getNormal(p);
 
         // Ensure the normal has length 1

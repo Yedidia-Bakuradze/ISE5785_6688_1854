@@ -37,8 +37,13 @@ public class Cylinder extends Tube {
      */
     @Override
     public Vector getNormal(Point point) {
-        //TODO: Dont throw exceptions of outside the cylinder
-        //TODO: Check if the point is on the top or bottom of the cylinder and throw the proper normal (Up or Down)
-        return null;
+        Point p0 = this.axis.getHead();
+        Vector v = this.axis.getDirection();
+
+        double t = point.equals(p0) ? 0 : alignZero(v.dotProduct(point.subtract(p0)));
+        if (t == 0) return v.scale(-1);
+        if (t == height) return v;
+
+        return point.subtract(p0.add(v.scale(t))).normalize();
     }
 }
