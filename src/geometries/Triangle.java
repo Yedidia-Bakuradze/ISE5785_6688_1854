@@ -23,6 +23,13 @@ public class Triangle extends Polygon {
         super(point, point1, point2);
     }
 
+
+    /**
+     * Finds the intersections of a ray with the polygon.
+     *
+     * @param ray The ray to check for intersections.
+     * @return A list of intersection points, or null if there are no intersections.
+     * */
     @Override
     public List<Point> findIntersections(Ray ray) {
         return null;

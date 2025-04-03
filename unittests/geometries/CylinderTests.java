@@ -5,6 +5,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit tests for {@link geometries.Cylinder}.
@@ -68,5 +69,14 @@ public class CylinderTests {
         Point topEdge = new Point(1, 0, 2); // Edge point
         normal = cylinder.getNormal(topEdge);
         assertEquals(new Vector(1,0,0), normal, "ERROR: Normal at the edge between the lateral surface and the top base is not correct");
+    }
+
+    /**
+     * Test method for {@link geometries.Cylinder#findIntersections(primitives.Ray)}.
+     * Tests ray intersections with the cylinder.
+     */
+    @Test
+    void testFindIntersections() {
+        fail("Test for findIntersections in Cylinder is not implemented yet");
     }
 }

@@ -13,6 +13,22 @@ class TriangleTests {
      */
     @Test
     void testFindIntersections() {
-        fail("Test not implemented yet");
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Ray intersects the triangle
+
+        // TC02: Ray does not intersect the triangle
+
+        // TC03: Ray does not intersect the triangle and its in front of a vertex of the triangle
+
+
+        // =============== Boundary Values Tests ==================
+
+        // TC11: Ray is interacting the vertix of the triangle
+
+        // TC12: Ray is interacting the edge of the triangle
+
+        // TC13: Ray is interacting the line of the edge of the triangle where its not a part of the edge
+
     }
 }

@@ -44,6 +44,13 @@ public class Sphere extends RadialGeometry {
         return point.subtract(center).normalize();
     }
 
+
+    /**
+     * Finds the intersections of a ray with the sphere.
+     *
+     * @param ray The ray to check for intersections.
+     * @return A list of intersection points, or null if there are no intersections.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
         Vector u = this.center.subtract(ray.getHead());
