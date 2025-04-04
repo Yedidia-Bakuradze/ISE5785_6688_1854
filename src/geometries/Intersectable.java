@@ -14,5 +14,5 @@ public interface Intersectable {
      * @param ray The cast ray.
      * @return A list of intersection points (LinkedList instance), or null value if there are no intersections.
      */
-    List<Point> findIntsersections(Ray ray);
+    List<Point> findIntersections(Ray ray);
 }

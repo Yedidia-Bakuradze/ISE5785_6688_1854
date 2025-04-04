@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit tests for {@link geometries.Sphere}.
@@ -34,5 +35,13 @@ public class SphereTests {
 
         // Ensure the normal has length 1
         assertEquals(1, normal.length(), "ERROR: Normal is not a unit vector");
+    }
+
+    /**
+     * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    void testFindIntersections(){
+        fail("Not yet implemented");
     }
 }

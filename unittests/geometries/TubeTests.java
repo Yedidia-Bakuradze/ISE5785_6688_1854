@@ -6,6 +6,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit tests for {@link geometries.Tube}.
@@ -52,5 +53,13 @@ public class TubeTests {
         
         assertEquals(1, normal.length(), "ERROR: Normal is not a unit vector");
         assertEquals(new Vector(1, 0, 0), normal, "ERROR: Normal at boundary point is not correct");
+    }
+
+    /**
+     * Test method for {@link geometries.Tube#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    void testFindIntersections(){
+        fail("Not yet implemented");
     }
 }

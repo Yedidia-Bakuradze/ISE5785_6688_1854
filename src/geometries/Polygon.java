@@ -3,6 +3,8 @@ package geometries;
 import static java.lang.Double.*;
 import java.util.List;
 import static primitives.Util.*;
+
+import org.junit.jupiter.api.Test;
 import primitives.*;
 
 /**
@@ -86,4 +88,9 @@ public class Polygon extends Geometry {
    @Override
    public Vector getNormal(Point point) { return plane.getNormal(point); }
 
+   //TODO: This method is a bonus for this project. implement it later
+   @Override
+   public List<Point> findIntersections(Ray ray) {
+      return null;
+   }
 }

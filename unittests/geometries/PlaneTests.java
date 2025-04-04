@@ -76,4 +76,12 @@ public class PlaneTests {
         Point p4 = new Point(2, 0, 0);
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p2, p4), "ERROR: Constructor does not throw an exception for collinear points");
     }
+
+    /**
+     * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    void testFindIntersections(){
+        fail("Not yet implemented");
+    }
 }
