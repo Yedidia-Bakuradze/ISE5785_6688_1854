@@ -48,6 +48,8 @@ public class SphereTests {
      */
     @Test
     void testFindIntersections(){
+        // Visual: https://www.geogebra.org/calculator/hjc4tu2w
+
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Ray is entirely outside the sphere
