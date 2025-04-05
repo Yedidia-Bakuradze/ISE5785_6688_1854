@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 /**
  * Represents a sphere in 3D space.
  * Extends RadialGeometry to include a center point and radius.
@@ -15,7 +17,7 @@ public class Sphere extends RadialGeometry {
      * The center point of the sphere.
      */
     private final Point center;
-
+    private final double radiusSquared;
     /**
      * Constructor to create a Sphere with a center point and radius.
      * @param center The center point of the sphere.
@@ -23,6 +25,7 @@ public class Sphere extends RadialGeometry {
      */
     public Sphere(Point center, double radius) {
         super(radius);
+        radiusSquared = radius * radius;
         this.center = center;
     }
 
@@ -39,6 +42,22 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        Point p0 = ray.getHead();
+        Vector v = ray.getDirection();
+
+        if(this.center.equals(p0)) return List.of(p0.add(v.scale(radiusSquared)));
+
+        Vector u = this.center.subtract(p0);
+        double tm = alignZero(v.dotProduct(u));
+        double dSquared = alignZero(u.lengthSquared() - tm * tm);
+
+        if(dSquared >= this.radiusSquared) return null;
+
+        double th = Math.sqrt(this.radiusSquared - dSquared);
+        double t1 = alignZero(tm + th);
+        double t2 = alignZero(tm - th);
+
+        if(t1 <= 0) return null;
+        else return t2<= 0 ? List.of(p0.add(v.scale(t1))) : List.of(p0.add(v.scale(t1)), p0.add(v.scale(t2)));
     }
 }

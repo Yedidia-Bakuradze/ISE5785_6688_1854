@@ -56,7 +56,7 @@ public class SphereTests {
         assertNull(sphere.findIntersections(new Ray(Point.ZERO, upVec)), "ERROR: Ray should not intersect with the sphere");
 
         // TC02: Ray's line intersects with the sphere, and its starting point is before the sphere
-        assertEquals(1,sphere.findIntersections(new Ray(new Point(0,0,1),diagonalVec)).size(), "ERROR: Ray should intersect with the sphere at two point");
+        assertEquals(2,sphere.findIntersections(new Ray(new Point(0,0,1),diagonalVec)).size(), "ERROR: Ray should intersect with the sphere at two point");
 
         // TC03: Ray's line intersects with the sphere, and its starting point is after the sphere
         assertNull(sphere.findIntersections(new Ray(new Point(2,2,1),diagonalVec)), "ERROR: Ray shouldn't intersect with the sphere at all");
@@ -68,7 +68,7 @@ public class SphereTests {
         // *** Group 1: Ray's line is tangent to the sphere
 
         // TC11: Ray's starting point is before the sphere
-        assertEquals(0,sphere.findIntersections(new Ray(new Point(0,0,1) , xVec)).size(), "ERROR: Ray should intersect with the sphere on the tangent point");
+        assertNull(sphere.findIntersections(new Ray(new Point(0,0,1) , xVec)), "ERROR: Ray shouldn't intersect with the sphere on the tangent point");
 
         // TC12: Ray's starting point is on the sphere
         assertNull(sphere.findIntersections(new Ray(new Point(1,0,1), xVec)), "ERROR: Ray shouldn't intersect with the sphere on the tangent point on starting point of the ray");
