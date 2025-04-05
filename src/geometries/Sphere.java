@@ -59,6 +59,6 @@ public class Sphere extends RadialGeometry {
         double t2 = alignZero(tm - th);
 
         if (t1 <= 0) return null;
-        else return t2 <= 0 ? List.of(ray.getPoint(t1)) : List.of(ray.getPoint(t1), ray.getPoint(t2));
+        else return t2 <= 0 ? List.of(ray.getPoint(t1)) : List.of(ray.getPoint(t2),ray.getPoint(t1));
     }
 }
