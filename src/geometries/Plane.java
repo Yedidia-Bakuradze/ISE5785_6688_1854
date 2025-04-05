@@ -83,6 +83,6 @@ public class Plane extends Geometry {
         if (down == 0) return null;
 
         double t = alignZero(up / down);
-        return t < 0 ? null : List.of(p0.add(v.scale(t)));
+        return t < 0 ? null : List.of(ray.getPoint(t));
     }
 }

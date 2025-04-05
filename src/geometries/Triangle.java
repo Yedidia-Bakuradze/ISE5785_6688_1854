@@ -48,11 +48,7 @@ public class Triangle extends Polygon {
         double res2 = v.dotProduct(n2);
         double res3 = v.dotProduct(n3);
 
-        boolean isSameSign =
-                (res1 > 0 && res2 > 0 && res3 > 0) ||
-                        (res1 < 0 && res2 < 0 && res3 < 0);
-
-        if (isSameSign) return intersections;
+        if ((res1 > 0 && res2 > 0 && res3 > 0) || (res1 < 0 && res2 < 0 && res3 < 0)) return intersections;
         return null;
     }
 }

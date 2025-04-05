@@ -26,6 +26,7 @@ public class Cylinder extends Tube {
         this.height = height;
     }
 
+    //TODO: Refactoring is needed ASAP (Issue #11)
     /**
      * Calculates the normal vector to the cylinder at a given point.
      *
@@ -63,9 +64,7 @@ public class Cylinder extends Tube {
 
         // Case 2: If the point is on the top base
         if (t == this.height) {
-            Point o = this.axis
-                    .getHead()
-                    .add(this.axis.getDirection().scale(t));
+            Point o = this.axis.getPoint(t);
             double distance = point.distance(o);
 
             // If the point is on the Cylinder body
@@ -81,9 +80,7 @@ public class Cylinder extends Tube {
         }
 
         // If the point is on the lateral surface
-        Point o = this.axis
-                .getHead()
-                .add(this.axis.getDirection().scale(t));
+        Point o = this.axis.getPoint(t);
 
         return point.subtract(o).normalize();
     }
