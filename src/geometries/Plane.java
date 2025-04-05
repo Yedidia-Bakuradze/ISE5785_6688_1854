@@ -32,8 +32,19 @@ public class Plane extends Geometry {
      * @throws IllegalArgumentException when the points are collinear.
      */
     public Plane(Point p1, Point p2, Point p3) {
+
+        // Check that the points are not on the same line
+        if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3)) {
+            throw new IllegalArgumentException("The points can't be on the same line");
+        }
+
         Vector v1 = p2.subtract(p1);
         Vector v2 = p3.subtract(p1);
+
+        if (v1.crossProduct(v2).equals(Vector.ZERO)) {
+            throw new IllegalArgumentException("The points can't be on the same line");
+        }
+
         this.normal = v1.crossProduct(v2).normalize();
         this.q = p1;
     }
@@ -62,16 +73,17 @@ public class Plane extends Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Point p0 = ray.getHead();
-        if(this.q.equals(p0)) return null; // The ray starts on the plane
-
         Vector v = ray.getDirection();
-        double dotMult = normal.dotProduct(this.q.subtract(p0));
+        Point p0 = ray.getHead();
 
-        if(alignZero(dotMult) == 0) return null; // The ray is parallel to the plane
+        double up = q.equals(p0) ? 0 : alignZero(this.normal.dotProduct(this.q.subtract(p0)));
+        if (up == 0) return null;
 
-        double t = dotMult / normal.dotProduct(v);
-        if(alignZero(t) <= 0) return null;
-        return List.of(p0.add(v.scale(t)));
+        // If the ray is parallel to the plane, return null
+        double down = this.normal.dotProduct(v);
+        if (down == 0) return null;
+
+        double t = alignZero(up / down);
+        return t < 0 ? null : List.of(ray.getPoint(t));
     }
 }

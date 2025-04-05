@@ -1,5 +1,7 @@
 package primitives;
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -11,11 +13,12 @@ public class VectorTests {
      * Allows for a small margin of error in floating-point calculations.
      */
     private final float DELTA = 0.00001f;
-    
+
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public VectorTests() {}
+    public VectorTests() {
+    }
 
     /**
      * Test method for {@link primitives.Vector#length()}.
@@ -25,7 +28,7 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Vector (4,0,3) should have length 5
-        Vector v1 = new Vector(4,0,3);
+        Vector v1 = new Vector(4, 0, 3);
         assertEquals(5, v1.length(), DELTA, "ERROR: length() is incorrect");
 
         // TC02: Vector with negative values should return the correct length
@@ -47,7 +50,7 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Vector (4,0,3) should have LengthSquared 25
-        Vector v1 = new Vector(4,0,3);
+        Vector v1 = new Vector(4, 0, 3);
         assertEquals(25, v1.lengthSquared(), "ERROR: lengthSquared() is incorrect");
 
         // TC02: Vector with negative values should return the correct LengthSquared
@@ -77,7 +80,7 @@ public class VectorTests {
         // TC02: Adding two vectors with an angle greater than 90 degrees
         vec1 = new Vector(1, 0, 0);
         vec2 = new Vector(0, 1, 0);
-        expected = new Vector(1,1,0);
+        expected = new Vector(1, 1, 0);
         assertEquals(expected, vec1.add(vec2), "ERROR: vectors addition is Wrong"); //Expected is zero
 
         // =============== Boundary Values Tests ==================
@@ -85,7 +88,7 @@ public class VectorTests {
         // TC11: Adding a vector and its negative should give zero
         Vector v1 = new Vector(1, 2, 3);
         Vector v2 = new Vector(-1, -2, -3);
-        assertThrows(IllegalArgumentException.class,()-> v1.add(v2), "ERROR: opposite vectors addition is not zero");
+        assertThrows(IllegalArgumentException.class, () -> v1.add(v2), "ERROR: opposite vectors addition is not zero");
     }
 
 
@@ -112,7 +115,7 @@ public class VectorTests {
 
         // TC11: Subtracting a vector from itself should give zero
         Vector v1 = new Vector(1, 2, 3);
-        assertThrows(IllegalArgumentException.class,()-> v1.subtract(v1), "ERROR: subtracting a vector from itself is not zero");
+        assertThrows(IllegalArgumentException.class, () -> v1.subtract(v1), "ERROR: subtracting a vector from itself is not zero");
 
         // TC12: Subtracting a zero vector should return the same vector
         assertEquals(v1, v1.subtract(Vector.ZERO), "ERROR: subtracting zero vector does not return the same vector");
@@ -128,19 +131,19 @@ public class VectorTests {
     void testScale() {
         // ============ Equivalence Partitions Tests ==============
         //TC01: test that length of the dot-product of vectors with less than 90 degrees angle (45d) is correct
-        Vector vec1 = new Vector(1,2,3);
-        assertEquals(new Vector(5,2*5,3*5), vec1.scale(5), "ERROR: scale() result on positive scalar is not correct");
+        Vector vec1 = new Vector(1, 2, 3);
+        assertEquals(new Vector(5, 2 * 5, 3 * 5), vec1.scale(5), "ERROR: scale() result on positive scalar is not correct");
 
         //TC02: test that length of the dot-product of vectors with a degree higher than 90 degrees angle (135d) is correct
-        vec1 = new Vector(1,2,3);
-        assertEquals(new Vector(-5,-2*5,-3*5), vec1.scale(-5), "ERROR: scale() result on negative scalar is not correct");
-    
+        vec1 = new Vector(1, 2, 3);
+        assertEquals(new Vector(-5, -2 * 5, -3 * 5), vec1.scale(-5), "ERROR: scale() result on negative scalar is not correct");
+
         // =============== Boundary Values Tests ==================
 
         //TC11: test that it throws an exception when trying to scale by zero
-        assertThrows(IllegalArgumentException.class ,()-> new Vector(1,2,3).scale(0), "ERROR: scale() results vector zero and doesn't throws an exception");
-    
-    
+        assertThrows(IllegalArgumentException.class, () -> new Vector(1, 2, 3).scale(0), "ERROR: scale() results vector zero and doesn't throws an exception");
+
+
     }
 
     /**
@@ -151,25 +154,25 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01: test that result of the dot-product of vectors with less than 90 degrees angle (45d) is correct
-        Vector vec1 = new Vector(1,0,0);
-        Vector vec2 = new Vector(1,0,-1);
+        Vector vec1 = new Vector(1, 0, 0);
+        Vector vec2 = new Vector(1, 0, -1);
         assertEquals(1, vec1.dotProduct(vec2), "ERROR: dotProduct() result on vectors with angle less than 90d is not correct");
 
         //TC02: test that result of the dot-product of vectors with a degree higher than 90 degrees angle (135d) is correct
-        vec1 = new Vector(1,0,1);
-        vec2 = new Vector(-1,0,-1);
+        vec1 = new Vector(1, 0, 1);
+        vec2 = new Vector(-1, 0, -1);
         assertEquals(-2, vec1.dotProduct(vec2), "ERROR: dotProduct() result on vectors with angle more than 90d is not correct");
 
         // =============== Boundary Values Tests ==================
 
         //TC11: test that a dot-product of orthogonal vectors is zero
-        vec1 = new Vector(1,4,-2);
-        vec2 = new Vector(4,0,2);
+        vec1 = new Vector(1, 4, -2);
+        vec2 = new Vector(4, 0, 2);
         assertEquals(0, vec1.dotProduct(vec2), "ERROR: dotProduct() result of orthogonal vectors is not zero");
 
         //TC12: test that a dot-product of vectors which one of them is a unit vector
-        vec1 = new Vector(1,0,0);
-        vec2 = new Vector(4,12,3);
+        vec1 = new Vector(1, 0, 0);
+        vec2 = new Vector(4, 12, 3);
         assertEquals(4, vec1.dotProduct(vec2), "ERROR: dotProduct() result of unit vector and random vector is not correct");
     }
 
@@ -181,38 +184,38 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01: test that the result of the cross-product of vectors with less than 90 degrees angle (45d) is correct (length and orthogonality)
-        Vector vec1 = new Vector(1,0,0);
-        Vector vec2 = new Vector(1,0,-1);
+        Vector vec1 = new Vector(1, 0, 0);
+        Vector vec2 = new Vector(1, 0, -1);
         Vector vr = vec1.crossProduct(vec2);
-        assertEquals(vec1.length()*vec2.length()*Math.sin(Math.toRadians(45)), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
+        assertEquals(vec1.length() * vec2.length() * Math.sin(Math.toRadians(45)), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
         assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
         assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
 
         //TC02: test that the result of the cross-product of vectors with more than 90 degrees angle (135d) is correct (length and orthogonality)
-        vec1 = new Vector(1,0,0);
-        vec2 = new Vector(-1,0,-1);
+        vec1 = new Vector(1, 0, 0);
+        vec2 = new Vector(-1, 0, -1);
         vr = vec1.crossProduct(vec2);
-        assertEquals(vec1.length()*vec2.length()*Math.sin(Math.toRadians(135)), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
+        assertEquals(vec1.length() * vec2.length() * Math.sin(Math.toRadians(135)), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
         assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
         assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
 
         // =============== Boundary Values Tests ==================
 
         //TC11: test that a cross-product of parallel vectors throws an exception
-        assertThrows(IllegalArgumentException.class ,()->new Vector(1,0,0).crossProduct(new Vector(3,0,0)), "ERROR: crossProduct() for parallel vectors does not throw an exception");
+        assertThrows(IllegalArgumentException.class, () -> new Vector(1, 0, 0).crossProduct(new Vector(3, 0, 0)), "ERROR: crossProduct() for parallel vectors does not throw an exception");
 
         //TC12: test that a cross-product of negating vectors with the same size equals to zero
-        assertThrows(IllegalArgumentException.class,()-> new Vector(1,2,3).crossProduct(new Vector(-1,-2,-3)), "ERROR: crossProduct() for negating vectors with same sizes is not a zero vector");
+        assertThrows(IllegalArgumentException.class, () -> new Vector(1, 2, 3).crossProduct(new Vector(-1, -2, -3)), "ERROR: crossProduct() for negating vectors with same sizes is not a zero vector");
 
         //TC13: test that a cross-product of negating vectors with the different sizes equals to zero
 
-        assertThrows(IllegalArgumentException.class,()->new Vector(7,0,0).crossProduct(new Vector(-5,0,0)), "ERROR: crossProduct() for negating vectors with different sizes is not a zero vector");
+        assertThrows(IllegalArgumentException.class, () -> new Vector(7, 0, 0).crossProduct(new Vector(-5, 0, 0)), "ERROR: crossProduct() for negating vectors with different sizes is not a zero vector");
 
         //TC14: test that a cross-product of negating vectors with the different sizes equals to zero
-        Vector vec3 = new Vector(7,7,0);
-        Vector vec4 = new Vector(7,7,0);
-        assertThrows(IllegalArgumentException.class,()->vec3.crossProduct(vec4), "ERROR: crossProduct() for vectors with same sizes and same direction is not a zero vector");
+        Vector vec3 = new Vector(7, 7, 0);
+        Vector vec4 = new Vector(7, 7, 0);
+        assertThrows(IllegalArgumentException.class, () -> vec3.crossProduct(vec4), "ERROR: crossProduct() for vectors with same sizes and same direction is not a zero vector");
     }
 
     /**

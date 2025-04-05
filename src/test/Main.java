@@ -61,12 +61,10 @@ public final class Main {
      * @param args irrelevant here
      */
     public static void main(String[] args) {
-
-        return;
-//        pointTests();
-//        vectorDoubleOperationTests();
-//        vectorSingleOperationTests();
-//        out.println("If there were no any other outputs - all tests succeeded!");
+        pointTests();
+        vectorDoubleOperationTests();
+        vectorSingleOperationTests();
+        out.println("If there were no any other outputs - all tests succeeded!");
     }
 
     /**

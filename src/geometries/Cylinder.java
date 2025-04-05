@@ -31,6 +31,8 @@ public class Cylinder extends Tube {
         this.height = height;
     }
 
+    //TODO: Refactoring is needed ASAP (Issue #11)
+
     /**
      * Calculates the normal vector to the cylinder at a given point.
      *
@@ -42,12 +44,51 @@ public class Cylinder extends Tube {
         Point p0 = this.axis.getHead();
         Vector v = this.axis.getDirection();
 
-        double t = point.equals(p0) ? 0 : alignZero(v.dotProduct(point.subtract(p0)));
-        if (t == 0) return v.scale(-1);
-        if (t == height) return v;
+        // If the point is on the origin point
+        if (point.equals(this.axis.getHead()))
+            return this.axis.getDirection().normalize();
 
-        return point.subtract(p0.add(v.scale(t))).normalize();
-    }
+        double t = this.axis
+                .getDirection()
+                .dotProduct(point.subtract(this.axis.getHead()));
+
+        // If the point is on a base
+
+        // Case 1: If the point is on the bottom base
+        if (t == 0) {
+            double distance = point.distance(this.axis.getHead());
+
+            // If the point is on the Cylinder body
+            if (distance == this.radius)
+                return point.subtract(this.axis.getHead()).normalize();
+
+            // If the point is on the bottom base
+            if (distance < this.radius)
+                return this.axis.getDirection().normalize();
+
+            // If the point is outside the Cylinder
+            throw new IllegalArgumentException("The point is outside the Cylinder");
+        }
+
+        // Case 2: If the point is on the top base
+        if (t == this.height) {
+            Point o = this.axis.getPoint(t);
+            double distance = point.distance(o);
+
+            // If the point is on the Cylinder body
+            if (distance == this.radius)
+                return point.subtract(o).normalize();
+
+            // If the point is on the top base
+            if (distance < this.radius)
+                return this.axis.getDirection().normalize();
+
+            // If the point is outside the Cylinder
+            throw new IllegalArgumentException("The point is outside the Cylinder");
+        }
+
+        // If the point is on the lateral surface
+        Point o = this.axis.getPoint(t);
 
     /**
      * Finds the intersections of a ray with the cylinder.

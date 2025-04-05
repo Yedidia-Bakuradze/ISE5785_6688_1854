@@ -49,7 +49,7 @@ public class Vector extends Point {
      */
     @Override
     public String toString() {
-        return "->" + super.toString();
+        return "Vector: " + super.toString();
     }
 
     /**
@@ -110,9 +110,17 @@ public class Vector extends Point {
      * @throws IllegalArgumentException if the right vector is zero or if the vectors are parallel
      */
     public Vector crossProduct(Vector rightVec) {
+        //Check if right vector is zero
+        if (rightVec.equals(Point.ZERO))
+            throw new IllegalArgumentException("Cross-Product of zero vectors is not allowed");
+
+        //Check if vectors are parallel
+        if (this.xyz.d1() / rightVec.xyz.d1() == this.xyz.d2() / rightVec.xyz.d2() && this.xyz.d2() / rightVec.xyz.d2() == this.xyz.d3() / rightVec.xyz.d3())
+            throw new IllegalArgumentException("Cross-Product of parallel vectors is not allowed");
+
         return new Vector(
                 this.xyz.d2() * rightVec.xyz.d3() - this.xyz.d3() * rightVec.xyz.d2(),  // x component
-                this.xyz.d3() * rightVec.xyz.d1() - this.xyz.d1() * rightVec.xyz.d3(),  // y component
+                this.xyz.d3() * rightVec.xyz.d1() - this.xyz.d1() * rightVec.xyz.d3(),  // y component (fixed)
                 this.xyz.d1() * rightVec.xyz.d2() - this.xyz.d2() * rightVec.xyz.d1()   // z component
         );
     }

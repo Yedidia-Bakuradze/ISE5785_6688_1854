@@ -17,11 +17,12 @@ public class TubeTests {
      * Allows for a small margin of error in floating-point calculations.
      */
     private final float DELTA = 0.00001f;
-    
+
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public TubeTests() {}
+    public TubeTests() {
+    }
 
     /**
      * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
@@ -40,7 +41,7 @@ public class TubeTests {
         Vector normal = tube.getNormal(p);
 
         // Ensure the normal has length 1
-        assertEquals(1, normal.length(), DELTA,"ERROR: Normal is not a unit vector");
+        assertEquals(1, normal.length(), DELTA, "ERROR: Normal is not a unit vector");
 
         // Ensure the normal is orthogonal to the tube
         assertEquals(0, normal.dotProduct(axisVector), "ERROR: Normal is not correct");
@@ -50,24 +51,16 @@ public class TubeTests {
         // TC11: Test that the normal at a point directly above the tube's axis is correct
         Point boundaryPoint = new Point(2, 0, 0); // Point directly above the axis
         normal = tube.getNormal(boundaryPoint);
-        
+
         assertEquals(1, normal.length(), "ERROR: Normal is not a unit vector");
         assertEquals(new Vector(1, 0, 0), normal, "ERROR: Normal at boundary point is not correct");
     }
 
     /**
      * Test method for {@link geometries.Tube#findIntersections(primitives.Ray)}.
-     * Tests ray intersections with the tube.
      */
     @Test
     void testFindIntersections() {
-
-        // ============ Equivalence Partitions Tests ==============
-
-
-        // =============== Boundary Values Tests ==================
-
-
-        fail("Test not implemented yet");
+        fail("Not yet implemented");
     }
 }

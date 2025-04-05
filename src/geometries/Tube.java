@@ -6,8 +6,6 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static primitives.Util.isZero;
-
 /**
  * Represents a tube in 3D space, which is a cylinder with infinite height.
  * Extends the {@link RadialGeometry} class.
@@ -38,12 +36,15 @@ public class Tube extends RadialGeometry {
     @Override
     public Vector getNormal(Point point) {
         Point p0 = this.axis.getHead();
-        Vector u = this.axis.getDirection();
-        double t = u.dotProduct(point.subtract(p0));
-        Point o = isZero(t) ? p0 : p0.add(u.scale(t));
+        double t = this.axis.getDirection().dotProduct(point.subtract(p0));
+
+        // If the point is on the axis
+        if (t == 0) return point.subtract(p0).normalize();
+        Point o = this.axis.getPoint(t);
         return point.subtract(o).normalize();
     }
 
+    //TODO: This method is a bonus for this project. implement it later
     @Override
     public List<Point> findIntersections(Ray ray) {
         return null;

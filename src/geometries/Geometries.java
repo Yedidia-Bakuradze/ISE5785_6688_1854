@@ -6,38 +6,63 @@ import primitives.Ray;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Geometries implements Intersectable{
+/**
+ * Represents a collection of geometries that can be intersected by rays.
+ * Implements the {@link Intersectable} interface.
+ */
+public class Geometries implements Intersectable {
 
-    private List<Intersectable> geometries = new LinkedList<Intersectable>();
+    /**
+     * A list of intersectable geometries.
+     */
+    private final List<Intersectable> geometries = new LinkedList<Intersectable>();
 
-
-    Geometries(){
-
+    /**
+     * Default constructor for Geometries.
+     * Made for empty collection of geometries.
+     */
+    Geometries() {
     }
 
-    Geometries(Intersectable ...geometries){
-        this.add(geometries);
+    /**
+     * Constructor for Geometries that accepts many geometries objects.
+     *
+     * @param intersectable Objects of intersectable geometries.
+     */
+    public Geometries(Intersectable... intersectable) {
+        this.add(intersectable);
     }
 
-    public void add(Intersectable... intersectable){
+    /**
+     * Adds intersectable geometries into the collection.
+     *
+     * @param intersectable Objects of intersectable geometries.
+     */
+    public void add(Intersectable... intersectable) {
         for (Intersectable i : intersectable) {
-            this.geometries.add(i);
+            geometries.add(i);
         }
     }
 
+
+    /**
+     * Calculates the intersections of a ray with all geometries in the collection.
+     *
+     * @param ray The cast ray.
+     * @return A list of intersection points (LinkedList instance), or null value if there are no intersections.
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        List<Point> resList = null;
+        List<Point> intersections = null;
         for (Intersectable i : geometries) {
-            List<Point> intersections = i.findIntersections(ray);
-            if (intersections != null) {
-                if(resList == null) {
-                    resList = new LinkedList<Point>(intersections);
-                    continue;
+            List<Point> res = i.findIntersections(ray);
+            if (res != null) {
+                if (intersections == null) {
+                    intersections = new LinkedList<Point>();
                 }
-                resList.addAll(intersections);
+                intersections.addAll(res);
             }
         }
-        return resList;
+        return intersections;
     }
 }

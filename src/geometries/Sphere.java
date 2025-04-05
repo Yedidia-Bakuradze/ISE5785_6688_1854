@@ -4,8 +4,9 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.LinkedList;
 import java.util.List;
+
+import static primitives.Util.alignZero;
 
 /**
  * Represents a sphere in 3D space.
@@ -18,7 +19,8 @@ public class Sphere extends RadialGeometry {
     private final Point center;
 
     /**
-     * The radius squared of the sphere.
+     * The square of the radius of the sphere.
+     * Made to prevent the need to save processing time on every intersection calculations.
      */
     private final double radiusSquared;
 
@@ -30,7 +32,7 @@ public class Sphere extends RadialGeometry {
      */
     public Sphere(Point center, double radius) {
         super(radius);
-        this.radiusSquared = radius * radius;
+        radiusSquared = radius * radius;
         this.center = center;
     }
 
@@ -45,39 +47,23 @@ public class Sphere extends RadialGeometry {
         return point.subtract(center).normalize();
     }
 
-
-    /**
-     * Finds the intersections of a ray with the sphere.
-     *
-     * @param ray The ray to check for intersections.
-     * @return A list of intersection points, or null if there are no intersections.
-     */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        if(this.center.equals(ray.getHead())) return List.of(ray.getHead().add(ray.getDirection().scale(radius)));
+        Point p0 = ray.getHead();
 
-        Vector u = this.center.subtract(ray.getHead());
-        double tm = ray.getDirection().dotProduct(u);
-        double d = Math.sqrt(u.lengthSquared() - tm * tm);
+        if (this.center.equals(p0)) return List.of(ray.getPoint(radius));
 
-        if(d >= radius) return null;
+        Vector u = this.center.subtract(p0);
+        double tm = alignZero(ray.getDirection().dotProduct(u));
+        double dSquared = alignZero(u.lengthSquared() - tm * tm);
 
-        double th = Math.sqrt(radiusSquared - d * d);
-        double t1 = tm - th;
-        double t2 = tm + th;
+        if (dSquared >= this.radiusSquared) return null;
 
-        List<Point> intersections = null;
+        double th = Math.sqrt(this.radiusSquared - dSquared);
+        double t1 = alignZero(tm + th);
+        double t2 = alignZero(tm - th);
 
-        if(t1 > 0){
-            intersections = new LinkedList<>();
-            intersections.add(ray.getHead().add(ray.getDirection().scale(t1)));
-        }
-
-        if(t2 > 0){
-            if(intersections == null) intersections = new LinkedList<>();
-            intersections.add(ray.getHead().add(ray.getDirection().scale(t2)));
-        }
-
-        return intersections;
+        if (t1 <= 0) return null;
+        else return t2 <= 0 ? List.of(ray.getPoint(t1)) : List.of(ray.getPoint(t2), ray.getPoint(t1));
     }
 }

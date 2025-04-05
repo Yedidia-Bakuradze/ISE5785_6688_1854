@@ -7,58 +7,55 @@ import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link Triangle} class.
+ */
 class TriangleTests {
 
-    private final Vector v1 = new Vector(0, 0, -1);
-    private final Vector v2 = new Vector(0, 0, 1);
-    private final Point p1 = new Point(0, 0, 1);
-    private final Point p2 = new Point(0, 1, 0);
-    private final Point p3 = new Point(1, 0, 0);
+    /**
+     * Default constructor - only to dismiss errors in JavaDoc generator.
+     */
+    TriangleTests() {
+    }
+
+    // ============ <b>Global Fields</b> ============
+    /**
+     * A triangle to be used in the tests.
+     */
+    private final Triangle triangle = new Triangle(new Point(1, 1, 1), new Point(3, 1, 1), new Point(2, 2, 3));
+
+    /**
+     * A vector pointing in the y direction used in the tests.
+     */
+    private final Vector yVec = new Vector(0, 1, 0);
 
 
     /**
-     * Test method for {@link geometries.Triangle#Triangle(primitives.Point, primitives.Point, primitives.Point)}.
+     * Tests the {@link Triangle#findIntersections(primitives.Ray ray)} method.
      */
     @Test
     void testFindIntersections() {
-        Triangle triangle = new Triangle(new Point(1, 1, 0), p3, p2);
-        // ============ Equivalence Partitions Tests ==============
-        // TC01: the intersection point is inside the triangle
-        assertEquals(1, triangle.findIntersections(new Ray(new Point(1.8, 1.8, 1), new Vector(-1, -1, -1))).size(),
-                "Failed to find the intersection point when the intersection point is inside the triangle");
+        // Tests: https://www.geogebra.org/calculator/n5fnz3mq
 
-        // TC02: the intersection point is outside the triangle and against an edge
-        assertNull(triangle.findIntersections(
-                        new Ray(new Point(0.5, 2, 1), v1)),
-                "Failed to find the intersection point when the intersection point is outside the triangle and against an edge");
+        // =========== Equivalence Partitions Tests ===========
+        // TC01: Ray's interception point is within the plane that contains the triangle inside the triangle.
+        assertEquals(1, triangle.findIntersections(new Ray(new Point(2, 0, 2), yVec)).size(), "ERROR: Ray should intersect with the sphere");
 
-        // TC03: the intersection point is outside the triangle and against a vertex
-        assertNull(triangle.findIntersections(
-                        new Ray(new Point(2, 2, 1), v1)),
-                "Failed to find the intersection point when the intersection point is outside the triangle and against an edge");
+        // TC02: Ray's interception point is within the plane that contains the triangle, outside the triangle in front of a triangle's side.
+        assertNull(triangle.findIntersections(new Ray(new Point(1, 0, 2), yVec)), "ERROR: Ray shouldn't intersect with the sphere");
 
-        // ================= Boundary Values Tests =================
-        // TC04: the intersection point is on the edge of the triangle
-        assertNull(triangle.findIntersections(
-                        new Ray(new Point(0.5, 1, -1), v2)),
-                "Failed to find the intersection point when the intersection point is on the edge of the triangle");
+        // TC03: Ray's interception point is within the plane that contains the triangle, outside the triangle in front of a triangle's vertex.
+        assertNull(triangle.findIntersections(new Ray(new Point(2, 0, 3.5), yVec)), "ERROR: Ray shouldn't intersect with the sphere");
 
-        // TC05: the intersection point is on the vertex of the triangle
-        assertNull(triangle.findIntersections(
-                        new Ray(new Point(1, 1, 1), new Vector(0, 0, -1))),
-                "Failed to find the intersection point when the intersection point is on the vertex of the triangle");
+        // =========== Boundary Value Tests ===========
 
-        // TC06: the intersection point is outside the triangle but in the path of the edge
-        assertNull(triangle.findIntersections(
-                        new Ray(new Point(2, 1, -1), v2)),
-                "Failed to find the intersection point when the intersection point is outside the triangle but in the path of the edge");
+        // TC11: Ray's interception point is within the plane that contains the triangle, on one of the vertexes.
+        assertNull(triangle.findIntersections(new Ray(new Point(2, 0, 3), yVec)), "ERROR: Ray shouldn't intersect with the sphere");
 
-        // ================= external Tests =================
-        // TC07: the triangle is in an angle
-        Triangle triangle2 = new Triangle(p3, p2, p1);
-        assertEquals(1, triangle2.findIntersections(
-                        new Ray(new Point(-1, -1, -1), new Vector(1, 1, 1))).size(),
-                "Failed to find the intersection point when the intersection point is inside the triangle");
+        // TC12: Ray's interception point is within the plane that contains the triangle on one of the sides.
+        assertNull(triangle.findIntersections(new Ray(new Point(2, 0, 1), yVec)), "ERROR: Ray shouldn't intersect with the sphere");
+
+        // TC13 Ray's interception point is within the plane that contains the triangle, on one of the side's line outside the triangle area.
+        assertNull(triangle.findIntersections(new Ray(new Point(4, 0, 1), yVec)), "ERROR: Ray shouldn't intersect with the sphere");
     }
-
 }
