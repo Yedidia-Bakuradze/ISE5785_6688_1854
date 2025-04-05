@@ -12,32 +12,31 @@ jobs:
   primitives-tests:
     name: Run Primitives Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test: ["PrimitiveTest1", "PrimitiveTest2"] # update with your actual test class names
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: "temurin"
           java-version: "21"
           cache: maven
-
       - name: Build with Maven
         run: mvn -B compile
-
-      - name: Run Primitives Tests
-        run: mvn -B test -Dtest=primitives.**.*Test -DtrimStackTrace=false -Dsurefire.reportFormat=xml
+      - name: Run Primitives Test (matrix)
+        run: mvn -B test -Dtest="${{ matrix.test }}" -DtrimStackTrace=false -Dsurefire.reportFormat=xml
         env:
           MAVEN_OPTS: "-Xmx1024m"
-
-      - name: Publish Primitives Test Report
+      - name: Publish Primitives Test Report (matrix)
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
           report_paths: "target/surefire-reports/TEST-*.xml"
           detailed_summary: true
-          check_name: "Primitives Test Results"
+          check_name: "Primitives Test Results: ${{ matrix.test }}"
           include_passed: true
           annotate_notice: false
           fail_on_failure: false
@@ -47,32 +46,31 @@ jobs:
   geometries-tests:
     name: Run Geometries Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test: ["GeometryTest1", "GeometryTest2"] # update with your actual test class names
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: "temurin"
           java-version: "21"
           cache: maven
-
       - name: Build with Maven
         run: mvn -B compile
-
-      - name: Run Geometries Tests
-        run: mvn -B test -Dtest=geometries.**.*Test -DtrimStackTrace=false -Dsurefire.reportFormat=xml
+      - name: Run Geometries Test (matrix)
+        run: mvn -B test -Dtest="${{ matrix.test }}" -DtrimStackTrace=false -Dsurefire.reportFormat=xml
         env:
           MAVEN_OPTS: "-Xmx1024m"
-
-      - name: Publish Geometries Test Report
+      - name: Publish Geometries Test Report (matrix)
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
           report_paths: "target/surefire-reports/TEST-*.xml"
           detailed_summary: true
-          check_name: "Geometries Test Results"
+          check_name: "Geometries Test Results: ${{ matrix.test }}"
           include_passed: true
           annotate_notice: false
           fail_on_failure: false
