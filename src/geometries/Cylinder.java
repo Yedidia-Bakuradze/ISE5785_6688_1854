@@ -16,7 +16,7 @@ public class Cylinder extends Tube {
 
     /**
      * Constructs a cylinder with a given axis, radius, and height.
-     * 
+     *
      * @param axis   The axis ray of the cylinder.
      * @param radius The radius of the cylinder.
      * @param height The height of the cylinder.
@@ -28,7 +28,7 @@ public class Cylinder extends Tube {
 
     /**
      * Calculates the normal vector to the cylinder at a given point.
-     * 
+     *
      * @param point The point on the cylinder.
      * @return The normal vector at the given point.
      */
@@ -36,7 +36,7 @@ public class Cylinder extends Tube {
     public Vector getNormal(Point point) {
 
         // If the point is on the origin point
-        if(point.equals(this.axis.getHead()))
+        if (point.equals(this.axis.getHead()))
             return this.axis.getDirection().normalize();
 
         double t = this.axis
@@ -46,15 +46,15 @@ public class Cylinder extends Tube {
         // If the point is on a base
 
         // Case 1: If the point is on the bottom base
-        if (t == 0 ){
+        if (t == 0) {
             double distance = point.distance(this.axis.getHead());
 
             // If the point is on the Cylinder body
-            if(distance == this.radius)
+            if (distance == this.radius)
                 return point.subtract(this.axis.getHead()).normalize();
 
             // If the point is on the bottom base
-            if(distance < this.radius)
+            if (distance < this.radius)
                 return this.axis.getDirection().normalize();
 
             // If the point is outside the Cylinder
@@ -62,18 +62,18 @@ public class Cylinder extends Tube {
         }
 
         // Case 2: If the point is on the top base
-        if (t == this.height){
+        if (t == this.height) {
             Point o = this.axis
                     .getHead()
                     .add(this.axis.getDirection().scale(t));
             double distance = point.distance(o);
 
             // If the point is on the Cylinder body
-            if(distance == this.radius)
+            if (distance == this.radius)
                 return point.subtract(o).normalize();
 
             // If the point is on the top base
-            if(distance < this.radius)
+            if (distance < this.radius)
                 return this.axis.getDirection().normalize();
 
             // If the point is outside the Cylinder

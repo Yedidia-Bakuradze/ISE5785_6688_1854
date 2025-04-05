@@ -2,20 +2,22 @@ package geometries;
 
 import primitives.Point;
 import primitives.Ray;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class Geometries implements Intersectable{
+public class Geometries implements Intersectable {
 
     private final List<Intersectable> geometries = new LinkedList<Intersectable>();
 
-    Geometries() {}
+    Geometries() {
+    }
 
-    public Geometries(Intersectable ... intersectable) {
+    public Geometries(Intersectable... intersectable) {
         this.add(intersectable);
     }
 
-    public void add(Intersectable ... intersectable) {
+    public void add(Intersectable... intersectable) {
         for (Intersectable i : intersectable) {
             geometries.add(i);
         }

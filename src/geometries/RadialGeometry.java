@@ -12,11 +12,11 @@ abstract public class RadialGeometry extends Geometry {
 
     /**
      * Constructs a radial geometry with a given radius.
-     * 
+     *
      * @param radius The radius of the geometry.
      */
     protected RadialGeometry(double radius) {
-        if(radius <= 0) throw new IllegalArgumentException("radius must be greater than zero");
+        if (radius <= 0) throw new IllegalArgumentException("radius must be greater than zero");
         this.radius = radius;
     }
 }

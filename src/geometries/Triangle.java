@@ -21,7 +21,7 @@ public class Triangle extends Polygon {
      * @param point2 The third point.
      */
     public Triangle(Point point, Point point1, Point point2) {
-        super(point,point1,point2);
+        super(point, point1, point2);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class Triangle extends Polygon {
 
         boolean isSameSign =
                 (res1 > 0 && res2 > 0 && res3 > 0) ||
-                (res1 < 0 && res2 < 0 && res3 < 0);
+                        (res1 < 0 && res2 < 0 && res3 < 0);
 
         if (isSameSign) return intersections;
         return null;

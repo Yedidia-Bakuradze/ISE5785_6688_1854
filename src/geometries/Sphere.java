@@ -18,8 +18,10 @@ public class Sphere extends RadialGeometry {
      */
     private final Point center;
     private final double radiusSquared;
+
     /**
      * Constructor to create a Sphere with a center point and radius.
+     *
      * @param center The center point of the sphere.
      * @param radius The radius of the sphere.
      */
@@ -31,7 +33,7 @@ public class Sphere extends RadialGeometry {
 
     /**
      * Calculates the normal vector to the sphere at a given point.
-     * 
+     *
      * @param point The point on the sphere.
      * @return The normal vector at the given point.
      */
@@ -45,19 +47,19 @@ public class Sphere extends RadialGeometry {
         Point p0 = ray.getHead();
         Vector v = ray.getDirection();
 
-        if(this.center.equals(p0)) return List.of(p0.add(v.scale(radiusSquared)));
+        if (this.center.equals(p0)) return List.of(p0.add(v.scale(radiusSquared)));
 
         Vector u = this.center.subtract(p0);
         double tm = alignZero(v.dotProduct(u));
         double dSquared = alignZero(u.lengthSquared() - tm * tm);
 
-        if(dSquared >= this.radiusSquared) return null;
+        if (dSquared >= this.radiusSquared) return null;
 
         double th = Math.sqrt(this.radiusSquared - dSquared);
         double t1 = alignZero(tm + th);
         double t2 = alignZero(tm - th);
 
-        if(t1 <= 0) return null;
-        else return t2<= 0 ? List.of(p0.add(v.scale(t1))) : List.of(p0.add(v.scale(t1)), p0.add(v.scale(t2)));
+        if (t1 <= 0) return null;
+        else return t2 <= 0 ? List.of(p0.add(v.scale(t1))) : List.of(p0.add(v.scale(t1)), p0.add(v.scale(t2)));
     }
 }

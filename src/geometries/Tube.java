@@ -18,7 +18,7 @@ public class Tube extends RadialGeometry {
 
     /**
      * Constructs a tube with a given axis and radius.
-     * 
+     *
      * @param axis   The axis ray of the tube.
      * @param radius The radius of the tube.
      */
@@ -29,7 +29,7 @@ public class Tube extends RadialGeometry {
 
     /**
      * Calculates the normal vector to the tube at a given point.
-     * 
+     *
      * @param point The point on the tube.
      * @return The normal vector at the given point.
      */
@@ -40,7 +40,7 @@ public class Tube extends RadialGeometry {
                 .dotProduct(point.subtract(this.axis.getHead()));
 
         // If the point is on the axis
-        if(t == 0)
+        if (t == 0)
             return point
                     .subtract(this.axis.getHead())
                     .normalize();

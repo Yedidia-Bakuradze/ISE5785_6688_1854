@@ -12,12 +12,13 @@ abstract public class Geometry implements Intersectable {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    protected Geometry() {}
+    protected Geometry() {
+    }
 
 
     /**
      * Abstract method to calculate the normal vector to the geometry at a given point.
-     * 
+     *
      * @param point The point on the geometry.
      * @return The normal vector at the given point.
      */
