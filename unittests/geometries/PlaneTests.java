@@ -89,6 +89,8 @@ public class PlaneTests {
      */
     @Test
     void testFindIntersections(){
+        // Visualize the plane in 3D space: https://www.geogebra.org/calculator/gn9xcbrm
+
         // ======== Equivalence Partitions Tests ========
 
         // TC01: Ray is neither orthogonal nor parallel to the plane and intersects with it
