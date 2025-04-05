@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test: ["PrimitiveTest1", "PrimitiveTest2"] # update with your actual test class names
+        test: ["PointTests", "RayTests", "VectorTests"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -48,7 +48,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test: ["GeometryTest1", "GeometryTest2"] # update with your actual test class names
+        test:
+          [
+            "CylinderTests",
+            "GeometriesTests",
+            "PlaneTests",
+            "PolygonTests",
+            "SphereTests",
+            "TriangleTests",
+            "TubeTests",
+          ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
