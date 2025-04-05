@@ -91,6 +91,6 @@ public class Polygon extends Geometry {
    //TODO: This method is a bonus for this project. implement it later
    @Override
    public List<Point> findIntersections(Ray ray) {
-      return null;
+      return this.plane.findIntersections(ray);
    }
 }

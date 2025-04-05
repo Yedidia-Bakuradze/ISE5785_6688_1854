@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 /**
  * Represents a plane in 3D space defined by a point and a normal vector.
  * Extends the {@link Geometry} class.
@@ -70,6 +72,11 @@ public class Plane extends Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        double t = alignZero( this.normal.dotProduct(this.q.subtract(ray.getHead())) /
+                this.normal.dotProduct(ray.getDirection()));
+
+        if(t <= 0) return null;
+
+        return List.of(ray.getHead().add(ray.getDirection().scale(t)));
     }
 }
