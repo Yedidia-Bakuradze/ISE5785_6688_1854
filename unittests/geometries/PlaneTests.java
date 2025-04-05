@@ -103,7 +103,7 @@ public class PlaneTests {
         // *** Group 1: Ray is parallel to the plane
 
         // TC11: Ray is included in the plane
-        assertNull(plane.findIntersections(new Ray(new Point(1,1,1),xVec)), "ERROR: Ray which is included in the plane shouldn't intersect with the plane at all");
+        assertNull(plane.findIntersections(new Ray(new Point(2,2,2),xVec)), "ERROR: Ray which is included in the plane shouldn't intersect with the plane at all");
 
         // TC12: Ray isn't included in the plane
         assertNull(plane.findIntersections(new Ray(new Point(1,0,1),xVec)), "ERROR: Ray which is parallel to the plane shouldn't intersect with the plane at all");
@@ -115,7 +115,7 @@ public class PlaneTests {
         assertEquals(1,plane.findIntersections(new Ray(new Point(1,0,1),orthVec)).size(), "ERROR: Ray should intersect with the plane at one point");
 
         // TC22: Ray's starting point is on the plane
-        assertNull(plane.findIntersections(new Ray(new Point(1,1,1),orthVec)), "ERROR: Ray which is orthogonal to the plane and its starting point at the plane shouldn't intersect with the plane at all");
+        assertNull(plane.findIntersections(new Ray(new Point(2,2,2),orthVec)), "ERROR: Ray which is orthogonal to the plane and its starting point at the plane shouldn't intersect with the plane at all");
 
         // TC23: Ray's starting point is after the plane
         assertNull(plane.findIntersections(new Ray(new Point(1,2,1),orthVec)), "ERROR: Ray which is orthogonal to the plane and its starting point after the plane shouldn't intersect with the plane at all");
