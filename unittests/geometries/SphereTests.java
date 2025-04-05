@@ -44,17 +44,6 @@ public class SphereTests {
     public SphereTests() {
     }
 
-    private final Vector v1 = new Vector(1, 0, 1);
-    private final Vector v2 = new Vector(0, -1, 0);
-    private final Vector v3 = new Vector(0, 1, 0);
-    private final Vector v4 = new Vector(1, 1, 1);
-    private final Point p1 = new Point(1, 0, 0);
-    private final Point p2 = new Point(0, 1, 1);
-    private final Point p3 = new Point(0, 2, 1);
-    private final Point p4 = new Point(0, -1, 1);
-    private final Point p5 = new Point(0, 0.5, 1);
-    private final Point p7 = new Point(0, sqrt075, 1.5);
-    private final Point p8 = new Point(0, 0, 1);
     /**
      * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.
      */

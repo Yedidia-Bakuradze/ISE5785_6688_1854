@@ -64,18 +64,6 @@ public class Ray {
         return head + "" + direction;
     }
 
-    /**
-     * Getter for the point on the ray at a certain distance from the head
-     * @param t the distance from the head
-     * @return the point on the ray at the distance t from the head
-     */
-    public Point getPoint(double t) {
-        // if t is zero, return the head point
-        if(Util.isZero(t))
-            return head;
-        return head.add(direction.scale(t));
-    }
-
 
     /**
      * Returns a point on the ray at a distance t from the starting point.

@@ -12,8 +12,19 @@ import static org.junit.jupiter.api.Assertions.fail;
  * Unit tests for {@link geometries.Cylinder}.
  */
 public class CylinderTests {
-    private final Vector v1 = new Vector(0,0,-1);
-    private final Vector v2 = new Vector(0,0,1);
+
+    /**
+     * Vector opposite to the cylinder's axis.
+     */
+    private final Vector v1 = new Vector(0, 0, -1);
+    /**
+     * Vector pointing in the cylinder's axis direction.
+     */
+    private final Vector v2 = new Vector(0, 0, 1);
+
+    /**
+     * A cylinder to be used in the tests.
+     */
     private final Cylinder cylinder = new Cylinder(new Ray(Point.ZERO, v2), 1, 1);
 
     /**
@@ -70,12 +81,12 @@ public class CylinderTests {
         // TC13: Test that the normal at the edge between the lateral surface and the bottom base is correct
         Point bottomEdge = new Point(1, 0, 0); // Edge point
         normal = cylinder.getNormal(bottomEdge);
-        assertEquals(new Vector(1, 0, 0), normal, "ERROR: Normal at the edge between the lateral surface and the bottom base is not correct");
+        assertEquals(axisVecN, normal, "ERROR: Normal at the edge between the lateral surface and the bottom base is not correct");
 
         // TC14: Test that the normal at the edge between the lateral surface and the top base is correct
         Point topEdge = new Point(1, 0, 2); // Edge point
         normal = cylinder.getNormal(topEdge);
-        assertEquals(new Vector(1, 0, 0), normal, "ERROR: Normal at the edge between the lateral surface and the top base is not correct");
+        assertEquals(axisVec, normal, "ERROR: Normal at the edge between the lateral surface and the top base is not correct");
     }
 
     /**
