@@ -27,17 +27,22 @@ jobs:
         run: mvn -B compile
 
       - name: Run Primitives Tests
-        run: mvn -B test -Dtest=primitives.**.*Test
+        run: mvn -B test -Dtest=primitives.**.*Test -DtrimStackTrace=false -Dsurefire.reportFormat=xml
         env:
-          MAVEN_OPTS: "-Dtest=primitives.**.*Test"
+          MAVEN_OPTS: "-Xmx1024m"
 
       - name: Publish Primitives Test Report
-        uses: mikepenz/action-junit-report@v3
+        uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: "target/surefire-reports/TEST-primitives.*.xml"
+          report_paths: "target/surefire-reports/TEST-*.xml"
           detailed_summary: true
           check_name: "Primitives Test Results"
+          include_passed: true
+          annotate_notice: false
+          fail_on_failure: false
+          require_tests: true
+          job_summary: true
 
   geometries-tests:
     name: Run Geometries Tests
@@ -57,14 +62,19 @@ jobs:
         run: mvn -B compile
 
       - name: Run Geometries Tests
-        run: mvn -B test -Dtest=geometries.**.*Test
+        run: mvn -B test -Dtest=geometries.**.*Test -DtrimStackTrace=false -Dsurefire.reportFormat=xml
         env:
-          MAVEN_OPTS: "-Dtest=geometries.**.*Test"
+          MAVEN_OPTS: "-Xmx1024m"
 
       - name: Publish Geometries Test Report
-        uses: mikepenz/action-junit-report@v3
+        uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: "target/surefire-reports/TEST-geometries.*.xml"
+          report_paths: "target/surefire-reports/TEST-*.xml"
           detailed_summary: true
           check_name: "Geometries Test Results"
+          include_passed: true
+          annotate_notice: false
+          fail_on_failure: false
+          require_tests: true
+          job_summary: true
