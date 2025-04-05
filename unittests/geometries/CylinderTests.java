@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -14,7 +15,8 @@ public class CylinderTests {
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.
      */
-    public CylinderTests() {}
+    public CylinderTests() {
+    }
 
     /**
      * Test method for {@link geometries.Cylinder#getNormal(primitives.Point)}.
@@ -63,19 +65,19 @@ public class CylinderTests {
         // TC13: Test that the normal at the edge between the lateral surface and the bottom base is correct
         Point bottomEdge = new Point(1, 0, 0); // Edge point
         normal = cylinder.getNormal(bottomEdge);
-        assertEquals(new Vector(1,0,0), normal, "ERROR: Normal at the edge between the lateral surface and the bottom base is not correct");
+        assertEquals(new Vector(1, 0, 0), normal, "ERROR: Normal at the edge between the lateral surface and the bottom base is not correct");
 
         // TC14: Test that the normal at the edge between the lateral surface and the top base is correct
         Point topEdge = new Point(1, 0, 2); // Edge point
         normal = cylinder.getNormal(topEdge);
-        assertEquals(new Vector(1,0,0), normal, "ERROR: Normal at the edge between the lateral surface and the top base is not correct");
+        assertEquals(new Vector(1, 0, 0), normal, "ERROR: Normal at the edge between the lateral surface and the top base is not correct");
     }
 
     /**
      * Test method for {@link geometries.Cylinder#findIntersections(primitives.Ray)}.
      */
     @Test
-    void testFindIntersections(){
+    void testFindIntersections() {
         fail("Not yet implemented");
     }
 }

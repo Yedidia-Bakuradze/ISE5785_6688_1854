@@ -71,7 +71,7 @@ public class Ray {
      * @param t the distance from the starting point
      * @return the point on the ray at distance t
      */
-    public Point getPoint(double t){
+    public Point getPoint(double t) {
         return isZero(t) ? this.head : this.head.add(direction.scale(t));
     }
 }

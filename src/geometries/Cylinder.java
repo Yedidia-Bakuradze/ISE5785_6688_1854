@@ -27,6 +27,7 @@ public class Cylinder extends Tube {
     }
 
     //TODO: Refactoring is needed ASAP (Issue #11)
+
     /**
      * Calculates the normal vector to the cylinder at a given point.
      *
