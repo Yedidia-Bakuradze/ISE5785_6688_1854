@@ -72,6 +72,10 @@ public class Ray {
      * @return the point on the ray at distance t
      */
     public Point getPoint(double t) {
-        return isZero(t) ? this.head : this.head.add(direction.scale(t));
+        try {
+            return this.head.add(direction.scale(t));
+        } catch (IllegalArgumentException ignore) {
+            return this.head;
+        }
     }
 }

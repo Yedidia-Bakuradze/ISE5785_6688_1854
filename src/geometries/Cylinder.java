@@ -41,12 +41,17 @@ public class Cylinder extends Tube {
      */
     @Override
     public Vector getNormal(Point point) {
-        Point p0 = this.axis.getHead();
         Vector v = this.axis.getDirection();
+        Vector u;
+        try {
+            u = point.subtract(this.axis.getHead());
+        } catch (IllegalArgumentException ignore) {
+            return v.scale(-1);
+        }
 
-        double t = point.equals(p0) ? 0 : alignZero(v.dotProduct(point.subtract(p0)));
-        if (t == 0) return v.scale(-1);
-        if (t == height) return v;
+        double t = v.dotProduct(u);
+        if (isZero(t)) return v.scale(-1);
+        if (isZero(t - height)) return v;
 
         return point.subtract(this.axis.getPoint(t)).normalize();
     }

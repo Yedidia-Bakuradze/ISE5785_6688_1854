@@ -3,6 +3,7 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,11 +40,8 @@ public class Geometries implements Intersectable {
      * @param intersectable Objects of intersectable geometries.
      */
     public void add(Intersectable... intersectable) {
-        for (Intersectable i : intersectable) {
-            geometries.add(i);
-        }
+        Collections.addAll(geometries, intersectable);
     }
-
 
     /**
      * Calculates the intersections of a ray with all geometries in the collection.
@@ -57,10 +55,10 @@ public class Geometries implements Intersectable {
         for (Intersectable i : geometries) {
             List<Point> res = i.findIntersections(ray);
             if (res != null) {
-                if (intersections == null) {
-                    intersections = new LinkedList<Point>();
-                }
-                intersections.addAll(res);
+                if (intersections == null)
+                    intersections = new LinkedList<>(res);
+                else
+                    intersections.addAll(res);
             }
         }
         return intersections;

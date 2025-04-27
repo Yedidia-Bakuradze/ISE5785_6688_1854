@@ -7,6 +7,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Represents a plane in 3D space defined by a point and a normal vector.
@@ -73,17 +74,19 @@ public class Plane extends Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Vector v = ray.getDirection();
-        Point p0 = ray.getHead();
+        Vector u;
+        try {
+            u = this.q.subtract(ray.getHead());
+        } catch (IllegalArgumentException ignore) {
+            return null;
+        }
 
-        double up = q.equals(p0) ? 0 : alignZero(this.normal.dotProduct(this.q.subtract(p0)));
-        if (up == 0) return null;
-
+        double up = this.normal.dotProduct(u);
         // If the ray is parallel to the plane, return null
-        double down = this.normal.dotProduct(v);
-        if (down == 0) return null;
+        double down = this.normal.dotProduct(ray.getDirection());
+        if (isZero(down)) return null;
 
         double t = alignZero(up / down);
-        return t < 0 ? null : List.of(ray.getPoint(t));
+        return t <= 0 ? null : List.of(ray.getPoint(t));
     }
 }

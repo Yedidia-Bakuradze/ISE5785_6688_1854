@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 /**
  * Represents a triangle in 3D space.
  * A triangle is a special case of a polygon with three vertices.
@@ -30,25 +32,27 @@ public class Triangle extends Polygon {
         List<Point> intersections = super.findIntersections(ray);
         if (intersections == null) return null;
 
-        // Check if the intersection point is inside the triangle
         Point p0 = ray.getHead();
-        Vector v1 = this.vertices.get(0).subtract(p0);
-        Vector v2 = this.vertices.get(1).subtract(p0);
-        Vector v3 = this.vertices.get(2).subtract(p0);
-
-        // Constraint: If any of them is a zero vector - there is no intersection
-        Vector n1 = v1.crossProduct(v2).normalize();
-        Vector n2 = v2.crossProduct(v3).normalize();
-        Vector n3 = v3.crossProduct(v1).normalize();
-
-        // Check if the intersection point is inside the triangle
         Vector v = ray.getDirection();
 
-        double res1 = v.dotProduct(n1);
-        double res2 = v.dotProduct(n2);
-        double res3 = v.dotProduct(n3);
+        // Check if the intersection point is inside the triangle
+        Vector v1 = this.vertices.get(0).subtract(p0);
+        Vector v2 = this.vertices.get(1).subtract(p0);
+        // Constraint: If any of them is a zero vector - there is no intersection
+        Vector n1 = v1.crossProduct(v2).normalize();
+        double res1 = alignZero(v.dotProduct(n1));
+        // Check if the intersection point is inside the triangle
+        if (res1 == 0) return null;
 
-        if ((res1 > 0 && res2 > 0 && res3 > 0) || (res1 < 0 && res2 < 0 && res3 < 0)) return intersections;
-        return null;
+        Vector v3 = this.vertices.get(2).subtract(p0);
+        Vector n2 = v2.crossProduct(v3).normalize();
+        double res2 = alignZero(v.dotProduct(n2));
+        if (res1 * res2 <= 0) return null;
+
+        Vector n3 = v3.crossProduct(v1).normalize();
+        double res3 = v.dotProduct(n3);
+        if (res1 * res3 <= 0) return null;
+
+        return intersections;
     }
 }

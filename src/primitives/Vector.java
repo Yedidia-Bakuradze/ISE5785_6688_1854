@@ -111,6 +111,7 @@ public class Vector extends Point {
      */
     public Vector crossProduct(Vector rightVec) {
         //Check if right vector is zero
+        //TODO: Remove the tests
         if (rightVec.equals(Point.ZERO))
             throw new IllegalArgumentException("Cross-Product of zero vectors is not allowed");
 

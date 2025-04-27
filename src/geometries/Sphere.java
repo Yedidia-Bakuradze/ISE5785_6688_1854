@@ -19,12 +19,6 @@ public class Sphere extends RadialGeometry {
     private final Point center;
 
     /**
-     * The square of the radius of the sphere.
-     * Made to prevent the need to save processing time on every intersection calculations.
-     */
-    private final double radiusSquared;
-
-    /**
      * Constructor to create a Sphere with a center point and radius.
      *
      * @param center The center point of the sphere.
@@ -32,7 +26,6 @@ public class Sphere extends RadialGeometry {
      */
     public Sphere(Point center, double radius) {
         super(radius);
-        radiusSquared = radius * radius;
         this.center = center;
     }
 
@@ -56,14 +49,14 @@ public class Sphere extends RadialGeometry {
         Vector u = this.center.subtract(p0);
         double tm = alignZero(ray.getDirection().dotProduct(u));
         double dSquared = alignZero(u.lengthSquared() - tm * tm);
+        double thSquared = alignZero(this.radiusSquared - dSquared);
+        if (thSquared <= 0) return null;
+        double th = Math.sqrt(thSquared);
 
-        if (dSquared >= this.radiusSquared) return null;
+        double t2 = alignZero(tm + th);
+        if (t2 <= 0) return null;
 
-        double th = Math.sqrt(this.radiusSquared - dSquared);
-        double t1 = alignZero(tm + th);
-        double t2 = alignZero(tm - th);
-
-        if (t1 <= 0) return null;
-        else return t2 <= 0 ? List.of(ray.getPoint(t1)) : List.of(ray.getPoint(t2), ray.getPoint(t1));
+        double t1 = alignZero(tm - th);
+        return t1 <= 0 ? List.of(ray.getPoint(t2)) : List.of(ray.getPoint(t1), ray.getPoint(t2));
     }
 }
