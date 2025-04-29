@@ -80,15 +80,15 @@ public class Camera implements Cloneable  {
             if (camera.position == null) throw new MissingResourceException("Camera position must be included", "Camera", "position");
             if (camera.vTo == null) throw new MissingResourceException("Camera to vector must be included", "Camera", "vTo");
             if (camera.vUp == null) throw new MissingResourceException("Camera up vector must be included", "Camera", "vUp");
+
+            // Calculate missing values
+            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
             if (camera.vRight == null) throw new MissingResourceException("Camera right vector must be included", "Camera", "vRight");
 
             // Check if the vectors are orthogonal
             if (camera.vTo.dotProduct(camera.vUp) != 0) throw new IllegalArgumentException("Error: Provided to & up vectors are not orthogonal");
             if (camera.vTo.dotProduct(camera.vRight) != 0) throw new IllegalArgumentException("Error: Provided to & right vectors are not orthogonal");
 
-            // Calculate missing values
-            // TODO: Check if the vector points to the right
-            camera.vRight = camera.vTo.crossProduct(camera.vUp.scale(-1)).normalize();
 
             return camera.clone();
         }
@@ -106,7 +106,7 @@ public class Camera implements Cloneable  {
 
     private Camera(){}
 
-    public Builder getBuilder(){
+    public static Builder getBuilder(){
         return new Builder();
     }
 
