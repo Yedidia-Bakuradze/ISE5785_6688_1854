@@ -30,22 +30,25 @@ public class Camera implements Cloneable  {
             return this;
         }
 
-        public Builder setDirection(Vector vUp, Vector vTo){
-            if(vUp.dotProduct(vTo) != 0) throw new IllegalArgumentException("Error: Provided vectors are not orthogonal");
+        public Builder setDirection(Vector vTo,Vector vUp){
+            if(!isZero(vUp.dotProduct(vTo))) throw new IllegalArgumentException("Error: Provided vectors are not orthogonal");
 
             camera.vUp = vUp.normalize();
             camera.vTo = vTo.normalize();
+            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
             return this;
         }
         public Builder setDirection(Point p,Vector vUp){
             camera.vTo = p.subtract(camera.position).normalize();
-            //TODO: Check how to calculate the up vector again to be persistent
+            camera.vRight = camera.vTo.crossProduct(vUp).normalize();
+            camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
             return this;
         }
-        public Builder setDirection(Point p){
+        public Builder setDirection(Point p) {
             camera.vTo = p.subtract(camera.position).normalize();
-            camera.vUp = Vector.AXIS_Z.crossProduct(camera.vTo).normalize();
-            //If the p value is right above the camera position it should throw an exception but not here
+            camera.vUp = Vector.AXIS_Y;
+            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
+            camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
             return this;
         }
 
@@ -65,11 +68,6 @@ public class Camera implements Cloneable  {
         public Builder setResolution(double nX,double nY){
             //TODO: The implementation of this method is holt for now
             return null;
-//            if (nX <= 0 || nY <= 0)
-//                throw new IllegalArgumentException("Resolution must be positive");
-//            this.width = nX;
-//            this.height = nY;
-//            return this;
         }
 
         public Camera build() {
@@ -82,9 +80,6 @@ public class Camera implements Cloneable  {
             if (camera.position == null) throw new MissingResourceException("Camera position must be included", "Camera", "position");
             if (camera.vTo == null) throw new MissingResourceException("Camera to vector must be included", "Camera", "vTo");
             if (camera.vUp == null) throw new MissingResourceException("Camera up vector must be included", "Camera", "vUp");
-
-            // Calculate missing values
-            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
             if (camera.vRight == null) throw new MissingResourceException("Camera right vector must be included", "Camera", "vRight");
 
             // Check if the vectors are orthogonal
@@ -121,7 +116,16 @@ public class Camera implements Cloneable  {
         * @return the ray through pixel (j,i)
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        return null;
+        Point pIJ = position.add(vTo.scale(distance));
+
+        double yI = -(i - (nY - 1) / 2.0) * height / nY;
+        double xJ = (j - (nX - 1) / 2.0) * width / nX;
+
+        //check if xJ or yI are not zero, so we will not add zero vector
+        if (!isZero(xJ)) pIJ = pIJ.add(vRight.scale(xJ));
+        if (!isZero(yI)) pIJ = pIJ.add(vUp.scale(yI));
+
+        return new Ray(position, pIJ.subtract(position).normalize());
     }
 
 }
