@@ -6,8 +6,21 @@ package primitives;
  */
 public class Vector extends Point {
 
+    // Static constants representing the three axes in 3D space
+
+    /**
+     * The X-axis unit vector
+     */
     public final static Vector AXIS_X = new Vector(1, 0, 0);
+
+    /**
+     * The Y-axis unit vector
+     */
     public final static Vector AXIS_Y = new Vector(0, 1, 0);
+
+    /**
+     * The Z-axis unit vector
+     */
     public final static Vector AXIS_Z = new Vector(0, 0, 1);
 
 

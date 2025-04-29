@@ -1,4 +1,5 @@
 package renderer;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -8,15 +9,26 @@ import primitives.*;
 
 /**
  * Testing Camera Class
+ *
  * @author Dan
  */
 class CameraTest {
-    /** Camera builder for the tests */
+    /**
+     * Default constructor for the test to make the JavaDoc error to be gone
+     */
+    public CameraTest() {
+    }
+
+    /**
+     * Camera builder for the tests
+     */
     private final Camera.Builder cameraBuilder = Camera.getBuilder()
             .setLocation(Point.ZERO)
             .setDistance(10);
-    /** Assert failure message for a bad ray */
-    private static final String  BAD_RAY       = "Bad ray";
+    /**
+     * Assert failure message for a bad ray
+     */
+    private static final String BAD_RAY = "Bad ray";
 
     /**
      * Test method for
@@ -60,26 +72,29 @@ class CameraTest {
 
     }
 
+    /**
+     * Testing the builder and its methods on the camera that is in building process
+     */
     @Test
     void testBuilder() {
         cameraBuilder.setSize(4, 4).setResolution(2, 2);
 
         // ============ Equivalence Partitions Tests ==============
         // EP01: set to a target point without up vector
-        Point  target1    = new Point(10, -10, 0);
-        Camera camera1    = cameraBuilder.setDirection(target1).build();
-        Point  center1    = target1.subtract(Point.ZERO).normalize().scale(10);
-        Vector right1     = Vector.AXIS_Z;
-        Vector up1        = new Vector(1, 1, 0).normalize();
+        Point target1 = new Point(10, -10, 0);
+        Camera camera1 = cameraBuilder.setDirection(target1).build();
+        Point center1 = target1.subtract(Point.ZERO).normalize().scale(10);
+        Vector right1 = Vector.AXIS_Z;
+        Vector up1 = new Vector(1, 1, 0).normalize();
         Vector direction1 = center1.add(up1.normalize()).subtract(right1).subtract(Point.ZERO);
         assertEquals(new Ray(Point.ZERO, direction1), camera1.constructRay(2, 2, 0, 0));
 
         // EP02: set to a target point with up vector
-        Point  target2    = new Point(0, 5, 0);
-        Camera camera2    = cameraBuilder.setDirection(target2, new Vector(0, 1, 1)).build();
-        Point  center2    = new Point(0, 10, 0);
-        Vector right2     = Vector.AXIS_X;
-        Vector up2        = Vector.AXIS_Z;
+        Point target2 = new Point(0, 5, 0);
+        Camera camera2 = cameraBuilder.setDirection(target2, new Vector(0, 1, 1)).build();
+        Point center2 = new Point(0, 10, 0);
+        Vector right2 = Vector.AXIS_X;
+        Vector up2 = Vector.AXIS_Z;
         Vector direction2 = center2.add(up2).subtract(right2).subtract(Point.ZERO);
         assertEquals(new Ray(Point.ZERO, direction2), camera2.constructRay(2, 2, 0, 0));
 
