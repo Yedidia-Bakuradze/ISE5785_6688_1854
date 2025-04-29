@@ -5,6 +5,8 @@ import primitives.Vector;
 
 import java.util.MissingResourceException;
 
+import static primitives.Util.isZero;
+
 public class Camera implements Cloneable  {
     @Override
     public Camera clone() {
@@ -41,8 +43,8 @@ public class Camera implements Cloneable  {
             return this;
         }
         public Builder setDirection(Point p){
-            camera.vUp = new Vector(0,1,0);
             camera.vTo = p.subtract(camera.position).normalize();
+            camera.vUp = Vector.AXIS_Z.crossProduct(camera.vTo).normalize();
             //If the p value is right above the camera position it should throw an exception but not here
             return this;
         }
@@ -86,8 +88,8 @@ public class Camera implements Cloneable  {
             if (camera.vRight == null) throw new MissingResourceException("Camera right vector must be included", "Camera", "vRight");
 
             // Check if the vectors are orthogonal
-            if (camera.vTo.dotProduct(camera.vUp) != 0) throw new IllegalArgumentException("Error: Provided to & up vectors are not orthogonal");
-            if (camera.vTo.dotProduct(camera.vRight) != 0) throw new IllegalArgumentException("Error: Provided to & right vectors are not orthogonal");
+            if (!isZero(camera.vTo.dotProduct(camera.vUp))) throw new IllegalArgumentException("Error: Provided to & up vectors are not orthogonal");
+            if (!isZero(camera.vTo.dotProduct(camera.vRight))) throw new IllegalArgumentException("Error: Provided to & right vectors are not orthogonal");
 
 
             return camera.clone();
