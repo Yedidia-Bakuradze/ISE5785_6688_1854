@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 import static primitives.Util.isZero;
 
 /**
@@ -77,5 +79,16 @@ public class Ray {
         } catch (IllegalArgumentException ignore) {
             return this.head;
         }
+    }
+
+
+    /**
+     * TODO: Implemented it later
+     * Calculates and returns the closest point from the provided list of points
+     * @param listOfPoints List of points
+     * @return the closest point
+     */
+    public Point findClosestPoint(List<Point> listOfPoints){
+        return null;
     }
 }
