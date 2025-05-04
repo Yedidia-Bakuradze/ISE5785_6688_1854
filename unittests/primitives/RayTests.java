@@ -2,6 +2,8 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -40,4 +42,24 @@ class RayTests {
         // TC12: Test for t value that resets the point (goes from 1,1,1 to 0,0,0 by vector -1,-1,-1)
         assertEquals(Point.ZERO, ray.getPoint(-1), "ERROR: getPoint() for t value that resets the point is incorrect");
     }
+
+    /**
+     * Test method for {@link Ray#findClosestPoint(List)}
+     */
+    @Test
+    void testFindClosestPoint(){
+        // ======== Equivalence Partitions Tests ========
+        // TC01: The closest point is in the middle of the provided list
+
+        // ======== Boundary Value Tests ========
+
+        // TC11: The list is empty (null list provided)
+
+        // TC12: The closet point is the first point on the list
+
+        // TC13: The closet point is the last point on the list
+
+        fail("Not implemented yet");
+    }
+
 }
