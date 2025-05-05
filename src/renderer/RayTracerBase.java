@@ -6,7 +6,7 @@ import scene.Scene;
 
 public abstract class RayTracerBase {
 
-    final private Scene scene;
+    final protected Scene scene;
 
     RayTracerBase(Scene _scene){
         scene = _scene;
