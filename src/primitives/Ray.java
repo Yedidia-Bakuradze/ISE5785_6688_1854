@@ -83,12 +83,21 @@ public class Ray {
 
 
     /**
-     * TODO: Implemented it later
      * Calculates and returns the closest point from the provided list of points
      * @param listOfPoints List of points
      * @return the closest point
      */
     public Point findClosestPoint(List<Point> listOfPoints){
-        return null;
+        if (listOfPoints == null || listOfPoints.isEmpty()) return null;
+        double minSquaredDistance = 0;
+        Point closestPoint = null;
+        for (Point point : listOfPoints) {
+            double distance = head.distanceSquared(point);
+            if (minSquaredDistance == 0 || distance < minSquaredDistance) {
+                minSquaredDistance = distance;
+                closestPoint = point;
+            }
+        }
+        return closestPoint;
     }
 }
