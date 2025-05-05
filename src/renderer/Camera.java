@@ -30,6 +30,10 @@ public class Camera implements Cloneable {
         clone.distance = this.distance;
         clone.width = this.width;
         clone.height = this.height;
+        clone.nX = this.nX;
+        clone.nY = this.nY;
+        clone.imageWriter = this.imageWriter;
+        clone.rayTracer = this.rayTracer;
 
         return clone;
     }
@@ -137,8 +141,6 @@ public class Camera implements Cloneable {
 
         /**
          * Sets the resolution of the view plane
-         * NOT IMPLEMENTED YET
-         *
          * @param _nX The number of columns in the view plane
          * @param _nY The number of rows in the view plane
          * @return The builder instance for method chaining
@@ -150,13 +152,18 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Sets the ray that would identify and paint the intersected pixels
+         * @param scene the scene of objects
+         * @param type the type of requested ray
+         * @return the builder instance
+         */
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             switch (type) {
                 case SIMPLE:
                     camera.rayTracer = new SimpleRayTracer(scene);
                     break;
                 case GRID:
-                    //TODO: Implement the grid ray tracer
                     camera.rayTracer = null;
                     break;
                 default:
@@ -195,8 +202,6 @@ public class Camera implements Cloneable {
             if (camera.nY <= 0) throw new IllegalArgumentException("The resolution (nY) should have a positive non zero value");
 
             camera.imageWriter = new ImageWriter(camera.nX,camera.nY);
-            camera.rayTracer = camera.rayTracer == null ? new SimpleRayTracer(null) : camera.rayTracer;
-
             return camera.clone();
         }
     }
@@ -289,14 +294,14 @@ public class Camera implements Cloneable {
 
     //TODO: The printGrid method is not implemented yet
     public Camera printGrid(int interval, Color borderColor){
-        ImageWriter imageWriter = new ImageWriter(800, 500);
-        for (int i = 0; i < 500; i++) {
-            for (int j = 0; j < 800; j++) {
+        int rows = imageWriter.nY();
+        int columns = imageWriter.nX();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 if(i % interval == 0 || j % interval == 0 )
                     imageWriter.writePixel(j, i, borderColor);
             }
         }
-        imageWriter.writeToImage("firstImage");
         return this;
     }
 
