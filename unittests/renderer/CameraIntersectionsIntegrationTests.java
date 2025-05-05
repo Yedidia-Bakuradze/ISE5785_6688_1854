@@ -36,8 +36,8 @@ public class CameraIntersectionsIntegrationTests {
      */
     private final Camera.Builder cameraBuilder = Camera.getBuilder()
             .setDirection(zAxis, yAxis)
-            .setDistance(1)
-            .setSize(3, 3);
+            .setVpDistance(1)
+            .setVpSize(3, 3);
 
     /**
      * Camera instance positioned for intersection tests

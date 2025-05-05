@@ -115,7 +115,7 @@ public class Camera implements Cloneable {
          * @return The builder instance for method chaining
          * @throws IllegalArgumentException if width or height are not positive
          */
-        public Builder setSize(double width, double height) {
+        public Builder setVpSize(double width, double height) {
             if (width <= 0 || height <= 0) throw new IllegalArgumentException("Width and height must be positive");
             camera.width = width;
             camera.height = height;
@@ -129,7 +129,7 @@ public class Camera implements Cloneable {
          * @return The builder instance for method chaining
          * @throws IllegalArgumentException if distance is not positive
          */
-        public Builder setDistance(double d) {
+        public Builder setVpDistance(double d) {
             if (d <= 0) throw new IllegalArgumentException("Distance must be positive");
             camera.distance = d;
             return this;
@@ -290,5 +290,9 @@ public class Camera implements Cloneable {
         return this;
     }
 
-
+    private void castRay(int x, int y){
+        Ray ray = constructRay(nX, nY, x, y);
+        Color color = rayTracer.traceRay(ray);
+        imageWriter.writePixel(x,y,color);
+    }
 }

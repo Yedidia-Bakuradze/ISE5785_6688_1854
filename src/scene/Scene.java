@@ -14,7 +14,7 @@ public class Scene {
         name = sceneName;
     }
 
-    public Scene setBackgroundColor(Color _color){
+    public Scene setBackground(Color _color){
         backgroundColor = _color;
         return this;
     }

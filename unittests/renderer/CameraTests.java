@@ -3,7 +3,6 @@ package renderer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 
@@ -24,7 +23,7 @@ class CameraTest {
      */
     private final Camera.Builder cameraBuilder = Camera.getBuilder()
             .setLocation(Point.ZERO)
-            .setDistance(10);
+            .setVpDistance(10);
     /**
      * Assert failure message for a bad ray
      */
@@ -37,8 +36,8 @@ class CameraTest {
     @Test
     void testConstructRay() {
         cameraBuilder.setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0));
-        Camera EvenVPCamera = cameraBuilder.setSize(8, 8).build();
-        Camera OddVPCamera = cameraBuilder.setSize(6, 6).build();
+        Camera EvenVPCamera = cameraBuilder.setVpSize(8, 8).build();
+        Camera OddVPCamera = cameraBuilder.setVpSize(6, 6).build();
 
         // ============ Equivalence Partitions Tests ==============
         // EP01: 4X4 Inside (1,1)
@@ -77,7 +76,7 @@ class CameraTest {
      */
     @Test
     void testBuilder() {
-        cameraBuilder.setSize(4, 4).setResolution(2, 2);
+        cameraBuilder.setVpSize(4, 4).setResolution(2, 2);
 
         // ============ Equivalence Partitions Tests ==============
         // EP01: set to a target point without up vector
