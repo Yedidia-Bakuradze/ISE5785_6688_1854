@@ -141,6 +141,7 @@ public class Camera implements Cloneable {
 
         /**
          * Sets the resolution of the view plane
+         *
          * @param _nX The number of columns in the view plane
          * @param _nY The number of rows in the view plane
          * @return The builder instance for method chaining
@@ -154,8 +155,9 @@ public class Camera implements Cloneable {
 
         /**
          * Sets the ray that would identify and paint the intersected pixels
+         *
          * @param scene the scene of objects
-         * @param type the type of requested ray
+         * @param type  the type of requested ray
          * @return the builder instance
          */
         public Builder setRayTracer(Scene scene, RayTracerType type) {
@@ -167,7 +169,7 @@ public class Camera implements Cloneable {
                     camera.rayTracer = null;
                     break;
                 default:
-                    throw new IllegalArgumentException("The type: " + type.toString() +" is invalid for the ray tracer");
+                    throw new IllegalArgumentException("The type: " + type.toString() + " is invalid for the ray tracer");
             }
             return this;
         }
@@ -182,15 +184,22 @@ public class Camera implements Cloneable {
          */
         public Camera build() {
             // Size values check
-            if (camera.width == 0) throw new MissingResourceException("Width must be positive non zero values", "Camera", "width");
-            if (camera.height == 0) throw new MissingResourceException("Height must be positive non zero values", "Camera", "height");
-            if (camera.distance == 0) throw new MissingResourceException("Distance must be positive a non zero value", "Camera", "distance");
+            if (camera.width == 0)
+                throw new MissingResourceException("Width must be positive non zero values", "Camera", "width");
+            if (camera.height == 0)
+                throw new MissingResourceException("Height must be positive non zero values", "Camera", "height");
+            if (camera.distance == 0)
+                throw new MissingResourceException("Distance must be positive a non zero value", "Camera", "distance");
 
             //Geometry values check
-            if (camera.position == null) throw new MissingResourceException("Camera position must be included", "Camera", "position");
-            if (camera.vTo == null) throw new MissingResourceException("Camera to vector must be included", "Camera", "vTo");
-            if (camera.vUp == null) throw new MissingResourceException("Camera up vector must be included", "Camera", "vUp");
-            if (camera.vRight == null) throw new MissingResourceException("Camera right vector must be included", "Camera", "vRight");
+            if (camera.position == null)
+                throw new MissingResourceException("Camera position must be included", "Camera", "position");
+            if (camera.vTo == null)
+                throw new MissingResourceException("Camera to vector must be included", "Camera", "vTo");
+            if (camera.vUp == null)
+                throw new MissingResourceException("Camera up vector must be included", "Camera", "vUp");
+            if (camera.vRight == null)
+                throw new MissingResourceException("Camera right vector must be included", "Camera", "vRight");
 
             // Check if the vectors are orthogonal
             if (!isZero(camera.vTo.dotProduct(camera.vUp)))
@@ -198,10 +207,12 @@ public class Camera implements Cloneable {
             if (!isZero(camera.vTo.dotProduct(camera.vRight)))
                 throw new IllegalArgumentException("Error: Provided to & right vectors are not orthogonal");
 
-            if (camera.nX <= 0) throw new IllegalArgumentException("The resolution (nX) should have a positive non zero value");
-            if (camera.nY <= 0) throw new IllegalArgumentException("The resolution (nY) should have a positive non zero value");
+            if (camera.nX <= 0)
+                throw new IllegalArgumentException("The resolution (nX) should have a positive non zero value");
+            if (camera.nY <= 0)
+                throw new IllegalArgumentException("The resolution (nY) should have a positive non zero value");
 
-            camera.imageWriter = new ImageWriter(camera.nX,camera.nY);
+            camera.imageWriter = new ImageWriter(camera.nX, camera.nY);
             return camera.clone();
         }
     }
@@ -235,11 +246,24 @@ public class Camera implements Cloneable {
      */
     private double height = 0.0;
 
+    /**
+     * The image writer instance for rendering the image
+     */
     private ImageWriter imageWriter;
 
+    /**
+     * The ray tracer instance for calculating the rays
+     */
     private RayTracerBase rayTracer = null;
 
+    /**
+     * The number of pixels in the view plane (Rows)
+     */
     private int nX = 1;
+
+    /**
+     * The number of pixels in the view plane (columns)
+     */
     private int nY = 1;
 
 
@@ -280,39 +304,61 @@ public class Camera implements Cloneable {
         return new Ray(position, pIJ.subtract(position).normalize());
     }
 
-
-    public Camera renderImage(){
+    /**
+     * Goes over evert pixel in the view plane and casts the ray through each pixel's middle point
+     *
+     * @return the caller (camera instance)
+     */
+    public Camera renderImage() {
         //Goes over the rows
         for (int i = 0; i < nY; i++) {
             //Goes over the columns
             for (int j = 0; j < nX; j++) {
-                castRay(j,i);
+                castRay(j, i);
             }
         }
         return this;
     }
 
-    //TODO: The printGrid method is not implemented yet
-    public Camera printGrid(int interval, Color borderColor){
+    /**
+     * Provides a layout of borderlines with the provided color on the image.
+     *
+     * @param interval    the size of each square on the view place that should be sounded with the borderlines
+     * @param borderColor the color of the borderline
+     * @return the caller (camera)
+     */
+    public Camera printGrid(int interval, Color borderColor) {
         int rows = imageWriter.nY();
         int columns = imageWriter.nX();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                if(i % interval == 0 || j % interval == 0 )
+                if (i % interval == 0 || j % interval == 0)
                     imageWriter.writePixel(j, i, borderColor);
             }
         }
         return this;
     }
 
-    public Camera writeToImage(String imageName){
+    /**
+     * Sends an instructions to the imageWriter to apply the data on a given named image
+     *
+     * @param imageName the new image's name
+     * @return the caller (camera)
+     */
+    public Camera writeToImage(String imageName) {
         imageWriter.writeToImage(imageName);
         return this;
     }
 
-    private void castRay(int j, int i){
+    /**
+     * Sends the ray and gets the intersection data (the point)
+     *
+     * @param j the row that the ray should be sent on the ViewPlane
+     * @param i the column that the ray should be sent on the ViewPlane
+     */
+    private void castRay(int j, int i) {
         Ray ray = constructRay(nX, nY, j, i);
         Color color = rayTracer.traceRay(ray);
-        imageWriter.writePixel(j,i,color);
+        imageWriter.writePixel(j, i, color);
     }
 }

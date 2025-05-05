@@ -47,7 +47,7 @@ class RayTests {
      * Test method for {@link Ray#findClosestPoint(List)}
      */
     @Test
-    void testFindClosestPoint(){
+    void testFindClosestPoint() {
         // ======== Equivalence Partitions Tests ========
         // TC01: The closest point is in the middle of the provided list
 

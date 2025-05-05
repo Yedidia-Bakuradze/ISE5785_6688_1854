@@ -4,27 +4,69 @@ import geometries.Geometries;
 import lighting.AmbientLight;
 import primitives.Color;
 
+/**
+ * Represents a scene containing geometries, lights, and other properties.
+ */
 public class Scene {
+
+    /**
+     * The name of the scene.
+     */
     public String name;
+
+    /**
+     * The background color of the scene.
+     */
     public Color backgroundColor = Color.BLACK;
-    public AmbientLight ambientLight = AmbientLight.NONE ;
+
+    /**
+     * The ambient light of the scene.
+     */
+    public AmbientLight ambientLight = AmbientLight.NONE;
+
+    /**
+     * The geometries in the scene.
+     */
     public Geometries geometries = new Geometries();
 
-    public Scene(String sceneName){
+    /**
+     * Constructs a Scene with the specified name.
+     *
+     * @param sceneName The name of the scene.
+     */
+    public Scene(String sceneName) {
         name = sceneName;
     }
 
-    public Scene setBackground(Color _color){
+    /**
+     * Sets the background color of the scene.
+     *
+     * @param _color The background color.
+     * @return The current Scene instance for method chaining.
+     */
+    public Scene setBackground(Color _color) {
         backgroundColor = _color;
         return this;
     }
 
-    public Scene setAmbientLight(AmbientLight _light){
+    /**
+     * Sets the ambient light of the scene.
+     *
+     * @param _light The ambient light.
+     * @return The current Scene instance for method chaining.
+     */
+    public Scene setAmbientLight(AmbientLight _light) {
         ambientLight = _light;
         return this;
     }
 
-    public Scene setGeometries(Geometries _geometries){
+    /**
+     * Sets the geometries in the scene.
+     *
+     * @param _geometries The geometries.
+     * @return The current Scene instance for method chaining.
+     */
+    public Scene setGeometries(Geometries _geometries) {
         geometries = _geometries;
         return this;
     }
