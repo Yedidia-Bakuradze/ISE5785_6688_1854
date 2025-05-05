@@ -5,6 +5,8 @@ import primitives.Point;
 import primitives.Ray;
 import scene.Scene;
 
+import java.util.List;
+
 public class SimpleRayTracer extends RayTracerBase {
 
     SimpleRayTracer(Scene scene) {
@@ -13,7 +15,10 @@ public class SimpleRayTracer extends RayTracerBase {
 
     @Override
     public Color traceRay(Ray ray) {
-        throw new UnsupportedOperationException("Tray method has been implemented yet in the son's class");
+        List<Point> listOfIntersections = scene.geometries.findIntersections(ray);
+        return listOfIntersections != null
+                ? calcColor(ray.findClosestPoint(listOfIntersections))
+                : scene.backgroundColor;
     }
 
     private Color calcColor(Point p){
