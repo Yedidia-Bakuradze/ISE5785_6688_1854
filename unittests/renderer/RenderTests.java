@@ -1,4 +1,4 @@
-package unittests.renderer;
+package renderer;
 
 import static java.awt.Color.*;
 
@@ -20,8 +20,8 @@ public class RenderTests {
    /** Camera builder of the tests */
    private final Camera.Builder camera = Camera.getBuilder() //
       .setLocation(Point.ZERO).setDirection(new Point(0, 0, -1), Vector.AXIS_Y) //
-      .setVpDistance(100) //
-      .setVpSize(500, 500);
+      .setDistance(100) //
+      .setSize(500, 500);
 
    /**
     * Produce a scene with basic 3D model and render it into a png image with a
@@ -29,7 +29,7 @@ public class RenderTests {
     */
    @Test
    public void renderTwoColorTest() {
-      Scene scene = new Scene("Two color").setBackground(new Color(75, 127, 90))
+      Scene scene = new Scene("Two color").setBackgroundColor(new Color(75, 127, 90))
          .setAmbientLight(new AmbientLight(new Color(255, 191, 191)));
       scene.geometries //
          .add(// center
@@ -84,6 +84,7 @@ public class RenderTests {
    @Test
    public void basicRenderXml() {
       Scene scene = new Scene("Using XML");
+
       // enter XML file name and parse from XML file into scene object instead of the
       // new Scene above,
       // Use the code you added in appropriate packages
