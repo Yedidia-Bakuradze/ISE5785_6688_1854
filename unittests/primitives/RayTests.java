@@ -1,5 +1,9 @@
 package primitives;
 
+import geometries.Geometries;
+import geometries.Plane;
+import geometries.Sphere;
+import geometries.Triangle;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,6 +26,48 @@ class RayTests {
      * A ray to be used in the tests.
      */
     private final Ray ray = new Ray(new Point(1, 0, 0), new Vector(1, 0, 0));
+
+    /**
+     * A geometries object to be used in the tests.
+     * It contains the closets object's point in the middle of the list,
+     */
+    private final Geometries middleClosestIntersectionPoint = new Geometries(
+            new Triangle(
+                    new Point(7, 1, -1),
+                    new Point(7, -1, 0),
+                    new Point(7, 1, 2)
+            ),
+            new Sphere(new Point(4, 0, 0), 1),
+            new Plane(new Vector(1, 0, 0), new Point(8, 0, 0))
+    );
+    /**
+     * A geometries object to be used in the tests.
+     * It contains the closets object's point in the beginning of the list,
+     */
+    private final Geometries beginningClosestIntersectionPoint = new Geometries(
+            new Sphere(new Point(4, 0, 0), 1),
+            new Triangle(
+                    new Point(7, 1, -1),
+                    new Point(7, -1, 0),
+                    new Point(7, 1, 2)
+            ),
+            new Plane(new Vector(1, 0, 0), new Point(8, 0, 0))
+    );
+
+    /**
+     * A geometries object to be used in the tests.
+     * It contains the closets object's point at the end of the list,
+     */
+    private final Geometries endPointClosestIntersectionPoint = new Geometries(
+            new Triangle(
+                    new Point(7, 1, -1),
+                    new Point(7, -1, 0),
+                    new Point(7, 1, 2)
+            ),
+            new Plane(new Vector(1, 0, 0), new Point(8, 0, 0)),
+            new Sphere(new Point(4, 0, 0), 1)
+    );
+
 
     /**
      * Test method for {@link Ray#getPoint(double)}.
@@ -50,16 +96,18 @@ class RayTests {
     void testFindClosestPoint() {
         // ======== Equivalence Partitions Tests ========
         // TC01: The closest point is in the middle of the provided list
+        assertEquals(new Point(3, 0, 0), ray.findClosestPoint(middleClosestIntersectionPoint.findIntersections(ray)), "ERROR: findClosestPoint() for middle point is incorrect");
 
         // ======== Boundary Value Tests ========
 
         // TC11: The list is empty (null list provided)
+        assertEquals(null, ray.findClosestPoint(null), "ERROR: findClosestPoint() for middle point is incorrect");
 
         // TC12: The closet point is the first point on the list
+        assertEquals(new Point(3, 0, 0), ray.findClosestPoint(beginningClosestIntersectionPoint.findIntersections(ray)), "ERROR: findClosestPoint() for middle point is incorrect");
 
         // TC13: The closet point is the last point on the list
-
-        fail("Not implemented yet");
+        assertEquals(new Point(3, 0, 0), ray.findClosestPoint(endPointClosestIntersectionPoint.findIntersections(ray)), "ERROR: findClosestPoint() for middle point is incorrect");
     }
 
 }
