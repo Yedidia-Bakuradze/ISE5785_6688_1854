@@ -1,8 +1,10 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import scene.Scene;
 
 import java.util.MissingResourceException;
 
@@ -137,15 +139,32 @@ public class Camera implements Cloneable {
          * Sets the resolution of the view plane
          * NOT IMPLEMENTED YET
          *
-         * @param nX The number of columns in the view plane
-         * @param nY The number of rows in the view plane
+         * @param _nX The number of columns in the view plane
+         * @param _nY The number of rows in the view plane
          * @return The builder instance for method chaining
          * @throws IllegalArgumentException if nX or nY are not positive
          */
-        public Builder setResolution(double nX, double nY) {
-            //TODO: The implementation of this method is holt for now
-            return null;
+        public Builder setResolution(int _nX, int _nY) {
+            camera.nX = _nX;
+            camera.nY = _nY;
+            return this;
         }
+
+        public Builder setRayTracer(Scene scene, RayTracerType type) {
+            switch (type) {
+                case SIMPLE:
+                    camera.rayTracer = new SimpleRayTracer(scene);
+                    break;
+                case GRID:
+                    //TODO: Implement the grid ray tracer
+                    camera.rayTracer = null;
+                    break;
+                default:
+                    throw new IllegalArgumentException("The type: " + type.toString() +" is invalid for the ray tracer");
+            }
+            return this;
+        }
+
 
         /**
          * Builds and validates the camera instance
@@ -156,22 +175,15 @@ public class Camera implements Cloneable {
          */
         public Camera build() {
             // Size values check
-            if (camera.width == 0)
-                throw new MissingResourceException("Width must be positive non zero values", "Camera", "width");
-            if (camera.height == 0)
-                throw new MissingResourceException("Height must be positive non zero values", "Camera", "height");
-            if (camera.distance == 0)
-                throw new MissingResourceException("Distance must be positive a non zero value", "Camera", "distance");
+            if (camera.width == 0) throw new MissingResourceException("Width must be positive non zero values", "Camera", "width");
+            if (camera.height == 0) throw new MissingResourceException("Height must be positive non zero values", "Camera", "height");
+            if (camera.distance == 0) throw new MissingResourceException("Distance must be positive a non zero value", "Camera", "distance");
 
             //Geometry values check
-            if (camera.position == null)
-                throw new MissingResourceException("Camera position must be included", "Camera", "position");
-            if (camera.vTo == null)
-                throw new MissingResourceException("Camera to vector must be included", "Camera", "vTo");
-            if (camera.vUp == null)
-                throw new MissingResourceException("Camera up vector must be included", "Camera", "vUp");
-            if (camera.vRight == null)
-                throw new MissingResourceException("Camera right vector must be included", "Camera", "vRight");
+            if (camera.position == null) throw new MissingResourceException("Camera position must be included", "Camera", "position");
+            if (camera.vTo == null) throw new MissingResourceException("Camera to vector must be included", "Camera", "vTo");
+            if (camera.vUp == null) throw new MissingResourceException("Camera up vector must be included", "Camera", "vUp");
+            if (camera.vRight == null) throw new MissingResourceException("Camera right vector must be included", "Camera", "vRight");
 
             // Check if the vectors are orthogonal
             if (!isZero(camera.vTo.dotProduct(camera.vUp)))
@@ -179,6 +191,11 @@ public class Camera implements Cloneable {
             if (!isZero(camera.vTo.dotProduct(camera.vRight)))
                 throw new IllegalArgumentException("Error: Provided to & right vectors are not orthogonal");
 
+            if (camera.nX <= 0) throw new IllegalArgumentException("The resolution (nX) should have a positive non zero value");
+            if (camera.nY <= 0) throw new IllegalArgumentException("The resolution (nY) should have a positive non zero value");
+
+            camera.imageWriter = new ImageWriter(camera.nX,camera.nY);
+            camera.rayTracer = camera.rayTracer == null ? new SimpleRayTracer(null) : camera.rayTracer;
 
             return camera.clone();
         }
@@ -212,6 +229,14 @@ public class Camera implements Cloneable {
      * Height of the view plane
      */
     private double height = 0.0;
+
+    private ImageWriter imageWriter;
+
+    private RayTracerBase rayTracer = null;
+
+    private int nX = 1;
+    private int nY = 1;
+
 
     /**
      * Private constructor for builder pattern
@@ -249,5 +274,21 @@ public class Camera implements Cloneable {
 
         return new Ray(position, pIJ.subtract(position).normalize());
     }
+
+
+    public Camera renderImage(){
+        throw new UnsupportedOperationException("This feature is not available yet");
+    }
+
+    //TODO: The printGrid method is not implemented yet
+    public Camera printGrid(int interval, Color color){
+        return this;
+    }
+
+    public Camera writeToImage(String imageName){
+        imageWriter.writeToImage(imageName);
+        return this;
+    }
+
 
 }
