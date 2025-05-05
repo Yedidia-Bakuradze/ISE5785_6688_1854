@@ -277,11 +277,26 @@ public class Camera implements Cloneable {
 
 
     public Camera renderImage(){
-        throw new UnsupportedOperationException("This feature is not available yet");
+        //Goes over the rows
+        for (int i = 0; i < nY; i++) {
+            //Goes over the columns
+            for (int j = 0; j < nX; j++) {
+                castRay(j,i);
+            }
+        }
+        return this;
     }
 
     //TODO: The printGrid method is not implemented yet
-    public Camera printGrid(int interval, Color color){
+    public Camera printGrid(int interval, Color borderColor){
+        ImageWriter imageWriter = new ImageWriter(800, 500);
+        for (int i = 0; i < 500; i++) {
+            for (int j = 0; j < 800; j++) {
+                if(i % interval == 0 || j % interval == 0 )
+                    imageWriter.writePixel(j, i, borderColor);
+            }
+        }
+        imageWriter.writeToImage("firstImage");
         return this;
     }
 
@@ -290,9 +305,9 @@ public class Camera implements Cloneable {
         return this;
     }
 
-    private void castRay(int x, int y){
-        Ray ray = constructRay(nX, nY, x, y);
+    private void castRay(int j, int i){
+        Ray ray = constructRay(nX, nY, j, i);
         Color color = rayTracer.traceRay(ray);
-        imageWriter.writePixel(x,y,color);
+        imageWriter.writePixel(j,i,color);
     }
 }
