@@ -17,7 +17,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Color calcColor(Point p){
-        return this.
+        return this.scene.ambientLight.getIntensity();
     }
 
 }
