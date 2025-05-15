@@ -11,7 +11,7 @@ import java.util.List;
  * Represents a collection of geometries that can be intersected by rays.
  * Implements the {@link Intersectable} interface.
  */
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
 
     /**
      * A list of intersectable geometries.
