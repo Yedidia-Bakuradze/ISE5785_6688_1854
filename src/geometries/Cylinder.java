@@ -6,7 +6,6 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -64,6 +63,11 @@ public class Cylinder extends Tube {
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
+        return null;
+    }
+
+    @Override
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         return null;
     }
 }

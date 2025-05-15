@@ -63,4 +63,21 @@ public class Geometries extends Intersectable {
         }
         return intersections;
     }
+
+    @Override
+    protected List<Intersection> calculateIntersectionsHelper(Ray ray) {
+        List<Intersection> intersections = null;
+
+        for (Intersectable i : geometries) {
+            List<Intersection> res = i.calculateIntersectionsHelper(ray);
+            if (res != null) {
+                if (intersections == null)
+                    intersections = new LinkedList<>(res);
+                else
+                    intersections.addAll(res);
+            }
+        }
+
+        return intersections;
+    }
 }

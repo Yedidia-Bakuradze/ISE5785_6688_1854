@@ -89,4 +89,13 @@ public class Plane extends Geometry {
         double t = alignZero(up / down);
         return t <= 0 ? null : List.of(ray.getPoint(t));
     }
+
+    @Override
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+        List<Point> intersections = this.findIntersections(ray);
+        if (intersections == null) return null;
+        return intersections.stream()
+                .map(point -> new Intersection(this, point))
+                .toList();
+    }
 }

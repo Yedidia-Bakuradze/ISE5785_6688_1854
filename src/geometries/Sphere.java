@@ -59,4 +59,14 @@ public class Sphere extends RadialGeometry {
         double t1 = alignZero(tm - th);
         return t1 <= 0 ? List.of(ray.getPoint(t2)) : List.of(ray.getPoint(t1), ray.getPoint(t2));
     }
+
+
+    @Override
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+        List<Point> intersections = this.findIntersections(ray);
+        if (intersections == null) return null;
+        return intersections.stream()
+                .map(point -> new Intersection(this, point))
+                .toList();
+    }
 }

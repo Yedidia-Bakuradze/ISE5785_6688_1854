@@ -39,7 +39,15 @@ public abstract class Intersectable {
      * @param ray The cast ray.
      * @return A list of intersection points (LinkedList instance), or null value if there are no intersections.
      */
-    public abstract List<Point> findIntersections(Ray ray);
+    public List<Point> findIntersections(Ray ray) {
+        var list = calculateIntersections(ray);
+        return list == null ? null : list.stream().map(intersection -> intersection.point).toList();
+    }
 
 
+    protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray);
+
+    final public List<Intersection> calculateIntersections(Ray ray) {
+        return calculateIntersectionsHelper(ray);
+    }
 }

@@ -55,4 +55,13 @@ public class Triangle extends Polygon {
 
         return intersections;
     }
+
+    @Override
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+        List<Point> intersections = this.findIntersections(ray);
+        if (intersections == null) return null;
+        return intersections.stream()
+                .map(point -> new Intersection(this, point))
+                .toList();
+    }
 }
