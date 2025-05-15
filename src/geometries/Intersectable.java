@@ -14,7 +14,7 @@ public abstract class Intersectable {
         public final Geometry geometry;
         public final Point point;
 
-        Intersection(Geometry geometry, Point point) {
+        public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
             this.point = point;
         }

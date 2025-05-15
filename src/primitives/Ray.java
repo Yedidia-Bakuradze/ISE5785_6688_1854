@@ -1,5 +1,7 @@
 package primitives;
 
+import geometries.Intersectable.Intersection;
+
 import java.util.List;
 
 /**
@@ -63,7 +65,7 @@ public class Ray {
     public String toString() {
         return head + "" + direction;
     }
-    
+
     /**
      * Returns a point on the ray at a distance t from the starting point.
      *
@@ -79,23 +81,28 @@ public class Ray {
     }
 
 
+    public Point findClosestPoint(List<Point> points) {
+        return points == null ? null
+                : findClosestIntersection(points.stream().map(p -> new Intersection(null, p)).toList()).point;
+    }
+
     /**
-     * Calculates and returns the closest point from the provided list of points
+     * Calculates and returns the closest intersection from the provided list of intersections.
      *
-     * @param listOfPoints List of points
+     * @param listOfIntersections List of points
      * @return the closest point
      */
-    public Point findClosestPoint(List<Point> listOfPoints) {
-        if (listOfPoints == null) return null;
+    public Intersection findClosestIntersection(List<Intersection> listOfIntersections) {
+        if (listOfIntersections == null) return null;
         double minSquaredDistance = Double.POSITIVE_INFINITY;
-        Point closestPoint = null;
-        for (Point point : listOfPoints) {
-            double distanceSquared = head.distanceSquared(point);
+        Intersection closestIntersection = null;
+        for (Intersection intersection : listOfIntersections) {
+            double distanceSquared = head.distanceSquared(intersection.point);
             if (distanceSquared < minSquaredDistance) {
                 minSquaredDistance = distanceSquared;
-                closestPoint = point;
+                closestIntersection = intersection;
             }
         }
-        return closestPoint;
+        return closestIntersection;
     }
 }
