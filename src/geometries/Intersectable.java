@@ -10,7 +10,7 @@ import java.util.List;
  */
 public abstract class Intersectable {
 
-    public static class g {
+    public static class Intersection {
         public final Geometry geometry;
         public final Point point;
 
