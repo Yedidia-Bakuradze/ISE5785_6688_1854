@@ -28,8 +28,8 @@ public class ImageWriterTest {
         assertDoesNotThrow(() -> {
             Color mainColor = new Color(java.awt.Color.YELLOW);
             Color borderColor = new Color(java.awt.Color.RED);
-            int x = 800;
-            int y = 500;
+            int x = 801;
+            int y = 501;
             ImageWriter imageWriter = new ImageWriter(x, y);
             for (int i = 0; i < y; i++) {
                 for (int j = 0; j < x; j++) {

@@ -2,8 +2,6 @@ package primitives;
 
 import java.util.List;
 
-import static primitives.Util.isZero;
-
 /**
  * Represents a ray in 3D space, defined by a starting point and a direction vector.
  */
@@ -65,8 +63,7 @@ public class Ray {
     public String toString() {
         return head + "" + direction;
     }
-
-
+    
     /**
      * Returns a point on the ray at a distance t from the starting point.
      *
@@ -89,13 +86,13 @@ public class Ray {
      * @return the closest point
      */
     public Point findClosestPoint(List<Point> listOfPoints) {
-        if (listOfPoints == null || listOfPoints.isEmpty()) return null;
-        double minSquaredDistance = 0;
+        if (listOfPoints == null) return null;
+        double minSquaredDistance = Double.POSITIVE_INFINITY;
         Point closestPoint = null;
         for (Point point : listOfPoints) {
-            double distance = head.distanceSquared(point);
-            if (minSquaredDistance == 0 || distance < minSquaredDistance) {
-                minSquaredDistance = distance;
+            double distanceSquared = head.distanceSquared(point);
+            if (distanceSquared < minSquaredDistance) {
+                minSquaredDistance = distanceSquared;
                 closestPoint = point;
             }
         }

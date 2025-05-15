@@ -2,7 +2,8 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for {@link primitives.Point}.
@@ -75,6 +76,7 @@ public class PointTests {
     @Test
     void testDistance() {
         // ============ Equivalence Partitions Tests ==============
+        // TODO: Add comments
         Point p1 = new Point(1, 2, 3);
         Point p2 = new Point(4, 6, 3);
         assertEquals(5, p1.distance(p2), "ERROR: distance() is incorrect");

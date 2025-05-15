@@ -22,20 +22,11 @@ public class Camera implements Cloneable {
      */
     @Override
     public Camera clone() {
-        Camera clone = new Camera();
-        clone.vRight = this.vRight;
-        clone.vUp = this.vUp;
-        clone.vTo = this.vTo;
-        clone.position = this.position;
-        clone.distance = this.distance;
-        clone.width = this.width;
-        clone.height = this.height;
-        clone.nX = this.nX;
-        clone.nY = this.nY;
-        clone.imageWriter = this.imageWriter;
-        clone.rayTracer = this.rayTracer;
-
-        return clone;
+        try {
+            return (Camera) super.clone();
+        } catch (CloneNotSupportedException ignored) {
+            throw new AssertionError("It shall not happen!!!");
+        }
     }
 
     /**
@@ -52,7 +43,7 @@ public class Camera implements Cloneable {
         /**
          * The camera instance being built
          */
-        private Camera camera = new Camera();
+        private final Camera camera = new Camera();
 
         /**
          * Sets the location of the camera
@@ -169,7 +160,7 @@ public class Camera implements Cloneable {
                     camera.rayTracer = null;
                     break;
                 default:
-                    throw new IllegalArgumentException("The type: " + type.toString() + " is invalid for the ray tracer");
+                    throw new IllegalArgumentException("The type: " + type + " is invalid for the ray tracer");
             }
             return this;
         }
@@ -184,16 +175,18 @@ public class Camera implements Cloneable {
          */
         public Camera build() {
             // Size values check
-            if (camera.width == 0)
+            if (camera.width <= 0)
                 throw new MissingResourceException("Width must be positive non zero values", "Camera", "width");
-            if (camera.height == 0)
+            if (camera.height <= 0)
                 throw new MissingResourceException("Height must be positive non zero values", "Camera", "height");
-            if (camera.distance == 0)
+            if (camera.distance <= 0)
                 throw new MissingResourceException("Distance must be positive a non zero value", "Camera", "distance");
 
             //Geometry values check
             if (camera.position == null)
                 throw new MissingResourceException("Camera position must be included", "Camera", "position");
+            camera.viewPlaneCenter = camera.position.add(camera.vTo.scale(camera.distance));
+
             if (camera.vTo == null)
                 throw new MissingResourceException("Camera to vector must be included", "Camera", "vTo");
             if (camera.vUp == null)
@@ -211,8 +204,14 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("The resolution (nX) should have a positive non zero value");
             if (camera.nY <= 0)
                 throw new IllegalArgumentException("The resolution (nY) should have a positive non zero value");
-
             camera.imageWriter = new ImageWriter(camera.nX, camera.nY);
+            camera.pixelWidth = camera.width / camera.nX;
+            camera.pixelHeight = camera.height / camera.nY;
+
+            if (camera.rayTracer == null) {
+                camera.rayTracer = new SimpleRayTracer(null);
+            }
+
             return camera.clone();
         }
     }
@@ -245,6 +244,12 @@ public class Camera implements Cloneable {
      * Height of the view plane
      */
     private double height = 0.0;
+
+    private Point viewPlaneCenter;
+
+    private double pixelWidth;
+    private double pixelHeight;
+
 
     /**
      * The image writer instance for rendering the image
@@ -292,11 +297,10 @@ public class Camera implements Cloneable {
      * @return The ray through pixel (j,i)
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        Point pIJ = position.add(vTo.scale(distance));
+        double yI = -(i - (nY - 1) / 2.0) * pixelHeight;
+        double xJ = (j - (nX - 1) / 2.0) * pixelWidth;
 
-        double yI = -(i - (nY - 1) / 2.0) * height / nY;
-        double xJ = (j - (nX - 1) / 2.0) * width / nX;
-
+        Point pIJ = viewPlaneCenter;
         //check if xJ or yI are not zero, so we will not add zero vector
         if (!isZero(xJ)) pIJ = pIJ.add(vRight.scale(xJ));
         if (!isZero(yI)) pIJ = pIJ.add(vUp.scale(yI));
@@ -328,10 +332,8 @@ public class Camera implements Cloneable {
      * @return the caller (camera)
      */
     public Camera printGrid(int interval, Color borderColor) {
-        int rows = imageWriter.nY();
-        int columns = imageWriter.nX();
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < nX; i++) {
+            for (int j = 0; j < nY; j++) {
                 if (i % interval == 0 || j % interval == 0)
                     imageWriter.writePixel(j, i, borderColor);
             }

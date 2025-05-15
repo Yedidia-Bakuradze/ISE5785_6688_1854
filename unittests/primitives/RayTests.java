@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Unit tests for {@link Ray} class.
@@ -101,7 +102,7 @@ class RayTests {
         // ======== Boundary Value Tests ========
 
         // TC11: The list is empty (null list provided)
-        assertEquals(null, ray.findClosestPoint(null), "ERROR: findClosestPoint() for middle point is incorrect");
+        assertNull(ray.findClosestPoint(null), "ERROR: findClosestPoint() for middle point is incorrect");
 
         // TC12: The closet point is the first point on the list
         assertEquals(new Point(3, 0, 0), ray.findClosestPoint(beginningClosestIntersectionPoint.findIntersections(ray)), "ERROR: findClosestPoint() for middle point is incorrect");
