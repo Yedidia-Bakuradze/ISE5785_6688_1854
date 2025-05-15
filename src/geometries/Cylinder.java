@@ -62,11 +62,6 @@ public class Cylinder extends Tube {
      * @return A list of intersection points, or null if there are no intersections.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        return null;
-    }
-
-    @Override
     public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         return null;
     }

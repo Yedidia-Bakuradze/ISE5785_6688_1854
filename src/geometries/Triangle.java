@@ -27,9 +27,9 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         // Check if there are any intersections with the triangle's plane
-        List<Point> intersections = super.findIntersections(ray);
+        List<Intersection> intersections = super.calculateIntersectionsHelper(ray);
         if (intersections == null) return null;
 
         Point p0 = ray.getHead();
@@ -54,14 +54,5 @@ public class Triangle extends Polygon {
         if (res1 * res3 <= 0) return null;
 
         return intersections;
-    }
-
-    @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
-        List<Point> intersections = this.findIntersections(ray);
-        if (intersections == null) return null;
-        return intersections.stream()
-                .map(point -> new Intersection(this, point))
-                .toList();
     }
 }

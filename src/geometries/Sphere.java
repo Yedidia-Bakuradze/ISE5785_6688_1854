@@ -40,11 +40,12 @@ public class Sphere extends RadialGeometry {
         return point.subtract(center).normalize();
     }
 
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         Point p0 = ray.getHead();
 
-        if (this.center.equals(p0)) return List.of(ray.getPoint(radius));
+        if (this.center.equals(p0)) return List.of(new Intersection(this, ray.getPoint(radius)));
 
         Vector u = this.center.subtract(p0);
         double tm = alignZero(ray.getDirection().dotProduct(u));
@@ -57,16 +58,7 @@ public class Sphere extends RadialGeometry {
         if (t2 <= 0) return null;
 
         double t1 = alignZero(tm - th);
-        return t1 <= 0 ? List.of(ray.getPoint(t2)) : List.of(ray.getPoint(t1), ray.getPoint(t2));
+        return t1 <= 0 ? List.of(new Intersection(this, ray.getPoint(t2))) : List.of(new Intersection(this, ray.getPoint(t1)), new Intersection(this, ray.getPoint(t2)));
     }
 
-
-    @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
-        List<Point> intersections = this.findIntersections(ray);
-        if (intersections == null) return null;
-        return intersections.stream()
-                .map(point -> new Intersection(this, point))
-                .toList();
-    }
 }

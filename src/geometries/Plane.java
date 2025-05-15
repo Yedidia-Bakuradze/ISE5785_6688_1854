@@ -72,8 +72,9 @@ public class Plane extends Geometry {
         return normal;
     }
 
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         Vector u;
         try {
             u = this.q.subtract(ray.getHead());
@@ -87,15 +88,6 @@ public class Plane extends Geometry {
         if (isZero(down)) return null;
 
         double t = alignZero(up / down);
-        return t <= 0 ? null : List.of(ray.getPoint(t));
-    }
-
-    @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
-        List<Point> intersections = this.findIntersections(ray);
-        if (intersections == null) return null;
-        return intersections.stream()
-                .map(point -> new Intersection(this, point))
-                .toList();
+        return t <= 0 ? null : List.of(new Intersection(this, ray.getPoint(t)));
     }
 }
