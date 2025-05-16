@@ -5,12 +5,8 @@ import primitives.Color;
 /**
  * Represents the light that shines all the objects in the scene
  */
-public class AmbientLight {
+public class AmbientLight extends Light {
 
-    /**
-     * The intensity of the ambient light
-     */
-    final private Color intensity;
 
     /**
      * The default ambient light, which is black
@@ -20,18 +16,10 @@ public class AmbientLight {
     /**
      * Initiates the ambient light with provided intensity
      *
-     * @param _intensity the intensity of the ambient light
+     * @param _intensity the intensity of the ambient light (Ia)
      */
     public AmbientLight(Color _intensity) {
-        intensity = _intensity;
+        super(_intensity);
     }
 
-    /**
-     * Returns the intensity of the ambient light
-     *
-     * @return the intensity of the ambient light
-     */
-    public Color getIntensity() {
-        return intensity;
-    }
 }
