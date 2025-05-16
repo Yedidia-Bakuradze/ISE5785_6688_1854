@@ -92,19 +92,19 @@ public class RenderTests {
         scene.geometries //
                 .add(// center
                         new Sphere(new Point(0, 0, -100), 50)
-                                .setMaterial(new Material().setKa(0.4)),
+                                .setMaterial(new Material().setKA(0.4)),
                         // up left
                         new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)) //
                                 .setEmission(new Color(GREEN))
-                                .setMaterial(new Material().setKa(new Double3(0, 0.8, 0))),
+                                .setMaterial(new Material().setKA(new Double3(0, 0.8, 0))),
                         // down left
                         new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)) //
                                 .setEmission(new Color(RED))
-                                .setMaterial(new Material().setKa(new Double3(0.8, 0, 0))),
+                                .setMaterial(new Material().setKA(new Double3(0.8, 0, 0))),
                         // down right
                         new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)) //
                                 .setEmission(new Color(BLUE))
-                                .setMaterial(new Material().setKa(new Double3(0, 0, 0.8)))
+                                .setMaterial(new Material().setKA(new Double3(0, 0, 0.8)))
                 );
 
         camera //
