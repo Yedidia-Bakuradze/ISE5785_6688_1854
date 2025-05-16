@@ -87,9 +87,12 @@ public class RenderTests {
     @Test
     public void renderMultiColorAndMaterialEffectTest() {
         Scene scene = new Scene("Multi Color and Material Effect Test").setAmbientLight(new AmbientLight(new Color(WHITE)));
+
+
         scene.geometries //
                 .add(// center
-                        new Sphere(new Point(0, 0, -100), 50),
+                        new Sphere(new Point(0, 0, -100), 50)
+                                .setMaterial(new Material().setKa(0.4)),
                         // up left
                         new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)) //
                                 .setEmission(new Color(GREEN))
