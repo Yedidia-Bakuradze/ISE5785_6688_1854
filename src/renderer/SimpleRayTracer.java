@@ -36,7 +36,8 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return the calculated color to paint that pixel with
      */
     private Color calcColor(Intersectable.Intersection intersection) {
-        return this.scene.ambientLight.getIntensity().add(intersection.geometry.getEmission());
+        return this.scene.ambientLight.getIntensity()
+                .add(intersection.geometry.getEmission().scale(intersection.geometry.getMaterial().ka));
     }
 
 }

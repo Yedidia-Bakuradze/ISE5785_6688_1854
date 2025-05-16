@@ -4,9 +4,7 @@ import geometries.Sphere;
 import geometries.Triangle;
 import lighting.AmbientLight;
 import org.junit.jupiter.api.Test;
-import primitives.Color;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 import scene.Scene;
 
 import static java.awt.Color.*;
@@ -84,6 +82,35 @@ public class RenderTests {
                 .renderImage() //
                 .printGrid(100, new Color(WHITE)) //
                 .writeToImage("color render test");
+    }
+
+    @Test
+    public void renderMultiColorAndMaterialEffectTest() {
+        Scene scene = new Scene("Multi Color and Material Effect Test").setAmbientLight(new AmbientLight(new Color(WHITE)));
+        scene.geometries //
+                .add(// center
+                        new Sphere(new Point(0, 0, -100), 50),
+                        // up left
+                        new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)) //
+                                .setEmission(new Color(GREEN))
+                                .setMaterial(new Material().setKa(new Double3(0, 0.8, 0))),
+                        // down left
+                        new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)) //
+                                .setEmission(new Color(RED))
+                                .setMaterial(new Material().setKa(new Double3(0.8, 0, 0))),
+                        // down right
+                        new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)) //
+                                .setEmission(new Color(BLUE))
+                                .setMaterial(new Material().setKa(new Double3(0, 0, 0.8)))
+                );
+
+        camera //
+                .setRayTracer(scene, RayTracerType.SIMPLE) //
+                .setResolution(1000, 1000) //
+                .build() //
+                .renderImage() //
+                .printGrid(100, new Color(WHITE)) //
+                .writeToImage("Multi Color and Material Effect");
     }
 
 //    /**
