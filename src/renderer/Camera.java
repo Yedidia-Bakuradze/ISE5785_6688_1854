@@ -297,8 +297,8 @@ public class Camera implements Cloneable {
      * @return The ray through pixel (j,i)
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        double yI = -(i - (nY - 1) / 2.0) * pixelHeight;
-        double xJ = (j - (nX - 1) / 2.0) * pixelWidth;
+        double yI = -(i - (nY - 1) / 2.0) * height / nY;
+        double xJ = (j - (nX - 1) / 2.0) * width / nX;
 
         Point pIJ = viewPlaneCenter;
         //check if xJ or yI are not zero, so we will not add zero vector
