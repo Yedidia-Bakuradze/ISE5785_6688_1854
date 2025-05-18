@@ -13,10 +13,32 @@ public abstract class Intersectable {
     public static class Intersection {
         public final Geometry geometry;
         public final Point point;
+//        public final Material material;
+//        public Vector normal;
+//        public Vector rayDirection;
+//        public Vector rayNormalProduct;
+//        public LightSource lightSource;
+//        public Vector lightDirection;
+//        public Vector lightNormalProduct;
 
-        public Intersection(Geometry geometry, Point point) {
+
+        public Intersection(Geometry geometry, Point point
+//                , Material material, Vector rayDirection, Vector normal,
+//                            LightSource lightSource, Vector lightDirection
+        ) {
             this.geometry = geometry;
             this.point = point;
+//            this.material = material;
+//
+//            this.rayDirection = rayDirection;
+//            this.normal = normal;
+//            this.rayNormalProduct = rayDirection.crossProduct(normal).normalize();
+//
+//            this.lightSource = lightSource;
+//
+//            this.lightDirection = lightDirection;
+//            this.lightNormalProduct = lightDirection.crossProduct(normal).normalize();
+
         }
 
         @Override
