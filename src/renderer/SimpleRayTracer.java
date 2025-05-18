@@ -3,6 +3,7 @@ package renderer;
 import geometries.Intersectable;
 import lighting.LightSource;
 import primitives.Color;
+import primitives.Double3;
 import primitives.Ray;
 import primitives.Vector;
 import scene.Scene;
@@ -41,7 +42,7 @@ public class SimpleRayTracer extends RayTracerBase {
      */
     private Color calcColor(Intersectable.Intersection intersection) {
         return this.scene.ambientLight.getIntensity()
-                .add(intersection.geometry.getEmission()).scale(intersection.geometry.getMaterial().kA);
+                .add(calcColorLocalEffects(intersection));
     }
 
 
@@ -52,10 +53,33 @@ public class SimpleRayTracer extends RayTracerBase {
         return intersection.rayNormalProduct != 0;
     }
 
-    boolean setLightSource(Intersectable.Intersection intersection, LightSource lightSource) {
+    private boolean setLightSource(Intersectable.Intersection intersection, LightSource lightSource) {
         intersection.lightSource = lightSource;
         intersection.lightDirection = lightSource.getL(intersection.point);
         intersection.lightNormalProduct = alignZero(intersection.lightDirection.dotProduct(intersection.normal));
         return intersection.lightNormalProduct * intersection.rayNormalProduct >= 0;
+    }
+
+    Color calcColorLocalEffects(Intersectable.Intersection intersection) {
+        Color color = intersection.geometry.getEmission();
+        for (LightSource lightSource : scene.lights) {
+            if (intersection.lightNormalProduct * intersection.rayNormalProduct > 0) { // sign(nl) == sign(nv)
+                Color iL = lightSource.getIntensity(intersection.point);
+                color = color.add(
+                        iL.scale(calcDiffusive(intersection)
+                                .add(calcSpecular(intersection))));
+            }
+        }
+        return color;
+    }
+
+    Double3 calcSpecular(Intersectable.Intersection intersection) {
+        double factor = -intersection.rayNormalProduct <= 0 ? 0 : intersection.rayNormalProduct;
+        factor = Math.pow(factor, intersection.material.nShininess);
+        return intersection.material.kS.scale(factor);
+    }
+
+    Double3 calcDiffusive(Intersectable.Intersection intersection) {
+        return intersection.material.kD.scale(intersection.lightNormalProduct);
     }
 }
