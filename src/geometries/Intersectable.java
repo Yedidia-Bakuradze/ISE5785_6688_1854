@@ -1,7 +1,10 @@
 package geometries;
 
+import lighting.LightSource;
+import primitives.Material;
 import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 
 import java.util.List;
 
@@ -13,32 +16,19 @@ public abstract class Intersectable {
     public static class Intersection {
         public final Geometry geometry;
         public final Point point;
-//        public final Material material;
-//        public Vector normal;
-//        public Vector rayDirection;
-//        public Vector rayNormalProduct;
-//        public LightSource lightSource;
-//        public Vector lightDirection;
-//        public Vector lightNormalProduct;
+        public final Material material;
+        public Vector normal;
+        public Vector rayDirection;
+        public double rayNormalProduct;
+        public LightSource lightSource;
+        public Vector lightDirection;
+        public double lightNormalProduct;
 
 
-        public Intersection(Geometry geometry, Point point
-//                , Material material, Vector rayDirection, Vector normal,
-//                            LightSource lightSource, Vector lightDirection
-        ) {
+        public Intersection(Geometry geometry, Point point, Material material) {
             this.geometry = geometry;
             this.point = point;
-//            this.material = material;
-//
-//            this.rayDirection = rayDirection;
-//            this.normal = normal;
-//            this.rayNormalProduct = rayDirection.crossProduct(normal).normalize();
-//
-//            this.lightSource = lightSource;
-//
-//            this.lightDirection = lightDirection;
-//            this.lightNormalProduct = lightDirection.crossProduct(normal).normalize();
-
+            this.material = geometry == null ? null : material;
         }
 
         @Override
