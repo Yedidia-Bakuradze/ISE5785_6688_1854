@@ -10,6 +10,7 @@ import scene.Scene;
 
 import java.util.List;
 
+import static java.awt.Color.BLACK;
 import static primitives.Util.alignZero;
 
 /**
@@ -40,9 +41,9 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param intersection the intersection onto the calculation is made
      * @return the calculated color to paint that pixel with
      */
-    private Color calcColor(Intersectable.Intersection intersection) {
-        return this.scene.ambientLight.getIntensity()
-                .add(calcColorLocalEffects(intersection));
+    private Color calcColor(Intersectable.Intersection intersection, Vector rayDirection) {
+        if (!preprocessIntersection(intersection, rayDirection)) return new Color(BLACK);
+        return this.scene.ambientLight.getIntensity().add(calcColorLocalEffects(intersection));
     }
 
 
