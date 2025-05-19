@@ -125,7 +125,7 @@ public class RenderTests {
      */
     @Test
     public void basicRenderXml() {
-        Scene scene = XMLParser.BuildSceneFromXML("XML Documents For Image Generation/BasicRender.xml");
+        Scene scene = XMLParser.BuildSceneFromXML(XMLParser.folderLocation() + "/BasicRender.xml");
         camera //
                 .setRayTracer(scene, RayTracerType.SIMPLE) //
                 .setResolution(1000, 1000) //
