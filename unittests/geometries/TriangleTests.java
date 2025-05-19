@@ -8,7 +8,8 @@ import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for {@link Triangle} class.
+ * Unit tests for {@link geometries.Triangle}.
+ * This class tests the functionality of the Triangle class, including intersection calculations.
  */
 class TriangleTests {
 

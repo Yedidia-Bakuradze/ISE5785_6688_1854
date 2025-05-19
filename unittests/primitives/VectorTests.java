@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link primitives.Vector}.
+ * This class tests the functionality of vector operations such as addition, subtraction, scaling, and normalization.
  */
 public class VectorTests {
     /**

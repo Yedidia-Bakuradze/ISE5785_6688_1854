@@ -81,6 +81,12 @@ public class Ray {
     }
 
 
+    /**
+     * Calculates and returns the closest point from the provided list of points.
+     *
+     * @param points List of points
+     * @return the closest point
+     */
     public Point findClosestPoint(List<Point> points) {
         return points == null ? null
                 : findClosestIntersection(points.stream().map(p -> new Intersection(null, p)).toList()).point;

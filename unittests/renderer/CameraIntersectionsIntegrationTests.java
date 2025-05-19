@@ -11,8 +11,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Integration tests for Camera ray construction with geometric intersections
- * Tests the integration between Camera and various geometric shapes
+ * Integration tests for Camera ray construction with geometric intersections.
+ * This class tests the integration between Camera and various geometric shapes.
  */
 public class CameraIntersectionsIntegrationTests {
 

@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Represents a scene containing geometries, lights, and other properties.
+ * This class provides methods to configure the scene's properties.
  */
 public class Scene {
 
@@ -34,6 +35,11 @@ public class Scene {
     public Geometries geometries = new Geometries();
 
     /**
+     * The list of light sources in the scene.
+     */
+    public List<LightSource> lights = new LinkedList<>();
+
+    /**
      * Constructs a Scene with the specified name.
      *
      * @param sceneName The name of the scene.
@@ -41,8 +47,6 @@ public class Scene {
     public Scene(String sceneName) {
         name = sceneName;
     }
-
-    public List<LightSource> lights = new LinkedList<>();
 
     /**
      * Sets the background color of the scene.
@@ -77,6 +81,12 @@ public class Scene {
         return this;
     }
 
+    /**
+     * Sets the light sources in the scene.
+     *
+     * @param lights The list of light sources to set.
+     * @return The current Scene instance.
+     */
     public Scene setLights(LinkedList<LightSource> lights) {
         this.lights = lights;
         return this;

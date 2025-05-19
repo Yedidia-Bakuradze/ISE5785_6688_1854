@@ -39,6 +39,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the color on the given point with the ambient light and the emission of the geometry
      *
      * @param intersection the intersection onto the calculation is made
+     * @param rayDirection the direction of the ray
      * @return the calculated color to paint that pixel with
      */
     private Color calcColor(Intersectable.Intersection intersection, Vector rayDirection) {
@@ -48,7 +49,13 @@ public class SimpleRayTracer extends RayTracerBase {
                 .add(calcColorLocalEffects(intersection));
     }
 
-
+    /**
+     * Preprocesses the intersection to calculate necessary values.
+     *
+     * @param intersection The intersection to preprocess.
+     * @param rayDirection The direction of the ray.
+     * @return True if preprocessing is successful, false otherwise.
+     */
     private boolean preprocessIntersection(Intersectable.Intersection intersection, Vector rayDirection) {
         intersection.rayDirection = rayDirection;
         intersection.normal = intersection.geometry.getNormal(intersection.point);
@@ -56,6 +63,13 @@ public class SimpleRayTracer extends RayTracerBase {
         return intersection.rayNormalProduct != 0;
     }
 
+    /**
+     * Sets the light source for the intersection.
+     *
+     * @param intersection The intersection to set the light source for.
+     * @param lightSource  The light source to set.
+     * @return True if the light source is valid, false otherwise.
+     */
     private boolean setLightSource(Intersectable.Intersection intersection, LightSource lightSource) {
         intersection.lightSource = lightSource;
         intersection.lightDirection = lightSource.getL(intersection.point).normalize();
@@ -63,6 +77,12 @@ public class SimpleRayTracer extends RayTracerBase {
         return intersection.lightNormalProduct * intersection.rayNormalProduct > 0;
     }
 
+    /**
+     * Calculates the local effects of lighting at the intersection.
+     *
+     * @param intersection The intersection to calculate effects for.
+     * @return The color resulting from local lighting effects.
+     */
     private Color calcColorLocalEffects(Intersectable.Intersection intersection) {
         Color color = intersection.geometry.getEmission();
         for (LightSource lightSource : scene.lights) {
@@ -75,6 +95,12 @@ public class SimpleRayTracer extends RayTracerBase {
         return color;
     }
 
+    /**
+     * Calculates the reflection vector at the intersection.
+     *
+     * @param intersection The intersection to calculate reflection for.
+     * @return The reflection vector.
+     */
     private Vector calcReflection(Intersectable.Intersection intersection) {
         return intersection.lightDirection.add(
                 (
@@ -85,6 +111,12 @@ public class SimpleRayTracer extends RayTracerBase {
         );
     }
 
+    /**
+     * Calculates the specular lighting effect at the intersection.
+     *
+     * @param intersection The intersection to calculate specular effect for.
+     * @return The specular lighting effect as a Double3.
+     */
     private Double3 calcSpecular(Intersectable.Intersection intersection) {
         double factor = intersection
                 .rayDirection
@@ -94,6 +126,12 @@ public class SimpleRayTracer extends RayTracerBase {
         return intersection.material.kS.scale(factor);
     }
 
+    /**
+     * Calculates the diffusive lighting effect at the intersection.
+     *
+     * @param intersection The intersection to calculate diffusive effect for.
+     * @return The diffusive lighting effect as a Double3.
+     */
     private Double3 calcDiffusive(Intersectable.Intersection intersection) {
         Double3 res = intersection.material.kD.scale(intersection.lightNormalProduct);
         double q1 = res.d1() < 0 ? -res.d1() : res.d1();

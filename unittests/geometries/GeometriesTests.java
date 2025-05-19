@@ -8,7 +8,8 @@ import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for {@link Geometries} class.
+ * Unit tests for {@link geometries.Geometries}.
+ * This class tests the functionality of the Geometries class, including intersection calculations.
  */
 class GeometriesTests {
 

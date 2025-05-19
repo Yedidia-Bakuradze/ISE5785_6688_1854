@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link geometries.Sphere}.
+ * This class tests the functionality of the Sphere class, including normal and intersection calculations.
  */
 public class SphereTests {
 

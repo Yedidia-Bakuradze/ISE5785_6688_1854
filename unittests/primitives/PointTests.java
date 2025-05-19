@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for {@link primitives.Point}.
+ * This class tests the functionality of point operations such as addition, subtraction, and distance calculations.
  */
 public class PointTests {
     /**

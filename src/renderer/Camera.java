@@ -245,9 +245,19 @@ public class Camera implements Cloneable {
      */
     private double height = 0.0;
 
+    /**
+     * The center point of the view plane.
+     */
     private Point viewPlaneCenter;
 
+    /**
+     * The width of a single pixel in the view plane.
+     */
     private double pixelWidth;
+
+    /**
+     * The height of a single pixel in the view plane.
+     */
     private double pixelHeight;
 
 

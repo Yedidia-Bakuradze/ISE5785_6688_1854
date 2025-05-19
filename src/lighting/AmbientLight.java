@@ -3,7 +3,8 @@ package lighting;
 import primitives.Color;
 
 /**
- * Represents the light that shines all the objects in the scene
+ * Represents the ambient light in the scene.
+ * This class provides a default ambient light and methods to set its intensity.
  */
 public class AmbientLight extends Light {
 

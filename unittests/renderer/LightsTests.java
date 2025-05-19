@@ -14,7 +14,8 @@ import scene.Scene;
 import static java.awt.Color.BLUE;
 
 /**
- * Test rendering a basic image
+ * Unit tests for light sources.
+ * This class tests the behavior of different light sources in the scene.
  *
  * @author Dan Zilberstein
  */
@@ -271,6 +272,9 @@ class LightsTests {
                 .writeToImage("lightTrianglesSpotSharp");
     }
 
+    /**
+     * Produce a picture of a sphere lighted by multiple lights
+     */
     @Test
     void sphereMultipleLights() {
         scene1.geometries.add(sphere);
@@ -288,6 +292,9 @@ class LightsTests {
                 .writeToImage("New Test - Sphere Multiple Lights");
     }
 
+    /**
+     * Produce a picture of two triangles lighted by multiple lights
+     */
     @Test
     void trianglesMultipleLights() {
         scene2.geometries.add(triangle1, triangle2);

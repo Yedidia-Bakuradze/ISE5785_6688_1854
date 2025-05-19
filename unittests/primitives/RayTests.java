@@ -12,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * Unit tests for {@link Ray} class.
+ * Unit tests for {@link primitives.Ray}.
+ * This class tests the functionality of ray operations, including finding closest points and constructing rays.
  */
 class RayTests {
 

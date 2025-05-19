@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Unit tests for {@link geometries.Plane}.
+ * This class tests the functionality of the Plane class, including normal and intersection calculations.
  */
 public class PlaneTests {
 

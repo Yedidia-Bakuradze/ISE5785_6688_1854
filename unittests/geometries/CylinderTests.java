@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit tests for {@link geometries.Cylinder}.
+ * This class tests the functionality of the Cylinder class, including normal calculations and intersections.
  */
 public class CylinderTests {
 

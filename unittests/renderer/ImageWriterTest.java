@@ -6,7 +6,8 @@ import primitives.Color;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
- * Represents the test cases related to image writing
+ * Unit tests for {@link renderer.ImageWriter}.
+ * This class tests the functionality of writing images and pixels.
  */
 public class ImageWriterTest {
 
