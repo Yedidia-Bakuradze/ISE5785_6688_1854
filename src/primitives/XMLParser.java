@@ -21,19 +21,49 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is responsible for parsing XML files to create Scene and Camera objects.
+ */
 public class XMLParser {
 
+    /**
+     * Default constructor for JavaDoc.
+     */
+    XMLParser() {
+    }
+
+    /**
+     * The location of the XML files for image generation.
+     */
     private static final String FOLDER_LOCATION = "XML Documents For Image Generation/";
 
+    /**
+     * The location of the XML files for image generation.
+     *
+     * @return The folder location as a string.
+     */
     public static String getFolderLocation() {
         return FOLDER_LOCATION;
     }
 
+    /**
+     * Checks if an element with the specified tag name exists within the parent element.
+     *
+     * @param parent  The parent element to search within.
+     * @param tagName The tag name to check for.
+     * @return true if the element exists, false otherwise.
+     */
     public static boolean elementExists(Element parent, String tagName) {
         NodeList nodeList = parent.getElementsByTagName(tagName);
         return nodeList != null && nodeList.getLength() > 0;
     }
 
+    /**
+     * Parses a Double3 object from the given XML element.
+     *
+     * @param parent The parent element containing the x, y, and z values.
+     * @return A Double3 object with the parsed values.
+     */
     public static Double3 parseDouble3(Element parent) {
         var res = new Double3(
                 Double.parseDouble(parent.getElementsByTagName("x").item(0).getTextContent()),
@@ -43,6 +73,12 @@ public class XMLParser {
         return res;
     }
 
+    /**
+     * Parses a Color object from the given XML element.
+     *
+     * @param parent The parent element containing the r, g, and b values.
+     * @return A Color object with the parsed values.
+     */
     public static Color parseToColor(Element parent) {
         return new Color(
                 Double.parseDouble(parent.getElementsByTagName("r").item(0).getTextContent()),
@@ -51,6 +87,12 @@ public class XMLParser {
         );
     }
 
+    /**
+     * Parses a list of Point objects from the given XML element.
+     *
+     * @param parent The parent element containing the points.
+     * @return A list of Point objects.
+     */
     public static List<Point> parseToPoints(Element parent) {
         NodeList pointsNodeList = parent.getChildNodes();
         List<Point> points = new ArrayList<>();
@@ -64,6 +106,12 @@ public class XMLParser {
         return points;
     }
 
+    /**
+     * Parses a list of coefficients from the given XML element.
+     *
+     * @param parent The parent element containing the coefficients.
+     * @return A list of Double values representing the coefficients. (ka, kl, kq)
+     */
     public static List<Double> parseToCoefficients(Element parent) {
         return List.of(
                 Double.parseDouble(parent.getElementsByTagName("Constant").item(0).getTextContent()),
@@ -72,6 +120,13 @@ public class XMLParser {
         );
     }
 
+
+    /**
+     * Parses a Material object from the given XML element.
+     *
+     * @param parent The parent element containing the material properties.
+     * @return A Material object with the parsed properties.
+     */
     public static Material parseToMaterial(Element parent) {
         Material material = new Material();
         if (elementExists(parent, "Ambient"))
@@ -85,6 +140,12 @@ public class XMLParser {
         return material;
     }
 
+    /**
+     * Parses a Scene object from the given XML element.
+     *
+     * @param scene The XML element representing the scene.
+     * @return A Scene object with the parsed properties.
+     */
     public static Scene SceneBuilder(Element scene) {
         Scene sceneRes = new Scene((scene.getElementsByTagName("Name").item(0)).getTextContent());
 
@@ -191,6 +252,12 @@ public class XMLParser {
         return sceneRes;
     }
 
+    /**
+     * Builds a Scene object from an XML file.
+     *
+     * @param xmlFileName The name of the XML file to parse.
+     * @return A Scene object built from the XML data.
+     */
     public static Scene BuildSceneFromXML(String xmlFileName) {
         try {
             // Load and parse the XML file
@@ -207,6 +274,12 @@ public class XMLParser {
         }
     }
 
+    /**
+     * Builds a Camera object from an XML file.
+     *
+     * @param xmlFileName The name of the XML file to parse.
+     * @return A Camera object built from the XML data.
+     */
     public static Camera BuildCameraFromXML(String xmlFileName) {
         try {
             // Load and parse the XML file
