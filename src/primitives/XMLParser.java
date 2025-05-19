@@ -25,6 +25,10 @@ public class XMLParser {
 
     private static final String FOLDER_LOCATION = "XML Documents For Image Generation/";
 
+    public static String getFolderLocation() {
+        return FOLDER_LOCATION;
+    }
+
     public static boolean elementExists(Element parent, String tagName) {
         NodeList nodeList = parent.getElementsByTagName(tagName);
         return nodeList != null && nodeList.getLength() > 0;
