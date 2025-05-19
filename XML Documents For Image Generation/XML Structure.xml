@@ -1,41 +1,43 @@
 <ImageDetails>
     <Camera>
         <CameraPosition>
-            <X>0</X>
-            <Y>0</Y>
-            <Z>5</Z>
+            <x>0</x>
+            <y>0</y>
+            <z>5</z>
         </CameraPosition>
-        <Direction1>
-            <vTo>
-                <X>0</X>
-                <Y>0</Y>
-                <Z>0</Z>
-            </vTo>
-            <vUp>
-                <X>0</X>
-                <Y>1</Y>
-                <Z>0</Z>
-            </vUp>
-        </Direction1>
-        <Direction2>
-            <LookAtPoint>
-                <X>0</X>
-                <Y>0</Y>
-                <Z>0</Z>
-            </LookAtPoint>
-            <vUp>
-                <X>0</X>
-                <Y>1</Y>
-                <Z>0</Z>
-            </vUp>
-        </Direction2>
-        <Direction3>
-            <LookAtPoint>
-                <X>0</X>
-                <Y>0</Y>
-                <Z>0</Z>
-            </LookAtPoint>
-        </Direction3>
+        <Directions>
+            <Direction1>
+                <vTo>
+                    <x>0</x>
+                    <y>0</y>
+                    <z>0</z>
+                </vTo>
+                <vUp>
+                    <x>0</x>
+                    <y>1</y>
+                    <z>0</z>
+                </vUp>
+            </Direction1>
+            <Direction2>
+                <Point>
+                    <x>0</x>
+                    <y>0</y>
+                    <z>0</z>
+                </Point>
+                <vUp>
+                    <x>0</x>
+                    <y>1</y>
+                    <z>0</z>
+                </vUp>
+            </Direction2>
+            <Direction3>
+                <LookAtPoint>
+                    <x>0</x>
+                    <y>0</y>
+                    <z>0</z>
+                </LookAtPoint>
+            </Direction3>
+        </Directions>
 
         <Size>
             <Width>800</Width>
@@ -47,42 +49,42 @@
             <nY>600</nY>
         </Resolution>
 
-        <RayTracner>
+        <RayTracer>
             <Scene>
                 <Name>Example</Name>
                 <BackgroundColor>
-                    <R>0</R>
-                    <G>0</G>
-                    <B>0</B>
+                    <r>0</r>
+                    <g>0</g>
+                    <b>0</b>
                 </BackgroundColor>
                 <AmbientLight>
-                    <R>0.5</R>
-                    <G>0.5</G>
-                    <B>0.5</B>
+                    <r>0.5</r>
+                    <g>0.5</g>
+                    <b>0.5</b>
                 </AmbientLight>
                 <ExternalLights>
                     <DirectionalLight>
                         <Direction>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>-1</Z>
+                            <x>0</x>
+                            <y>0</y>
+                            <z>-1</z>
                         </Direction>
                         <Intensity>
-                            <R>1</R>
-                            <G>1</G>
-                            <B>1</B>
+                            <r>1</r>
+                            <g>1</g>
+                            <b>1</b>
                         </Intensity>
                     </DirectionalLight>
                     <PointLight>
                         <Position>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
+                            <x>0</x>
+                            <y>0</y>
+                            <z>0</z>
                         </Position>
                         <Intensity>
-                            <R>1</R>
-                            <G>1</G>
-                            <B>1</B>
+                            <r>1</r>
+                            <g>1</g>
+                            <b>1</b>
                         </Intensity>
                         <Attenuation>
                             <Constant>1</Constant>
@@ -92,19 +94,19 @@
                     </PointLight>
                     <SpotLight>
                         <Position>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
+                            <x>0</x>
+                            <y>0</y>
+                            <z>0</z>
                         </Position>
                         <Direction>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>-1</Z>
+                            <x>0</x>
+                            <y>0</y>
+                            <z>-1</z>
                         </Direction>
                         <Intensity>
-                            <R>1</R>
-                            <G>1</G>
-                            <B>1</B>
+                            <r>1</r>
+                            <g>1</g>
+                            <b>1</b>
                         </Intensity>
                         <NarrowBeam>1.0</NarrowBeam>
                         <Attenuation>
@@ -117,15 +119,15 @@
                 <Geometries>
                     <Sphere>
                         <Center>
-                            <X>0</X>
-                            <Y>0</Y>
-                            <Z>0</Z>
+                            <x>0</x>
+                            <y>0</y>
+                            <z>0</z>
                         </Center>
                         <Radius>1</Radius>
                         <Emission>
-                            <R>1</R>
-                            <G>1</G>
-                            <B>1</B>
+                            <r>1</r>
+                            <g>1</g>
+                            <b>1</b>
                         </Emission>
                         <Material>
                             <Ambient>
@@ -148,9 +150,9 @@
                     </Sphere>
                     <Trinagnle>
                         <Emission>
-                            <R>1</R>
-                            <G>1</G>
-                            <B>1</B>
+                            <r>1</r>
+                            <g>1</g>
+                            <b>1</b>
                         </Emission>
                         <Material>
                             <Ambient>
@@ -170,29 +172,29 @@
                             </Specular>
                             <Shininess>32</Shininess>
                         </Material>
-                        <Vertesis>
-                            <V1>
-                                <X>0</X>
-                                <Y>0</Y>
-                                <Z>0</Z>
-                            </V1>
-                            <V2>
-                                <X>1</X>
-                                <Y>0</Y>
-                                <Z>0</Z>
-                            </V2>
-                            <V3>
-                                <X>0</X>
-                                <Y>1</Y>
-                                <Z>0</Z>
-                            </V3>
-                        </Vertesis>
+                        <Points>
+                            <Point1>
+                                <x>0</x>
+                                <y>0</y>
+                                <z>0</z>
+                            </Point1>
+                            <Point2>
+                                <x>1</x>
+                                <y>0</y>
+                                <z>0</z>
+                            </Point2>
+                            <Point3>
+                                <x>0</x>
+                                <y>1</y>
+                                <z>0</z>
+                            </Point3>
+                        </Points>
                     </Trinagnle>
                     <Plane>
                         <Emission>
-                            <R>1</R>
-                            <G>1</G>
-                            <B>1</B>
+                            <r>1</r>
+                            <g>1</g>
+                            <b>1</b>
                         </Emission>
                         <Material>
                             <Ambient>
@@ -214,33 +216,33 @@
                         </Material>
                         <!--The following normal value is optional if provided with 3 points-->
                         <Normal>
-                            <X>0</X>
-                            <Y>1</Y>
-                            <Z>0</Z>
+                            <x>0</x>
+                            <y>1</y>
+                            <z>0</z>
                         </Normal>
                         <Points>
                             <Point1>
-                                <X>0</X>
-                                <Y>0</Y>
-                                <Z>0</Z>
+                                <x>0</x>
+                                <y>0</y>
+                                <z>0</z>
                             </Point1>
 
                             <!--The following two points are optional if provided with normal value-->
                             <Point2>
-                                <X>1</X>
-                                <Y>0</Y>
-                                <Z>0</Z>
+                                <x>1</x>
+                                <y>0</y>
+                                <z>0</z>
                             </Point2>
                             <Point3>
-                                <X>0</X>
-                                <Y>0</Y>
-                                <Z>1</Z>
+                                <x>0</x>
+                                <y>0</y>
+                                <z>1</z>
                             </Point3>
                         </Points>
                     </Plane>
                 </Geometries>
             </Scene>
             <RayTracerType>SIMPLE</RayTracerType> <!--Could be also GRID-->
-        </RayTracner>
+        </RayTracer>
     </Camera>
 </ImageDetails>
