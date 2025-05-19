@@ -7,6 +7,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Represents a triangle in 3D space.
@@ -28,31 +29,39 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Intersection> calculateIntersectionsHelper(Ray ray) {
-        // Check if there are any intersections with the triangle's plane
-        List<Intersection> intersections = super.calculateIntersectionsHelper(ray);
-        if (intersections == null) return null;
+        // Get vertices of the triangle
+        Point v0 = vertices.get(0);
+        Point v1 = vertices.get(1);
+        Point v2 = vertices.get(2);
 
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
+        Vector direction = ray.getDirection();
 
-        // Check if the intersection point is inside the triangle
-        Vector v1 = this.vertices.get(0).subtract(p0);
-        Vector v2 = this.vertices.get(1).subtract(p0);
-        // Constraint: If any of them is a zero vector - there is no intersection
-        Vector n1 = v1.crossProduct(v2).normalize();
-        double res1 = alignZero(v.dotProduct(n1));
-        // Check if the intersection point is inside the triangle
-        if (res1 == 0) return null;
+        Vector edge1 = v1.subtract(v0);
+        Vector edge2 = v2.subtract(v0);
 
-        Vector v3 = this.vertices.get(2).subtract(p0);
-        Vector n2 = v2.crossProduct(v3).normalize();
-        double res2 = alignZero(v.dotProduct(n2));
-        if (res1 * res2 <= 0) return null;
+        Vector pVec = direction.crossProduct(edge2);
+        double det = edge1.dotProduct(pVec);
+        if (isZero(det)) return null;
 
-        Vector n3 = v3.crossProduct(v1).normalize();
-        double res3 = v.dotProduct(n3);
-        if (res1 * res3 <= 0) return null;
+        double invDet = 1.0 / det;
+        Vector tVec = ray.getHead().subtract(v0);
 
-        return intersections.stream().map(intersection -> new Intersection(this, intersection.point)).toList();
+        double u = tVec.dotProduct(pVec) * invDet;
+        if (alignZero(u) <= 0) return null;
+
+        // Calculate v parameter
+        Vector qVec = tVec.crossProduct(edge1);
+        double v = direction.dotProduct(qVec) * invDet;
+
+        // Check strict bounds (not on edges and not on hypotenuse)
+        if (alignZero(v) <= 0 || alignZero(u + v - 1) >= 0) return null;
+
+        // Calculate t (distance)
+        double t = edge2.dotProduct(qVec) * invDet;
+
+        // Only consider positive t values (in front of ray)
+        if (alignZero(t) <= 0) return null;
+
+        return List.of(new Intersection(this, ray.getPoint(t)));
     }
 }
