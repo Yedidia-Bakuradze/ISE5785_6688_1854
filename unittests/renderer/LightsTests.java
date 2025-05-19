@@ -25,17 +25,17 @@ class LightsTests {
     LightsTests() { /* to satisfy JavaDoc generator */ }
 
     /**
-     * First scene for some of tests
+     * First scene for some of the tests
      */
     private final Scene scene1 = new Scene("Test scene");
     /**
-     * Second scene for some of tests
+     * Second scene for some of the tests
      */
     private final Scene scene2 = new Scene("Test scene")
             .setAmbientLight(new AmbientLight(new Color(38, 38, 38)));
 
     /**
-     * First camera builder for some of tests
+     * First camera builder for some of the tests
      */
     private final Camera.Builder camera1 = Camera.getBuilder()                                          //
             .setRayTracer(scene1, RayTracerType.SIMPLE)                                                                      //
@@ -44,7 +44,7 @@ class LightsTests {
             .setVpSize(150, 150).setVpDistance(1000);
 
     /**
-     * Second camera builder for some of tests
+     * Second camera builder for some of the tests
      */
     private final Camera.Builder camera2 = Camera.getBuilder()                                          //
             .setRayTracer(scene2, RayTracerType.SIMPLE)                                                                      //
@@ -269,5 +269,39 @@ class LightsTests {
                 .build() //
                 .renderImage() //
                 .writeToImage("lightTrianglesSpotSharp");
+    }
+
+    @Test
+    void sphereMultipleLights() {
+        scene1.geometries.add(sphere);
+
+        // Add three light sources
+        scene1.lights.add(new DirectionalLight(new Color(300, 150, 150), new Vector(-1, -1, -1)));
+        scene1.lights.add(new PointLight(new Color(500, 300, 200), new Point(-50, 50, 25))
+                .setKl(0.0005).setKq(0.0002));
+        scene1.lights.add(new SpotLight(new Color(400, 250, 100), new Point(50, -50, 50), new Vector(-1, 1, -2))
+                .setKl(0.0001).setKq(0.00005).setNarrowBeam(15));
+
+        camera1.setResolution(500, 500)
+                .build()
+                .renderImage()
+                .writeToImage("New Test - Sphere Multiple Lights");
+    }
+
+    @Test
+    void trianglesMultipleLights() {
+        scene2.geometries.add(triangle1, triangle2);
+
+        // Add three light sources
+        scene2.lights.add(new DirectionalLight(new Color(200, 200, 300), new Vector(1, -1, -1)));
+        scene2.lights.add(new PointLight(new Color(300, 200, 400), new Point(30, 30, -50))
+                .setKl(0.0003).setKq(0.0001));
+        scene2.lights.add(new SpotLight(new Color(500, 300, 200), new Point(-30, -30, -50), new Vector(2, 2, -1))
+                .setKl(0.0002).setKq(0.0001).setNarrowBeam(10));
+
+        camera2.setResolution(500, 500)
+                .build()
+                .renderImage()
+                .writeToImage("New Test - Triangles Multiple Lights");
     }
 }
