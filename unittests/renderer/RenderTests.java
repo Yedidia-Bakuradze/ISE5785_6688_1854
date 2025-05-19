@@ -89,7 +89,8 @@ public class RenderTests {
      */
     @Test
     public void renderMultiColorAndMaterialEffectTest() {
-        Scene scene = new Scene("Multi Color and Material Effect Test").setAmbientLight(new AmbientLight(new Color(WHITE)));
+        Scene scene = new Scene("Multi Color and Material Effect Test")
+                .setAmbientLight(new AmbientLight(new Color(WHITE)));
 
 
         scene.geometries //
@@ -119,45 +120,18 @@ public class RenderTests {
                 .writeToImage("Multi Color and Material Effect");
     }
 
-    //    /**
-    //     * Test for XML based scene - for bonus
-    //     */
-    //    @Test
-    //    public void basicRenderXml() {
-    //        Scene scene = new Scene("Using XML");
-    //        // enter XML file name and parse from XML file into scene object instead of the
-    //        // new Scene above,
-    //        // Use the code you added in appropriate packages
-    //        // ...
-    //        // NB: unit tests is not the correct place to put XML parsing code
-    //
-    //        camera //
-    //                .setRayTracer(scene, RayTracerType.SIMPLE) //
-    //                .setResolution(1000, 1000) //
-    //                .build() //
-    //                .renderImage() //
-    //                .printGrid(100, new Color(YELLOW)) //
-    //                .writeToImage("xml render test");
-    //    }
-    //
-    //    /**
-    //     * Test for JSON based scene - for bonus
-    //     */
-    //    @Test
-    //    public void basicRenderJson() {
-    //        Scene scene = new Scene("Using Json");
-    //        // enter XML file name and parse from JSON file into scene object instead of the
-    //        // new Scene above,
-    //        // Use the code you added in appropriate packages
-    //        // ...
-    //        // NB: unit tests is not the correct place to put XML parsing code
-    //
-    //        camera //
-    //                .setRayTracer(scene, RayTracerType.SIMPLE) //
-    //                .setResolution(1000, 1000) //
-    //                .build() //
-    //                .renderImage() //
-    //                .printGrid(100, new Color(YELLOW)) //
-    //                .writeToImage("xml render test");
-    //    }
+    /**
+     * Test for XML based scene - for bonus
+     */
+    @Test
+    public void basicRenderXml() {
+        Scene scene = XMLParser.BuildSceneFromXML(XMLParser.getFolderLocation() + "/BasicRender.xml");
+        camera //
+                .setRayTracer(scene, RayTracerType.SIMPLE) //
+                .setResolution(1000, 1000) //
+                .build() //
+                .renderImage() //
+                .printGrid(100, new Color(YELLOW)) //
+                .writeToImage("xml render test");
+    }
 }
