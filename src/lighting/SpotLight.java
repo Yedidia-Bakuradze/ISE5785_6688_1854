@@ -7,7 +7,7 @@ import primitives.Vector;
 public class SpotLight extends PointLight {
     private final Vector direction;
 
-    private double narrowBeam;
+    private double narrowBeam = 1d;
 
     public SpotLight(Color _intensity, Point _position, Vector _direction) {
         super(_intensity, _position);
@@ -30,6 +30,12 @@ public class SpotLight extends PointLight {
     public SpotLight setKc(double kC) {
         super.setKc(kC);
         return (SpotLight) this;
+    }
+
+    @Override
+    public Color getIntensity(Point p) {
+        double additionalFactor = Math.max(0, direction.dotProduct(getL(p)));
+        return super.getIntensity(p).scale(additionalFactor);
     }
 
     public SpotLight setNarrowBeam(double narrowBeam) {

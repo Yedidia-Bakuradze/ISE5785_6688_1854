@@ -25,10 +25,10 @@ public abstract class Intersectable {
         public double lightNormalProduct;
 
 
-        public Intersection(Geometry geometry, Point point, Material material) {
+        public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
             this.point = point;
-            this.material = geometry == null ? null : material;
+            this.material = geometry == null ? null : new Material();
         }
 
         @Override
