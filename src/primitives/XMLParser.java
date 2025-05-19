@@ -23,7 +23,7 @@ import java.util.List;
 
 public class XMLParser {
 
-    public static String folderLocation = "XML Documents For Image Generation/";
+    private static final String FOLDER_LOCATION = "XML Documents For Image Generation/";
 
     public static boolean elementExists(Element parent, String tagName) {
         NodeList nodeList = parent.getElementsByTagName(tagName);
