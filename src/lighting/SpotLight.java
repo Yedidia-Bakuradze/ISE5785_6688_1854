@@ -35,10 +35,12 @@ public class SpotLight extends PointLight {
     @Override
     public Color getIntensity(Point p) {
         double additionalFactor = Math.max(0, direction.dotProduct(getL(p)));
+        additionalFactor = Math.pow(additionalFactor, narrowBeam);
         return super.getIntensity(p).scale(additionalFactor);
     }
 
     public SpotLight setNarrowBeam(double narrowBeam) {
+        if (narrowBeam < 0d) throw new IllegalArgumentException("narrowBeam must be greater than zero");
         this.narrowBeam = narrowBeam;
         return (SpotLight) this;
     }

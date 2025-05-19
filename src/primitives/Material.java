@@ -3,7 +3,6 @@ package primitives;
 public class Material {
 
     public Double3 kA = Double3.ONE;
-
     public Double3 kD = Double3.ZERO;
     public Double3 kS = Double3.ZERO;
     public int nShininess = 0;

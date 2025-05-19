@@ -28,7 +28,7 @@ public abstract class Intersectable {
         public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
             this.point = point;
-            this.material = geometry == null ? null : new Material();
+            this.material = geometry == null ? null : geometry.getMaterial();
         }
 
         @Override
@@ -53,7 +53,8 @@ public abstract class Intersectable {
      */
     public final List<Point> findIntersections(Ray ray) {
         var list = calculateIntersections(ray);
-        return list == null ? null : list.stream().map(intersection -> intersection.point).toList();
+        return list == null ? null
+                : list.stream().map(intersection -> intersection.point).toList();
     }
 
 

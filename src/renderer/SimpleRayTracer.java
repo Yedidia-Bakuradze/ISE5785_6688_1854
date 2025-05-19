@@ -43,8 +43,8 @@ public class SimpleRayTracer extends RayTracerBase {
      */
     private Color calcColor(Intersectable.Intersection intersection, Vector rayDirection) {
         if (!preprocessIntersection(intersection, rayDirection)) return new Color(BLACK);
-        return this.scene.ambientLight.getIntensity()
-                .scale(intersection.material.kA)
+        return this.scene.ambientLight
+                .getIntensity().scale(intersection.material.kA)
                 .add(calcColorLocalEffects(intersection));
     }
 
@@ -95,6 +95,10 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Double3 calcDiffusive(Intersectable.Intersection intersection) {
-        return intersection.material.kD.scale(intersection.lightNormalProduct);
+        Double3 res = intersection.material.kD.scale(intersection.lightNormalProduct);
+        double q1 = res.d1() < 0 ? -res.d1() : res.d1();
+        double q2 = res.d2() < 0 ? -res.d2() : res.d2();
+        double q3 = res.d3() < 0 ? -res.d3() : res.d3();
+        return new Double3(q1, q2, q3);
     }
 }

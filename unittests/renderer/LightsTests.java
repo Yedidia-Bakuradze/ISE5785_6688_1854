@@ -270,5 +270,4 @@ class LightsTests {
                 .renderImage() //
                 .writeToImage("lightTrianglesSpotSharp");
     }
-
 }
