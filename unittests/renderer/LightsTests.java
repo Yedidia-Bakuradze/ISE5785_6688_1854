@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
 
-import static java.awt.Color.BLUE;
+import static java.awt.Color.*;
 
 /**
  * Unit tests for light sources.
@@ -168,7 +168,7 @@ class LightsTests {
      */
     @Test
     void spherePoint() {
-        scene1.geometries.add(sphere);
+        scene1.geometries.add(sphere.setEmission(new Color(RED)));
         scene1.lights.add(new PointLight(sphereLightColor, sphereLightPosition) //
                 .setKl(0.001).setKq(0.0002));
 
@@ -277,7 +277,7 @@ class LightsTests {
      */
     @Test
     void sphereMultipleLights() {
-        scene1.geometries.add(sphere);
+        scene1.geometries.add(sphere.setEmission((new Color(GREEN).add(new Color(RED)).add(new Color(BLUE))).reduce(4)).setMaterial(new Material().setKD(KD).setKS(KS).setShininess(SHININESS)));
 
         // Add three light sources
         scene1.lights.add(new DirectionalLight(new Color(300, 150, 150), new Vector(-1, -1, -1)));
