@@ -168,7 +168,7 @@ class LightsTests {
      */
     @Test
     void spherePoint() {
-        scene1.geometries.add(sphere.setEmission(new Color(RED)));
+        scene1.geometries.add(sphere);
         scene1.lights.add(new PointLight(sphereLightColor, sphereLightPosition) //
                 .setKl(0.001).setKq(0.0002));
 
