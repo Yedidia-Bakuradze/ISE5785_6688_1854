@@ -1,9 +1,6 @@
 package renderer;
 
-import primitives.Color;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 import scene.Scene;
 
 import java.util.MissingResourceException;
@@ -165,7 +162,6 @@ public class Camera implements Cloneable {
             return this;
         }
 
-
         /**
          * Builds and validates the camera instance
          *
@@ -175,6 +171,7 @@ public class Camera implements Cloneable {
          */
         public Camera build() {
             // Size values check
+            //TODO Align zero
             if (camera.width <= 0)
                 throw new MissingResourceException("Width must be positive non zero values", "Camera", "width");
             if (camera.height <= 0)
@@ -208,9 +205,8 @@ public class Camera implements Cloneable {
             camera.pixelWidth = camera.width / camera.nX;
             camera.pixelHeight = camera.height / camera.nY;
 
-            if (camera.rayTracer == null) {
+            if (camera.rayTracer == null)
                 camera.rayTracer = new SimpleRayTracer(null);
-            }
 
             return camera.clone();
         }
@@ -260,7 +256,6 @@ public class Camera implements Cloneable {
      */
     private double pixelHeight;
 
-
     /**
      * The image writer instance for rendering the image
      */
@@ -280,7 +275,6 @@ public class Camera implements Cloneable {
      * The number of pixels in the view plane (columns)
      */
     private int nY = 1;
-
 
     /**
      * Private constructor for builder pattern
@@ -307,8 +301,8 @@ public class Camera implements Cloneable {
      * @return The ray through pixel (j,i)
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        double yI = -(i - (nY - 1) / 2.0) * height / nY;
-        double xJ = (j - (nX - 1) / 2.0) * width / nX;
+        double yI = -(i - (nY - 1) / 2.0) * pixelHeight;
+        double xJ = (j - (nX - 1) / 2.0) * pixelWidth;
 
         Point pIJ = viewPlaneCenter;
         //check if xJ or yI are not zero, so we will not add zero vector

@@ -1,14 +1,11 @@
 package geometries;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import primitives.Point;
+import primitives.Vector;
 
-import geometries.Plane;
-import geometries.Polygon;
-import primitives.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Testing Polygons
@@ -104,7 +101,8 @@ public class PolygonTests {
      * Test method for {@link geometries.Polygon#findIntersections(primitives.Ray)}.
      */
     @Test
+    @Disabled
     void testFindIntersections() {
-//        fail("Not yet implemented");
+        fail("Not yet implemented");
     }
 }

@@ -77,6 +77,7 @@ public class Scene {
      * @return The current Scene instance for method chaining.
      */
     public Scene setGeometries(Geometries _geometries) {
+        //TODO Fix parameter's naming
         geometries = _geometries;
         return this;
     }

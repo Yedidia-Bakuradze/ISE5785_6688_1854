@@ -6,6 +6,7 @@ import lighting.AmbientLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
+import scene.XMLParser;
 
 import static java.awt.Color.*;
 
@@ -92,22 +93,18 @@ public class RenderTests {
         Scene scene = new Scene("Multi Color and Material Effect Test")
                 .setAmbientLight(new AmbientLight(new Color(WHITE)));
 
-
         scene.geometries //
                 .add(// center
                         new Sphere(new Point(0, 0, -100), 50)
                                 .setMaterial(new Material().setKA(0.4)),
                         // up left
                         new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)) //
-                                .setEmission(new Color(GREEN))
                                 .setMaterial(new Material().setKA(new Double3(0, 0.8, 0))),
                         // down left
                         new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)) //
-                                .setEmission(new Color(RED))
                                 .setMaterial(new Material().setKA(new Double3(0.8, 0, 0))),
                         // down right
                         new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)) //
-                                .setEmission(new Color(BLUE))
                                 .setMaterial(new Material().setKA(new Double3(0, 0, 0.8)))
                 );
 

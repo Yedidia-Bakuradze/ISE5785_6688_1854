@@ -58,7 +58,8 @@ public class Sphere extends RadialGeometry {
         if (t2 <= 0) return null;
 
         double t1 = alignZero(tm - th);
-        return t1 <= 0 ? List.of(new Intersection(this, ray.getPoint(t2))) : List.of(new Intersection(this, ray.getPoint(t1)), new Intersection(this, ray.getPoint(t2)));
+        return t1 <= 0 ? List.of(new Intersection(this, ray.getPoint(t2)))
+                : List.of(new Intersection(this, ray.getPoint(t1)), new Intersection(this, ray.getPoint(t2)));
     }
 
 }

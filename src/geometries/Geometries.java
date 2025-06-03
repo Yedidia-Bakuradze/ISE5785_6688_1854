@@ -52,8 +52,8 @@ public class Geometries extends Intersectable {
     protected List<Intersection> calculateIntersectionsHelper(Ray ray) {
         List<Intersection> intersections = null;
 
-        for (Intersectable i : geometries) {
-            List<Intersection> res = i.calculateIntersections(ray);
+        for (Intersectable intersectable : geometries) {
+            var res = intersectable.calculateIntersections(ray);
             if (res != null) {
                 if (intersections == null)
                     intersections = new LinkedList<>(res);

@@ -90,7 +90,7 @@ public abstract class Intersectable {
 
         @Override
         public String toString() {
-            return "Intersection{" + "geometry=" + geometry + ", point=" + point + '}';
+            return "Intersection{" + geometry + "," + point + '}';
         }
     }
 

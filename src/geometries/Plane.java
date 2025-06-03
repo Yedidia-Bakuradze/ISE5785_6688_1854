@@ -33,19 +33,8 @@ public class Plane extends Geometry {
      * @throws IllegalArgumentException when the points are collinear.
      */
     public Plane(Point p1, Point p2, Point p3) {
-
-        // Check that the points are not on the same line
-        if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3)) {
-            throw new IllegalArgumentException("The points can't be on the same line");
-        }
-
         Vector v1 = p2.subtract(p1);
         Vector v2 = p3.subtract(p1);
-
-        if (v1.crossProduct(v2).equals(Vector.ZERO)) {
-            throw new IllegalArgumentException("The points can't be on the same line");
-        }
-
         this.normal = v1.crossProduct(v2).normalize();
         this.q = p1;
     }

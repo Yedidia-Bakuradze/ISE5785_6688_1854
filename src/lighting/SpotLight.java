@@ -4,6 +4,9 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
+import static java.lang.Math.pow;
+import static primitives.Util.alignZero;
+
 /**
  * Represents a spotlight in the scene.
  * This class extends {@link PointLight} and adds directionality to the light.
@@ -33,20 +36,17 @@ public class SpotLight extends PointLight {
 
     @Override
     public SpotLight setKl(double kL) {
-        super.setKl(kL);
-        return (SpotLight) this;
+        return (SpotLight) super.setKl(kL);
     }
 
     @Override
     public SpotLight setKq(double kQ) {
-        super.setKq(kQ);
-        return (SpotLight) this;
+        return (SpotLight) super.setKq(kQ);
     }
 
     @Override
     public SpotLight setKc(double kC) {
-        super.setKc(kC);
-        return (SpotLight) this;
+        return (SpotLight) super.setKc(kC);
     }
 
     /**
@@ -57,9 +57,8 @@ public class SpotLight extends PointLight {
      */
     @Override
     public Color getIntensity(Point p) {
-        double additionalFactor = Math.max(0, direction.dotProduct(getL(p)));
-        additionalFactor = Math.pow(additionalFactor, narrowBeam);
-        return super.getIntensity(p).scale(additionalFactor);
+        double additionalFactor = alignZero(direction.dotProduct(getL(p)));
+        return additionalFactor <= 0 ? Color.BLACK : super.getIntensity(p).scale(pow(additionalFactor, narrowBeam));
     }
 
     /**
@@ -69,8 +68,8 @@ public class SpotLight extends PointLight {
      * @return the current SpotLight instance
      */
     public SpotLight setNarrowBeam(double narrowBeam) {
-        if (narrowBeam < 0d) throw new IllegalArgumentException("narrowBeam must be greater than zero");
+        if (narrowBeam < 1d) throw new IllegalArgumentException("narrowBeam must be greater than zero");
         this.narrowBeam = narrowBeam;
-        return (SpotLight) this;
+        return this;
     }
 }

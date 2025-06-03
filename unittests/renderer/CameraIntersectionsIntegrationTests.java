@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * This class tests the integration between Camera and various geometric shapes.
  */
 public class CameraIntersectionsIntegrationTests {
+    private static final int PIXELS = 3;
 
     /**
      * Default constructor for the test to make the JavaDoc error to be gone
@@ -37,7 +38,8 @@ public class CameraIntersectionsIntegrationTests {
     private final Camera.Builder cameraBuilder = Camera.getBuilder()
             .setDirection(zAxis, yAxis)
             .setVpDistance(1)
-            .setVpSize(3, 3);
+            .setVpSize(3, 3)
+            .setResolution(PIXELS, PIXELS);
 
     /**
      * Camera instance positioned for intersection tests
@@ -53,15 +55,14 @@ public class CameraIntersectionsIntegrationTests {
      */
     private void CompareCountOfIntersections(Camera camera, Geometry geometry, int expectedAmount) {
         int intersections = 0;
-        for (int j = 0; j < 3; j++)
-            for (int i = 0; i < 3; i++) {
-                List<Point> intersectionsList = geometry.findIntersections(camera.constructRay(3, 3, j, i));
+        for (int j = 0; j < PIXELS; j++)
+            for (int i = 0; i < PIXELS; i++) {
+                List<Point> intersectionsList = geometry.findIntersections(camera.constructRay(PIXELS, PIXELS, j, i));
                 intersections += intersectionsList != null ? intersectionsList.size() : 0;
             }
 
         assertEquals(expectedAmount, intersections, "Wrong amount of intersections");
     }
-
 
     /**
      * Tests intersections between camera rays and spheres

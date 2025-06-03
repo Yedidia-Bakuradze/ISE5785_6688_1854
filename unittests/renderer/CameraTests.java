@@ -1,10 +1,9 @@
 package renderer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.Test;
 import primitives.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Testing Camera Class
@@ -36,8 +35,8 @@ class CameraTest {
     @Test
     void testConstructRay() {
         cameraBuilder.setDirection(new Vector(0, 0, -1), new Vector(0, -1, 0));
-        Camera EvenVPCamera = cameraBuilder.setVpSize(8, 8).build();
-        Camera OddVPCamera = cameraBuilder.setVpSize(6, 6).build();
+        Camera EvenVPCamera = cameraBuilder.setVpSize(8, 8).setResolution(4, 4).build();
+        Camera OddVPCamera = cameraBuilder.setVpSize(6, 6).setResolution(3, 3).build();
 
         // ============ Equivalence Partitions Tests ==============
         // EP01: 4X4 Inside (1,1)

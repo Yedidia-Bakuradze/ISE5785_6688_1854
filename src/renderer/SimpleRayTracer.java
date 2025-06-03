@@ -2,15 +2,12 @@ package renderer;
 
 import geometries.Intersectable;
 import lighting.LightSource;
-import primitives.Color;
-import primitives.Double3;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 import scene.Scene;
 
 import java.util.List;
 
-import static java.awt.Color.BLACK;
+import static primitives.Color.BLACK;
 import static primitives.Util.alignZero;
 
 /**
@@ -30,9 +27,8 @@ public class SimpleRayTracer extends RayTracerBase {
     @Override
     public Color traceRay(Ray ray) {
         List<Intersectable.Intersection> listOfIntersections = scene.geometries.calculateIntersections(ray);
-        return listOfIntersections != null
-                ? calcColor(ray.findClosestIntersection(listOfIntersections), ray.getDirection())
-                : scene.backgroundColor;
+        return listOfIntersections == null ? scene.backgroundColor
+                : calcColor(ray.findClosestIntersection(listOfIntersections), ray.getDirection());
     }
 
     /**
@@ -43,7 +39,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return the calculated color to paint that pixel with
      */
     private Color calcColor(Intersectable.Intersection intersection, Vector rayDirection) {
-        if (!preprocessIntersection(intersection, rayDirection)) return new Color(BLACK);
+        if (!preprocessIntersection(intersection, rayDirection)) return BLACK;
         return this.scene.ambientLight
                 .getIntensity().scale(intersection.material.kA)
                 .add(calcColorLocalEffects(intersection));
@@ -118,12 +114,9 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return The specular lighting effect as a Double3.
      */
     private Double3 calcSpecular(Intersectable.Intersection intersection) {
-        double factor = intersection
-                .rayDirection
-                .scale(-1)
-                .dotProduct(calcReflection(intersection)) <= 0 ? 0 : intersection.rayDirection.scale(-1).dotProduct(calcReflection(intersection));
-        factor = Math.pow(factor, intersection.material.nShininess);
-        return intersection.material.kS.scale(factor);
+        double minusVR = -alignZero(intersection.rayDirection.dotProduct(calcReflection(intersection)));
+        return minusVR <= 0 ? Double3.ZERO
+                : intersection.material.kS.scale(Math.pow(minusVR, intersection.material.nShininess));
     }
 
     /**
@@ -133,10 +126,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return The diffusive lighting effect as a Double3.
      */
     private Double3 calcDiffusive(Intersectable.Intersection intersection) {
-        Double3 res = intersection.material.kD.scale(intersection.lightNormalProduct);
-        double q1 = res.d1() < 0 ? -res.d1() : res.d1();
-        double q2 = res.d2() < 0 ? -res.d2() : res.d2();
-        double q3 = res.d3() < 0 ? -res.d3() : res.d3();
-        return new Double3(q1, q2, q3);
+        return intersection.material.kD.scale(intersection.lightNormalProduct < 0
+                ? -intersection.lightNormalProduct : intersection.lightNormalProduct);
     }
 }

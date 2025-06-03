@@ -1,4 +1,4 @@
-package primitives;
+package scene;
 
 import geometries.Geometry;
 import geometries.Plane;
@@ -12,9 +12,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import primitives.*;
 import renderer.Camera;
 import renderer.RayTracerType;
-import scene.Scene;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

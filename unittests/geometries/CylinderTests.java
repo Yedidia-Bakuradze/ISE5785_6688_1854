@@ -1,5 +1,6 @@
 package geometries;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
@@ -94,7 +95,8 @@ public class CylinderTests {
      * Test method for {@link geometries.Cylinder#findIntersections(primitives.Ray)}.
      */
     @Test
+    @Disabled
     void testFindIntersections() {
-//        fail("Not yet implemented");
+        fail("Not yet implemented");
     }
 }
