@@ -1,8 +1,6 @@
 package lighting;
 
-import primitives.Color;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 /**
  * Interface for light sources in the scene.
@@ -24,4 +22,6 @@ public interface LightSource {
      * @return The direction vector of the light at the given point.
      */
     Vector getL(Point p);
+
+    double getDistance(Point point);
 }
