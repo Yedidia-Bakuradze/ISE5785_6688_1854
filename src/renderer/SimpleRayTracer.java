@@ -15,6 +15,8 @@ import static primitives.Util.alignZero;
  */
 public class SimpleRayTracer extends RayTracerBase {
 
+    private static final double DELTA = 0.1;
+
     /**
      * Initiates the simple ray tracer with a scene containing the objects
      *
@@ -128,5 +130,13 @@ public class SimpleRayTracer extends RayTracerBase {
     private Double3 calcDiffusive(Intersectable.Intersection intersection) {
         return intersection.material.kD.scale(intersection.lightNormalProduct < 0
                 ? -intersection.lightNormalProduct : intersection.lightNormalProduct);
+    }
+
+    private boolean unshaded(Intersectable.Intersection intersection) {
+        Vector pointToLight = intersection.lightDirection.scale(-1);
+        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? DELTA : -DELTA);
+        Ray shadowRay = new Ray(intersection.point.add(delta), pointToLight);
+        var intersections = scene.geometries.findIntersections(shadowRay);
+        return intersections == null;
     }
 }
