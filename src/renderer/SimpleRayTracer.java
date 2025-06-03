@@ -17,6 +17,10 @@ public class SimpleRayTracer extends RayTracerBase {
 
     private static final double DELTA = 0.1;
 
+    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    private static final double MIN_CALC_COLOR_K = 0.001;
+    private static final Double3 INITIAL_K = Double3.ONE;
+
     /**
      * Initiates the simple ray tracer with a scene containing the objects
      *
@@ -44,7 +48,11 @@ public class SimpleRayTracer extends RayTracerBase {
         if (!preprocessIntersection(intersection, rayDirection)) return BLACK;
         return this.scene.ambientLight
                 .getIntensity().scale(intersection.material.kA)
-                .add(calcColorLocalEffects(intersection));
+                .add(calcColor(intersection, MAX_CALC_COLOR_LEVEL, INITIAL_K));
+    }
+
+    private Color calcColor(Intersectable.Intersection intersection, int level, Double3 k) {
+        return calcColorLocalEffects(intersection);
     }
 
     /**
