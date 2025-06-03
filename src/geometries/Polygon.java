@@ -1,8 +1,6 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
@@ -102,7 +100,7 @@ public class Polygon extends Geometry {
     //TODO: This method is a bonus for this project. implement it later
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
-        return this.plane.calculateIntersectionsHelper(ray);
+    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
+        return this.plane.calculateIntersectionsHelper(ray, maxDistance);
     }
 }

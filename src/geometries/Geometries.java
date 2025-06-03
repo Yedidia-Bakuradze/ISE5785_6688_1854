@@ -2,9 +2,7 @@ package geometries;
 
 import primitives.Ray;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a collection of geometries that can be intersected by rays.
@@ -49,11 +47,11 @@ public class Geometries extends Intersectable {
      * @return A list of intersection points (LinkedList instance), or null value if there are no intersections.
      */
     @Override
-    protected List<Intersection> calculateIntersectionsHelper(Ray ray) {
+    protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         List<Intersection> intersections = null;
 
         for (Intersectable intersectable : geometries) {
-            var res = intersectable.calculateIntersections(ray);
+            var res = intersectable.calculateIntersections(ray, maxDistance);
             if (res != null) {
                 if (intersections == null)
                     intersections = new LinkedList<>(res);

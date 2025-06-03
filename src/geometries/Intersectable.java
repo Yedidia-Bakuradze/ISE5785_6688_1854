@@ -1,10 +1,7 @@
 package geometries;
 
 import lighting.LightSource;
-import primitives.Material;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
@@ -67,7 +64,6 @@ public abstract class Intersectable {
          */
         public double lightNormalProduct;
 
-
         /**
          * Constructs an Intersection object with the specified geometry and point.
          *
@@ -106,6 +102,9 @@ public abstract class Intersectable {
                 : list.stream().map(intersection -> intersection.point).toList();
     }
 
+    public final List<Intersection> calculateIntersections(Ray ray) {
+        return calculateIntersections(ray, Double.POSITIVE_INFINITY);
+    }
 
     /**
      * Calculates the intersections of a ray with the geometry.
@@ -113,8 +112,8 @@ public abstract class Intersectable {
      * @param ray The ray to intersect with.
      * @return A list of intersections, or null if no intersections exist.
      */
-    public final List<Intersection> calculateIntersections(Ray ray) {
-        return calculateIntersectionsHelper(ray);
+    public final List<Intersection> calculateIntersections(Ray ray, double maxDistance) {
+        return calculateIntersectionsHelper(ray, maxDistance);
     }
 
     /**
@@ -123,5 +122,5 @@ public abstract class Intersectable {
      * @param ray The ray to intersect with.
      * @return A list of intersections, or null if no intersections exist.
      */
-    protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray);
+    protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance);
 }

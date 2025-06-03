@@ -1,13 +1,10 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
+import static primitives.Util.*;
 
 /**
  * Represents a plane in 3D space defined by a point and a normal vector.
@@ -61,9 +58,8 @@ public class Plane extends Geometry {
         return normal;
     }
 
-
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         Vector u;
         try {
             u = this.q.subtract(ray.getHead());
@@ -77,6 +73,6 @@ public class Plane extends Geometry {
         if (isZero(down)) return null;
 
         double t = alignZero(up / down);
-        return t <= 0 ? null : List.of(new Intersection(this, ray.getPoint(t)));
+        return t <= 0 || alignZero(maxDistance - t) < 0 ? null : List.of(new Intersection(this, ray.getPoint(t)));
     }
 }

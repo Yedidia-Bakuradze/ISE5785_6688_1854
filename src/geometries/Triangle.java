@@ -1,13 +1,10 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
+import static primitives.Util.*;
 
 /**
  * Represents a triangle in 3D space.
@@ -28,7 +25,7 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         // Get vertices of the triangle
         Point v0 = vertices.get(0);
         Point v1 = vertices.get(1);
@@ -60,7 +57,7 @@ public class Triangle extends Polygon {
         double t = edge2.dotProduct(qVec) * invDet;
 
         // Only consider positive t values (in front of ray)
-        if (alignZero(t) <= 0) return null;
+        if (alignZero(t) <= 0 || alignZero(maxDistance - t) < 0) return null;
 
         return List.of(new Intersection(this, ray.getPoint(t)));
     }
