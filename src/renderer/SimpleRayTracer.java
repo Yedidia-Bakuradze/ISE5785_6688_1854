@@ -84,7 +84,7 @@ public class SimpleRayTracer extends RayTracerBase {
     private Color calcColorLocalEffects(Intersectable.Intersection intersection) {
         Color color = intersection.geometry.getEmission();
         for (LightSource lightSource : scene.lights) {
-            if (!setLightSource(intersection, lightSource) && !unshaded(intersection)) continue;
+            if (!setLightSource(intersection, lightSource) || !unshaded(intersection)) continue;
             color = color.add(
                     lightSource
                             .getIntensity(intersection.point)
