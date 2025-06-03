@@ -1,9 +1,7 @@
 package geometries;
 
 import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,7 +70,7 @@ public class SphereTests {
     @Test
     void testFindIntersections() {
         // Visual: https://www.geogebra.org/calculator/hjc4tu2w
-
+        //TODO: Add maxDistance parameter to the findIntersections method and test it as said in the documentation
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Ray is entirely outside the sphere
@@ -106,7 +104,6 @@ public class SphereTests {
 
         // TC22: Ray's starting point is inside the sphere
         assertEquals(1, sphere.findIntersections(new Ray(new Point(1, 0.5, 1), xVec)).size(), "ERROR: Ray shouldn't intersect with the sphere when it doesn't directs to it");
-
 
         // *** Group 3: The ray's line crosses the sphere twice (doesn't pass through the center)
 
