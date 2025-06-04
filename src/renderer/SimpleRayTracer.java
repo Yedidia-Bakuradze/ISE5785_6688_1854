@@ -32,9 +32,17 @@ public class SimpleRayTracer extends RayTracerBase {
 
     @Override
     public Color traceRay(Ray ray) {
-        List<Intersectable.Intersection> listOfIntersections = scene.geometries.calculateIntersections(ray);
-        return listOfIntersections == null ? scene.backgroundColor
-                : calcColor(ray.findClosestIntersection(listOfIntersections), ray.getDirection());
+        Intersectable.Intersection closestIntersection = findClosestIntersection(ray);
+        return closestIntersection == null
+                ? scene.backgroundColor
+                : calcColor(closestIntersection, ray.getDirection());
+    }
+
+    public Intersectable.Intersection findClosestIntersection(Ray ray) {
+        List<Intersectable.Intersection> intersections = scene.geometries.calculateIntersections(ray);
+        return intersections == null
+                ? null
+                : ray.findClosestIntersection(intersections);
     }
 
     /**
@@ -58,11 +66,10 @@ public class SimpleRayTracer extends RayTracerBase {
     private Color calcGlobalEffect(Ray interactRay, int level, Double3 k, Double3 kx) {
         Double3 kkx = kx.product(k);
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-        var intersections = scene.geometries.calculateIntersections(interactRay);
-        if (intersections == null) return scene.backgroundColor.scale(kx);
-        Intersectable.Intersection intersection = interactRay.findClosestIntersection(intersections);
-        return preprocessIntersection(intersection, interactRay.getDirection())
-                ? calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
+        Intersectable.Intersection closestIntersection = findClosestIntersection(interactRay);
+        return closestIntersection == null
+                ? scene.backgroundColor.scale(kx)
+                : calcGlobalEffects(closestIntersection, level - 1, kkx).scale(kx);
     }
 
     private Color calcGlobalEffects(Intersectable.Intersection intersection, int level, Double3 k) {

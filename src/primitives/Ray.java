@@ -80,7 +80,6 @@ public class Ray {
         }
     }
 
-
     /**
      * Calculates and returns the closest point from the provided list of points.
      *
@@ -111,4 +110,5 @@ public class Ray {
         }
         return closestIntersection;
     }
+
 }
