@@ -173,12 +173,24 @@ public class SimpleRayTracer extends RayTracerBase {
     private boolean unshaded(Intersectable.Intersection intersection) {
         if (!intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return true;
         Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
-//        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? DELTA : -DELTA);
-//        Ray shadowRay = new Ray(intersection.point.add(delta), intersection.lightDirection.scale(-1));
-
         //TODO: Self improvement: Might be better if used a new method that returns a boolean value if one intersection exists
         var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
         return intersections == null;
+    }
+
+    private Double3 transparency(Intersectable.Intersection intersection) {
+        Double3 ktr = Double3.ONE;
+        if (!intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return ktr;
+        //TODO: Self improvement: Might be better if used a new method that returns a boolean value if one intersection exists
+        Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
+        var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
+        if (intersections == null) return ktr;
+        double lightDistance = intersection.lightSource.getDistance(intersection.point);
+        for (Intersectable.Intersection intersect : intersections) {
+            if (intersection.point.distance(intersect.point) >= lightDistance) continue;
+            ktr = ktr.product(intersect.geometry.getMaterial().kT);
+        }
+        return ktr;
     }
 
 }
