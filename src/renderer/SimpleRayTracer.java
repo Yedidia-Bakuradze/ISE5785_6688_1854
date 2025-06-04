@@ -189,7 +189,7 @@ public class SimpleRayTracer extends RayTracerBase {
         double lightDistance = intersection.lightSource.getDistance(intersection.point);
         for (Intersectable.Intersection shadowIntersection : intersections) {
             if (shadowIntersection.point.distance(intersection.point) >= lightDistance) continue;
-            ktr = ktr.product(shadowIntersection.geometry.getMaterial().kT);
+            ktr = ktr.product(shadowIntersection.material.kT);
             if (ktr.lowerThan(MIN_CALC_COLOR_K)) return Double3.ZERO;
         }
         return ktr;
