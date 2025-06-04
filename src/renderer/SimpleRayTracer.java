@@ -15,8 +15,6 @@ import static primitives.Util.alignZero;
  */
 public class SimpleRayTracer extends RayTracerBase {
 
-    private static final double DELTA = 0.1;
-
     private static final int MAX_CALC_COLOR_LEVEL = 10;
     private static final double MIN_CALC_COLOR_K = 0.001;
     private static final Double3 INITIAL_K = Double3.ONE;
@@ -163,22 +161,17 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Ray calcReflectionRay(Intersectable.Intersection intersection) {
-        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? DELTA : -DELTA);
-        return new Ray(intersection.point.add(delta), calcReflection(intersection));
+        return new Ray(intersection.point, calcReflection(intersection), intersection.normal);
     }
 
     private Ray calcRefractionRay(Intersectable.Intersection intersection) {
-        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? -DELTA : DELTA);
-        return new Ray(intersection.point.add(delta), intersection.rayDirection);
+        return new Ray(intersection.point, intersection.rayDirection, intersection.normal);
     }
 
     private boolean unshaded(Intersectable.Intersection intersection) {
-        Vector pointToLight = intersection.lightDirection.scale(-1);
-        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? DELTA : -DELTA);
-        Ray shadowRay = new Ray(intersection.point.add(delta), pointToLight);
-
-        var intersections = scene.geometries.calculateIntersections(shadowRay,
-                intersection.lightSource.getDistance(intersection.point));
+        Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
+        //TODO: Self improvement: Might be better if used a new method that returns a boolean value if one intersection exists
+        var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
         return intersections == null;
     }
 
