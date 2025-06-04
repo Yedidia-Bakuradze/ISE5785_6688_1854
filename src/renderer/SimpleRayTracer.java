@@ -112,12 +112,11 @@ public class SimpleRayTracer extends RayTracerBase {
      */
     private Color calcColorLocalEffects(Intersectable.Intersection intersection) {
         Color color = intersection.geometry.getEmission();
-        Double3 ktr = transparency(intersection);
-        Double3 tmp;
+        Double3 ktr;
         for (LightSource lightSource : scene.lights) {
             if (!setLightSource(intersection, lightSource)) continue;
-            tmp = ktr.product(intersection.material.kT);
-            if (!tmp.greaterThan(MIN_CALC_COLOR_K)) continue;
+            ktr = transparency(intersection);
+            if (!ktr.product(intersection.material.kT).greaterThan(MIN_CALC_COLOR_K)) continue;
             color = color.add(
                     lightSource
                             .getIntensity(intersection.point).scale(ktr)
