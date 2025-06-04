@@ -112,15 +112,15 @@ public class SimpleRayTracer extends RayTracerBase {
      */
     private Color calcColorLocalEffects(Intersectable.Intersection intersection) {
         Color color = intersection.geometry.getEmission();
-        Double3 ktr;
         for (LightSource lightSource : scene.lights) {
             if (!setLightSource(intersection, lightSource)) continue;
-            ktr = transparency(intersection);
-            if (!ktr.product(intersection.material.kT).greaterThan(MIN_CALC_COLOR_K)) continue;
-            color = color.add(
-                    lightSource
-                            .getIntensity(intersection.point).scale(ktr)
-                            .scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
+            Double3 ktr = transparency(intersection);
+            if (ktr.product(intersection.material.kT).greaterThan(MIN_CALC_COLOR_K)) {
+                color = color.add(
+                        lightSource
+                                .getIntensity(intersection.point).scale(ktr)
+                                .scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
+            }
         }
         return color;
     }
@@ -188,8 +188,9 @@ public class SimpleRayTracer extends RayTracerBase {
         if (intersections == null) return ktr;
         double lightDistance = intersection.lightSource.getDistance(intersection.point);
         for (Intersectable.Intersection shadowIntersection : intersections) {
-            if (intersection.point.distance(shadowIntersection.point) >= lightDistance) continue;
+            if (shadowIntersection.point.distance(intersection.point) >= lightDistance) continue;
             ktr = ktr.product(shadowIntersection.geometry.getMaterial().kT);
+            if (ktr.lowerThan(MIN_CALC_COLOR_K)) return Double3.ZERO;
         }
         return ktr;
     }
