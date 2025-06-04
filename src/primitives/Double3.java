@@ -116,6 +116,10 @@ public record Double3(double d1, double d2, double d3) {
         return d1 < k && d2 < k && d3 < k;
     }
 
+    public boolean greaterThan(double k) {
+        return d1 > k && d2 > k && d3 > k;
+    }
+
     /**
      * Checks whether all the numbers are lower than three numbers in another triad.
      *
