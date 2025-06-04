@@ -140,6 +140,16 @@ public class SimpleRayTracer extends RayTracerBase {
                 ? -intersection.lightNormalProduct : intersection.lightNormalProduct);
     }
 
+    private Ray calcReflectionRay(Intersectable.Intersection intersection) {
+        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? DELTA : -DELTA);
+        return new Ray(intersection.point.add(delta), calcReflection(intersection));
+    }
+
+    private Ray calcRefractionRay(Intersectable.Intersection intersection) {
+        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? -DELTA : DELTA);
+        return new Ray(intersection.point.add(delta), intersection.rayDirection);
+    }
+
     private boolean unshaded(Intersectable.Intersection intersection) {
         Vector pointToLight = intersection.lightDirection.scale(-1);
         Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? DELTA : -DELTA);
