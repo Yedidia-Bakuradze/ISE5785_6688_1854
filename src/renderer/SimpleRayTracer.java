@@ -169,6 +169,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private boolean unshaded(Intersectable.Intersection intersection) {
+        if (intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return true;
         Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
         //TODO: Self improvement: Might be better if used a new method that returns a boolean value if one intersection exists
         var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
