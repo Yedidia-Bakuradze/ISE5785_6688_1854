@@ -58,7 +58,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Color calcColor(Intersectable.Intersection intersection, int level, Double3 k) {
-        Color color = calcColorLocalEffects(intersection);
+        Color color = calcColorLocalEffects(intersection, k);
         return 1 == level ? color : color.add(calcGlobalEffects(intersection, level, k));
     }
 
@@ -110,17 +110,17 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param intersection The intersection to calculate effects for.
      * @return The color resulting from local lighting effects.
      */
-    private Color calcColorLocalEffects(Intersectable.Intersection intersection) {
+    private Color calcColorLocalEffects(Intersectable.Intersection intersection, Double3 k) {
         Color color = intersection.geometry.getEmission();
         for (LightSource lightSource : scene.lights) {
             if (!setLightSource(intersection, lightSource)) continue;
             Double3 ktr = transparency(intersection);
-            if (ktr.product(intersection.material.kT).greaterThan(MIN_CALC_COLOR_K)) {
-                color = color.add(
-                        lightSource
-                                .getIntensity(intersection.point).scale(ktr)
-                                .scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
-            }
+            if (!ktr.product(k).greaterThan(MIN_CALC_COLOR_K)) continue;
+            
+            color = color.add(
+                    lightSource
+                            .getIntensity(intersection.point).scale(ktr)
+                            .scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
         }
         return color;
     }
