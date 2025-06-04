@@ -169,9 +169,14 @@ public class SimpleRayTracer extends RayTracerBase {
         return new Ray(intersection.point, intersection.rayDirection, intersection.normal);
     }
 
+    private static final double DELTA = 0.1;
+
     private boolean unshaded(Intersectable.Intersection intersection) {
-        if (intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return true;
+        if (!intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return true;
         Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
+//        Vector delta = intersection.normal.scale(intersection.lightNormalProduct < 0 ? DELTA : -DELTA);
+//        Ray shadowRay = new Ray(intersection.point.add(delta), intersection.lightDirection.scale(-1));
+
         //TODO: Self improvement: Might be better if used a new method that returns a boolean value if one intersection exists
         var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
         return intersections == null;

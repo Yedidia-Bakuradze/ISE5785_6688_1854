@@ -42,7 +42,7 @@ public class Ray {
      */
     public Ray(Point head, Vector direction, Vector normal) {
         double factor = normal.dotProduct(direction);
-        this.head = isZero(factor) ? head : head.add(normal.scale(factor < 0 ? DELTA : -DELTA));
+        this.head = isZero(factor) ? head : head.add(normal.scale(factor > 0 ? DELTA : -DELTA));
         this.direction = direction.normalize();
     }
 
