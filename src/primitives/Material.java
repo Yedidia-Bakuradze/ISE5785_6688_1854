@@ -112,6 +112,11 @@ public class Material {
         return this;
     }
 
+    public Material setKT(double _kT) {
+        this.kT = new Double3(_kT);
+        return this;
+    }
+
     /**
      * Set the reflection coefficient.
      *
@@ -120,6 +125,11 @@ public class Material {
      */
     public Material setKR(Double3 kR) {
         this.kR = kR;
+        return this;
+    }
+
+    public Material setKR(double kR) {
+        this.kR = new Double3(kR);
         return this;
     }
 
