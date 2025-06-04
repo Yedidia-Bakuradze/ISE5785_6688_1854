@@ -171,20 +171,20 @@ public class SimpleRayTracer extends RayTracerBase {
         return new Ray(intersection.point, intersection.rayDirection, intersection.normal);
     }
 
-    private boolean unshaded(Intersectable.Intersection intersection) {
-        if (!intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return true;
+    private List<Intersectable.Intersection> castShadowRay(Intersectable.Intersection intersection) {
+        if (!intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return null;
         Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
         //TODO: Self improvement: Might be better if used a new method that returns a boolean value if one intersection exists
-        var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
-        return intersections == null;
+        return scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
+    }
+
+    private boolean unshaded(Intersectable.Intersection intersection) {
+        return castShadowRay(intersection) == null;
     }
 
     private Double3 transparency(Intersectable.Intersection intersection) {
         Double3 ktr = Double3.ONE;
-        if (!intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return ktr;
-        //TODO: Self improvement: Might be better if used a new method that returns a boolean value if one intersection exists
-        Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
-        var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
+        List<Intersectable.Intersection> intersections = castShadowRay(intersection);
         if (intersections == null) return ktr;
         double lightDistance = intersection.lightSource.getDistance(intersection.point);
         for (Intersectable.Intersection shadowIntersection : intersections) {
