@@ -20,7 +20,6 @@ public class Material {
      * Specular reflection coefficient.
      */
     public Double3 kS = Double3.ZERO;
-
     public Double3 kT = Double3.ZERO;
     public Double3 kR = Double3.ZERO;
 

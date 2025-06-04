@@ -58,7 +58,7 @@ class ReflectionRefractionTests {
     }
 
     /**
-     * Produce a picture of a sphere lighted by a spot light
+     * Produce a picture of a sphere lighted by a spotlight
      */
     @Test
     void twoSpheresOnMirrors() {
@@ -91,7 +91,7 @@ class ReflectionRefractionTests {
     }
 
     /**
-     * Produce a picture of a two triangles lighted by a spot light with a
+     * Produce a picture of two triangles lighted by a spotlight with a
      * partially
      * transparent Sphere producing partial shadow
      */
