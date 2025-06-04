@@ -65,6 +65,11 @@ public class SimpleRayTracer extends RayTracerBase {
                 ? calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
     }
 
+    private Color calcGlobalEffects(Intersectable.Intersection intersection, int level, Double3 k) {
+        return calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT)
+                .add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
+    }
+
     /**
      * Preprocesses the intersection to calculate necessary values.
      *
