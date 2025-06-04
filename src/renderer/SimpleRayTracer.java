@@ -55,6 +55,16 @@ public class SimpleRayTracer extends RayTracerBase {
         return calcColorLocalEffects(intersection);
     }
 
+    private Color calcGlobalEffect(Ray interactRay, int level, Double3 k, Double3 kx) {
+        Double3 kkx = kx.product(k);
+        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
+        var intersections = scene.geometries.calculateIntersections(interactRay);
+        if (intersections == null) return scene.backgroundColor.scale(kx);
+        Intersectable.Intersection intersection = interactRay.findClosestIntersection(intersections);
+        return preprocessIntersection(intersection, interactRay.getDirection())
+                ? calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
+    }
+
     /**
      * Preprocesses the intersection to calculate necessary values.
      *
@@ -159,4 +169,5 @@ public class SimpleRayTracer extends RayTracerBase {
                 intersection.lightSource.getDistance(intersection.point));
         return intersections == null;
     }
+
 }
