@@ -120,7 +120,7 @@ public class SimpleRayTracer extends RayTracerBase {
             if (!tmp.greaterThan(MIN_CALC_COLOR_K)) continue;
             color = color.add(
                     lightSource
-                            .getIntensity(intersection.point)
+                            .getIntensity(intersection.point).scale(ktr)
                             .scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
         }
         return color;
@@ -190,9 +190,9 @@ public class SimpleRayTracer extends RayTracerBase {
         var intersections = scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
         if (intersections == null) return ktr;
         double lightDistance = intersection.lightSource.getDistance(intersection.point);
-        for (Intersectable.Intersection intersect : intersections) {
-            if (intersection.point.distance(intersect.point) >= lightDistance) continue;
-            ktr = ktr.product(intersect.geometry.getMaterial().kT);
+        for (Intersectable.Intersection shadowIntersection : intersections) {
+            if (intersection.point.distance(shadowIntersection.point) >= lightDistance) continue;
+            ktr = ktr.product(shadowIntersection.geometry.getMaterial().kT);
         }
         return ktr;
     }
