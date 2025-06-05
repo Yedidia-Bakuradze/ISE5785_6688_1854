@@ -126,7 +126,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Calculates the reflection vector at the intersection.
+     * Calculates the light reflection vector at the intersection using light's direction.
      *
      * @param intersection The intersection to calculate reflection for.
      * @return The reflection vector.
@@ -135,6 +135,20 @@ public class SimpleRayTracer extends RayTracerBase {
         return intersection.lightDirection.subtract(
                 intersection.normal.scale(
                         2 * intersection.lightDirection.dotProduct(intersection.normal)
+                )
+        );
+    }
+
+    /**
+     * Calculates the reflection vector at the intersection using the camera vector.
+     *
+     * @param intersection The intersection to calculate reflection for.
+     * @return The reflection vector.
+     */
+    private Vector calcReflectionCam(Intersectable.Intersection intersection) {
+        return intersection.rayDirection.subtract(
+                intersection.normal.scale(
+                        2 * intersection.rayDirection.dotProduct(intersection.normal)
                 )
         );
     }
@@ -163,7 +177,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     private Ray calcReflectionRay(Intersectable.Intersection intersection) {
-        return new Ray(intersection.point, calcReflection(intersection), intersection.normal);
+        return new Ray(intersection.point, calcReflectionCam(intersection), intersection.normal);
     }
 
     private Ray calcRefractionRay(Intersectable.Intersection intersection) {
