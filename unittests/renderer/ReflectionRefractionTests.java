@@ -119,4 +119,47 @@ class ReflectionRefractionTests {
                 .renderImage() //
                 .writeToImage("refractionShadow");
     }
+
+    @Test
+    void testPingPongGenerator() {
+        // URL: https://www.geogebra.org/calculator/bwcjvthk
+        double RADIUS = 8;
+        double BASE_HEIGHT = 100;
+        double HEIGHT = BASE_HEIGHT + RADIUS;
+        double DIFF = (2 * RADIUS - 4);
+
+        // The plane
+        Point a = new Point(-150, -100, BASE_HEIGHT);
+        Point b = new Point(-150, 100, BASE_HEIGHT);
+        Point c = new Point(150, 100, BASE_HEIGHT);
+        Point d = new Point(150, -100, BASE_HEIGHT);
+
+        Triangle halfPlane01 = new Triangle(a, b, c);
+        Triangle halfPlane02 = new Triangle(a, c, d);
+
+        Sphere ball01 = new Sphere(new Point(100, 0, HEIGHT), RADIUS);
+        Sphere ball02 = new Sphere(new Point(100, -DIFF, HEIGHT), RADIUS);
+        Sphere ball03 = new Sphere(new Point(100, DIFF, HEIGHT), RADIUS);
+
+        Sphere ball11 = new Sphere(new Point(100 - DIFF, DIFF / 2, HEIGHT), RADIUS);
+        Sphere ball12 = new Sphere(new Point(100 - DIFF, -DIFF / 2, HEIGHT), RADIUS);
+
+        Sphere ball21 = new Sphere(new Point(100 - 2 * DIFF, 0, HEIGHT), RADIUS);
+
+        Sphere kicker = new Sphere(new Point(-80, 0, HEIGHT), RADIUS);
+
+        Scene pingPongScene = new Scene("Test - Ping Pong Scene");
+        pingPongScene.setAmbientLight(new AmbientLight(new Color(38, 38, 38)));
+        pingPongScene.geometries.add(halfPlane01, halfPlane02, ball01, ball02, ball03, ball11, ball12, ball21, kicker);
+
+        Camera.getBuilder()
+                .setRayTracer(pingPongScene, RayTracerType.SIMPLE)
+                .setLocation(new Point(-2500, 0, 170)) //
+                .setDirection(Point.ZERO, Vector.AXIS_Y) //
+                .setVpDistance(100).setVpSize(200, 200) //
+                .setResolution(600, 600) //
+                .build() //
+                .renderImage() //
+                .writeToImage("Ping Pong Image");
+    }
 }
