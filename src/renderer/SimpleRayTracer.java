@@ -132,9 +132,9 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return The reflection vector.
      */
     private Vector calcReflection(Intersectable.Intersection intersection) {
-        return intersection.rayDirection.subtract(
+        return intersection.lightDirection.subtract(
                 intersection.normal.scale(
-                        2 * intersection.rayDirection.dotProduct(intersection.normal)
+                        2 * intersection.lightDirection.dotProduct(intersection.normal)
                 )
         );
     }
