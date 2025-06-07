@@ -61,4 +61,9 @@ public class Triangle extends Polygon {
 
         return List.of(new Intersection(this, ray.getPoint(t)));
     }
+
+    @Override
+    public String toString() {
+        return "Triangle{" + "vertices=" + vertices + " }";
+    }
 }
