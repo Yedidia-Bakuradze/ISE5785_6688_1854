@@ -45,88 +45,88 @@ public class Material {
     /**
      * Set the ambient coefficient.
      *
-     * @param _kA the ambient coefficient
+     * @param kA the ambient coefficient
      * @return the Material object
      */
-    public Material setKA(Double3 _kA) {
-        this.kA = _kA;
+    public Material setKA(Double3 kA) {
+        this.kA = kA;
         return this;
     }
 
     /**
      * Set the ambient coefficient.
      *
-     * @param _kA the ambient coefficient
+     * @param kA the ambient coefficient
      * @return the Material object
      */
-    public Material setKA(double _kA) {
-        this.kA = new Double3(_kA);
+    public Material setKA(double kA) {
+        this.kA = new Double3(kA);
         return this;
     }
 
     /**
      * Set the diffuse coefficient.
      *
-     * @param _kD the diffuse coefficient
+     * @param kD the diffuse coefficient
      * @return the Material object
      */
-    public Material setKD(Double3 _kD) {
-        this.kD = _kD;
+    public Material setKD(Double3 kD) {
+        this.kD = kD;
         return this;
     }
 
     /**
      * Set the diffuse coefficient.
      *
-     * @param _kD the diffuse coefficient
+     * @param kD the diffuse coefficient
      * @return the Material object
      */
-    public Material setKD(double _kD) {
-        this.kD = new Double3(_kD);
+    public Material setKD(double kD) {
+        this.kD = new Double3(kD);
         return this;
     }
 
     /**
      * Set the specular coefficient.
      *
-     * @param _kS the specular coefficient
+     * @param kS the specular coefficient
      * @return the Material object
      */
-    public Material setKS(Double3 _kS) {
-        this.kS = _kS;
+    public Material setKS(Double3 kS) {
+        this.kS = kS;
         return this;
     }
 
     /**
      * Set the specular coefficient.
      *
-     * @param _kS the specular coefficient
+     * @param kS the specular coefficient
      * @return the Material object
      */
-    public Material setKS(double _kS) {
-        this.kS = new Double3(_kS);
+    public Material setKS(double kS) {
+        this.kS = new Double3(kS);
         return this;
     }
 
     /**
      * Set the transparency coefficient.
      *
-     * @param _kT the transparency coefficient
+     * @param kT the transparency coefficient
      * @return the Material object
      */
-    public Material setKT(Double3 _kT) {
-        this.kT = _kT;
+    public Material setKT(Double3 kT) {
+        this.kT = kT;
         return this;
     }
 
     /**
      * Set the transparency coefficient.
      *
-     * @param _kT the transparency coefficient
+     * @param kT the transparency coefficient
      * @return the Material object
      */
-    public Material setKT(double _kT) {
-        this.kT = new Double3(_kT);
+    public Material setKT(double kT) {
+        this.kT = new Double3(kT);
         return this;
     }
 
@@ -155,11 +155,11 @@ public class Material {
     /**
      * Set the shininess exponent.
      *
-     * @param _nShininess the shininess exponent
+     * @param nShininess the shininess exponent
      * @return the Material object
      */
-    public Material setShininess(int _nShininess) {
-        this.nShininess = _nShininess;
+    public Material setShininess(int nShininess) {
+        this.nShininess = nShininess;
         return this;
     }
 }

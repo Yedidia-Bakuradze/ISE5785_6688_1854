@@ -16,10 +16,10 @@ abstract class Light {
     /**
      * Default constructor for Light.
      *
-     * @param _intensity the color intensity of the light
+     * @param intensity the color intensity of the light
      */
-    protected Light(Color _intensity) {
-        this.intensity = _intensity;
+    protected Light(Color intensity) {
+        this.intensity = intensity;
     }
 
     /**

@@ -5,7 +5,7 @@ import scene.Scene;
 
 import java.util.MissingResourceException;
 
-import static primitives.Util.isZero;
+import static primitives.Util.*;
 
 /**
  * Represents a camera in 3D space for rendering scenes
@@ -130,14 +130,14 @@ public class Camera implements Cloneable {
         /**
          * Sets the resolution of the view plane
          *
-         * @param _nX The number of columns in the view plane
-         * @param _nY The number of rows in the view plane
+         * @param nX The number of columns in the view plane
+         * @param nY The number of rows in the view plane
          * @return The builder instance for method chaining
          * @throws IllegalArgumentException if nX or nY are not positive
          */
-        public Builder setResolution(int _nX, int _nY) {
-            camera.nX = _nX;
-            camera.nY = _nY;
+        public Builder setResolution(int nX, int nY) {
+            camera.nX = nX;
+            camera.nY = nY;
             return this;
         }
 
@@ -171,12 +171,11 @@ public class Camera implements Cloneable {
          */
         public Camera build() {
             // Size values check
-            //TODO Align zero
-            if (camera.width <= 0)
+            if (alignZero(camera.width) <= 0)
                 throw new MissingResourceException("Width must be positive non zero values", "Camera", "width");
-            if (camera.height <= 0)
+            if (alignZero(camera.height) <= 0)
                 throw new MissingResourceException("Height must be positive non zero values", "Camera", "height");
-            if (camera.distance <= 0)
+            if (alignZero(camera.distance) <= 0)
                 throw new MissingResourceException("Distance must be positive a non zero value", "Camera", "distance");
 
             //Geometry values check
@@ -205,8 +204,7 @@ public class Camera implements Cloneable {
             camera.pixelWidth = camera.width / camera.nX;
             camera.pixelHeight = camera.height / camera.nY;
 
-            if (camera.rayTracer == null)
-                camera.rayTracer = new SimpleRayTracer(null);
+            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null);
 
             return camera.clone();
         }

@@ -25,13 +25,13 @@ public class SpotLight extends PointLight {
     /**
      * Constructs a spotlight with the given intensity, position, and direction.
      *
-     * @param _intensity the color intensity of the light
-     * @param _position  the position of the light in the scene
-     * @param _direction the direction the light is pointing
+     * @param intensity the color intensity of the light
+     * @param position  the position of the light in the scene
+     * @param direction the direction the light is pointing
      */
-    public SpotLight(Color _intensity, Point _position, Vector _direction) {
-        super(_intensity, _position);
-        this.direction = _direction.normalize();
+    public SpotLight(Color intensity, Point position, Vector direction) {
+        super(intensity, position);
+        this.direction = direction.normalize();
     }
 
     /**

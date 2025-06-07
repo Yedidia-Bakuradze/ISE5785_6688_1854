@@ -17,10 +17,10 @@ public abstract class RayTracerBase {
     /**
      * Constructs a RayTracerBase with the specified scene.
      *
-     * @param _scene The scene to be rendered.
+     * @param scene The scene to be rendered.
      */
-    RayTracerBase(Scene _scene) {
-        scene = _scene;
+    RayTracerBase(Scene scene) {
+        this.scene = scene;
     }
 
     /**

@@ -133,4 +133,31 @@ public class SphereTests {
         // TC 46: Ray's starting point is outside the sphere before the center
         assertEquals(2, sphere.findIntersections(new Ray(new Point(1, -1, 1), yVec)).size(), "ERROR: Ray should intersect with the sphere at two points");
     }
+
+    /**
+     * Test method for {@link geometries.Sphere#calculateIntersections(primitives.Ray)} with a max distance parameter.
+     */
+    @Test
+    void testFindIntersectionsWithMaxDistance() {
+        // Visual: https://www.geogebra.org/calculator/hjc4tu2w
+        double maxDistance = 3.5; //max distance
+        Sphere distanceSphere = new Sphere(new Point(6, 1, 1), 6);
+        // TC01: Ray's outside, not intersecting the sphere within the max distance
+        assertNull(distanceSphere.calculateIntersections(new Ray(new Point(-4, 1, 1), xVec), maxDistance), "ERROR: Ray should not intersect with the sphere within the max distance");
+
+        // TC02: Ray's outside, intersecting the sphere within the max distance
+        assertEquals(1, distanceSphere.calculateIntersections(new Ray(new Point(-2, 1, 1), xVec), maxDistance).size(), "ERROR: Ray should not intersect with the sphere within the max distance");
+
+        // TC03: Ray's inside the sphere, not intersecting the sphere within the max distance
+        assertNull(distanceSphere.calculateIntersections(new Ray(new Point(0.5, 1, 1), xVec), maxDistance), "ERROR: Ray should not intersect with the sphere within the max distance");
+
+        // TC04: Ray's inside the sphere, intersecting the sphere within the max distance
+        assertEquals(1, distanceSphere.calculateIntersections(new Ray(new Point(10, 1, 1), xVec), maxDistance).size(), "ERROR: Ray should not intersect with the sphere within the max distance");
+
+        // TC05: Ray's close to be on the sphere, intersecting the sphere within the max distance
+        assertEquals(1, distanceSphere.calculateIntersections(new Ray(new Point(11.5, 1, 1), xVec), maxDistance).size(), "ERROR: Ray should not intersect with the sphere within the max distance");
+
+        // TC06: Ray's outside the sphere, no intersection at all
+        assertNull(distanceSphere.calculateIntersections(new Ray(new Point(14, 1, 1), xVec), maxDistance), "ERROR: Ray should not intersect with the sphere within the max distance");
+    }
 }

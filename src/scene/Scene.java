@@ -51,34 +51,33 @@ public class Scene {
     /**
      * Sets the background color of the scene.
      *
-     * @param _color The background color.
+     * @param color The background color.
      * @return The current Scene instance for method chaining.
      */
-    public Scene setBackground(Color _color) {
-        backgroundColor = _color;
+    public Scene setBackground(Color color) {
+        backgroundColor = color;
         return this;
     }
 
     /**
      * Sets the ambient light of the scene.
      *
-     * @param _light The ambient light.
+     * @param light The ambient light.
      * @return The current Scene instance for method chaining.
      */
-    public Scene setAmbientLight(AmbientLight _light) {
-        ambientLight = _light;
+    public Scene setAmbientLight(AmbientLight light) {
+        ambientLight = light;
         return this;
     }
 
     /**
      * Sets the geometries in the scene.
      *
-     * @param _geometries The geometries.
+     * @param geometries The geometries.
      * @return The current Scene instance for method chaining.
      */
-    public Scene setGeometries(Geometries _geometries) {
-        //TODO Fix parameter's naming
-        geometries = _geometries;
+    public Scene setGeometries(Geometries geometries) {
+        this.geometries = geometries;
         return this;
     }
 
