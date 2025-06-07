@@ -120,19 +120,24 @@ class ReflectionRefractionTests {
                 .writeToImage("refractionShadow");
     }
 
+    /**
+     * Produce a picture of two triangles lighted by a spotlight with a
+     * partially
+     * transparent Sphere producing partial shadow
+     */
     @Test
     void testDualMirrorRefractionShadow() {
         scene.geometries.add(
                 // Outer transparent sphere (glass)
-                new Sphere(new Point(0, 0, -100), 60d)
-                        .setEmission(new Color(40, 40, 80))
+                new Sphere(new Point(0, 0, -70), 60d)
+                        .setEmission(new Color(0, 0, 100))
                         .setMaterial(new Material()
                                 .setKD(0.2).setKS(0.3).setShininess(100)
                                 .setKT(0.6)),
 
                 // Inner solid sphere (red center)
-                new Sphere(new Point(0, 0, -100), 30d)
-                        .setEmission(new Color(250, 164, 189))
+                new Sphere(new Point(0, 0, -70), 30d)
+                        .setEmission(new Color(0, 0, 0))
                         .setMaterial(new Material()
                                 .setKD(0.4).setKS(0.3).setShininess(50)),
 
@@ -140,9 +145,9 @@ class ReflectionRefractionTests {
                 new Triangle(
                         new Point(150, -150, -200),
                         new Point(200, 150, -200),
-                        new Point(50, 150, -250))
-                        .setEmission(new Color(100, 100, 100))
-                        .setMaterial(new Material().setKR(1)),
+                        new Point(-50, 150, -250))
+                        .setEmission(new Color(10, 10, 10))
+                        .setMaterial(new Material().setKR(1).setKD(0.2).setKS(0.3).setShininess(50)),
 
                 // Mirror Reflects to Mirror
                 new Triangle(
@@ -160,7 +165,7 @@ class ReflectionRefractionTests {
 
         // Ambient light to see shadow properly
         scene.setAmbientLight(new AmbientLight(new Color(40, 40, 40)));
-
+        scene.setBackground(new Color(40, 40, 40));
         // Spotlight aimed at the center sphere (simulate sun/spotlight)
         scene.lights.add(new SpotLight(new Color(700, 400, 400),
                 new Point(100, 100, 200),
@@ -179,5 +184,4 @@ class ReflectionRefractionTests {
                 .renderImage()
                 .writeToImage("testDualMirrorRefractionShadow");
     }
-
 }
