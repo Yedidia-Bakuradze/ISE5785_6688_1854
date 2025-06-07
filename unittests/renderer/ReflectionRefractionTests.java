@@ -121,32 +121,63 @@ class ReflectionRefractionTests {
     }
 
     @Test
-    void testPersonal() {
-        // https://www.geogebra.org/calculator/u58fwube
-        scene.geometries //
-                .add( //
-                        new Triangle(new Point(-150, -150, -115), new Point(150, -150, -135), new Point(75, 75, -150)) //
-                                .setMaterial(new Material().setKS(0.8).setShininess(60)), //
-                        new Triangle(new Point(-150, -150, -115), new Point(-70, 70, -140), new Point(75, 75, -150)) //
-                                .setMaterial(new Material().setKS(0.8).setShininess(60)), //
-                        new Sphere(new Point(0, 0, -11), 30d) //
-                                .setEmission(new Color(BLUE)) //
-                                .setMaterial(new Material().setKD(0.5).setKS(0.5).setShininess(30)) //
-                );
-        scene.setAmbientLight(new AmbientLight(new Color(38, 38, 38)));
-        scene.lights //
-                .add(new SpotLight(new Color(700, 400, 400), new Point(40, 40, 115), new Vector(-1, -1, -4)) //
-                        .setKl(4E-4).setKq(2E-5));
+    void testDualMirrorRefractionShadow() {
+        scene.geometries.add(
+                // Outer transparent sphere (glass)
+                new Sphere(new Point(0, 0, -100), 60d)
+                        .setEmission(new Color(40, 40, 80))
+                        .setMaterial(new Material()
+                                .setKD(0.2).setKS(0.3).setShininess(100)
+                                .setKT(0.6)),
 
+                // Inner solid sphere (red center)
+                new Sphere(new Point(0, 0, -100), 30d)
+                        .setEmission(new Color(250, 164, 189))
+                        .setMaterial(new Material()
+                                .setKD(0.4).setKS(0.3).setShininess(50)),
+
+                // Mirror Reflects to Camera
+                new Triangle(
+                        new Point(150, -150, -200),
+                        new Point(200, 150, -200),
+                        new Point(50, 150, -250))
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKR(1)),
+
+                // Mirror Reflects to Mirror
+                new Triangle(
+                        new Point(-150, -150, -300),
+                        new Point(-200, 100, -250),
+                        new Point(-50, 150, -250))
+                        .setEmission(new Color(30, 30, 30))
+                        .setMaterial(new Material().setKR(1)),
+
+                // Floor plane (to show shadow)
+                new Triangle(new Point(-300, 20, -500), new Point(300, 20, -500), new Point(0, -180, 200))
+                        .setEmission(new Color(0, 0, 100))
+                        .setMaterial(new Material().setKD(0.6).setKS(0.2).setShininess(30))
+        );
+
+        // Ambient light to see shadow properly
+        scene.setAmbientLight(new AmbientLight(new Color(40, 40, 40)));
+
+        // Spotlight aimed at the center sphere (simulate sun/spotlight)
+        scene.lights.add(new SpotLight(new Color(700, 400, 400),
+                new Point(100, 100, 200),
+                new Vector(-1, -1, -2))
+                .setKl(0.0005).setKq(0.00005));
+
+        // Camera setup
         Camera.getBuilder()
-                .setLocation(new Point(0, 0, 1000))
-                .setDirection(Point.ZERO, Vector.AXIS_Y)
-                .setVpDistance(1000)
-                .setVpSize(200, 200)
-                .setRayTracer(scene, RayTracerType.SIMPLE)//
-                .setResolution(600, 600) //
-                .build() //
-                .renderImage() //
-                .writeToImage("Shadow Triangles Sphere");
+                .setLocation(new Point(0, 0, 1000)) // looking forward
+                .setDirection(Point.ZERO, new Vector(0, 1, 0)) // looking down -Z
+                .setVpDistance(800)
+                .setVpSize(250, 250)
+                .setResolution(600, 600)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .build()
+                .renderImage()
+                .writeToImage("testDualMirrorRefractionShadow");
     }
+
 }
