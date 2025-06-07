@@ -56,4 +56,18 @@ class TriangleTests {
         // TC13 Ray's interception point is within the plane that contains the triangle, on one of the side's line outside the triangle area.
         assertNull(triangle.findIntersections(new Ray(new Point(4, 0, 1), yVec)), "ERROR: Ray shouldn't intersect with the sphere");
     }
+
+    /**
+     * Test method for {@link geometries.Triangle#calculateIntersections(primitives.Ray, double)}.
+     */
+    @Test
+    void testCalculateIntersectionsMaxDistance() {
+        double maxDistance = 3.5;
+        // =========== Equivalence Partitions Tests ==============
+        assertNull(triangle.calculateIntersections(new Ray(new Point(2, -3, 2), yVec), maxDistance), "ERROR: Ray should not intersect with the triangle within the max distance");
+
+        assertEquals(1, triangle.calculateIntersections(new Ray(new Point(2, 0, 2), yVec), maxDistance).size(), "ERROR: Ray should intersect with the triangle within the max distance");
+
+        assertNull(triangle.calculateIntersections(new Ray(new Point(2, 2, 2), yVec), maxDistance), "ERROR: Ray should not intersect with the triangle within the max distance");
+    }
 }

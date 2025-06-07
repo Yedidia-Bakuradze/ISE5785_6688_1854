@@ -138,7 +138,7 @@ public class SphereTests {
      * Test method for {@link geometries.Sphere#calculateIntersections(primitives.Ray)} with a max distance parameter.
      */
     @Test
-    void testFindIntersectionsWithMaxDistance() {
+    void testCalculateIntersectionsMaxDistance() {
         // Visual: https://www.geogebra.org/calculator/hjc4tu2w
         double maxDistance = 3.5; //max distance
         Sphere distanceSphere = new Sphere(new Point(6, 1, 1), 6);

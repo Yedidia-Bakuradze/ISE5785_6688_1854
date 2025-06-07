@@ -155,4 +155,13 @@ public class PlaneTests {
         // TC32: Ray's starting point is at the plane and at its q point
         assertNull(plane.findIntersections(new Ray(qPoint, zVec)), "ERROR: Ray which is neither orthogonal nor parallel to the plane and its starting point at the plane (Q) shouldn't intersect with the plane at all");
     }
+
+    /**
+     * Test method for {@link geometries.Plane#calculateIntersections(primitives.Ray, double)}.
+     */
+    @Test
+    void testCalculateIntersectionsMaxDistance() {
+        // =========== Equivalence Partitions Tests ==============
+//        assertNull();
+    }
 }
