@@ -116,6 +116,12 @@ public record Double3(double d1, double d2, double d3) {
         return d1 < k && d2 < k && d3 < k;
     }
 
+    /**
+     * Checks if all components of this Double3 are greater than the given value.
+     *
+     * @param k the value to compare to
+     * @return true if all components are greater than k, false otherwise
+     */
     public boolean greaterThan(double k) {
         return d1 > k && d2 > k && d3 > k;
     }

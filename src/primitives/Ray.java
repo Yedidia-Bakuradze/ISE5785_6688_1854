@@ -10,6 +10,9 @@ import static primitives.Util.isZero;
  * Represents a ray in 3D space, defined by a starting point and a direction vector.
  */
 public class Ray {
+    /**
+     * Small delta used for ray offset to avoid self-intersection.
+     */
     private static final double DELTA = 0.1;
 
     /**

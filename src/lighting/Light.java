@@ -9,7 +9,7 @@ import primitives.Color;
 abstract class Light {
 
     /**
-     * The intensity of the ambient light
+     * The intensity of the ambient light.
      */
     final protected Color intensity;
 
@@ -22,9 +22,8 @@ abstract class Light {
         this.intensity = _intensity;
     }
 
-
     /**
-     * Returns the intensity of the ambient light
+     * Returns the intensity of the ambient light.
      *
      * @return the intensity of the ambient light
      */

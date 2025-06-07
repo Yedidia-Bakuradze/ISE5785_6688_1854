@@ -34,16 +34,34 @@ public class SpotLight extends PointLight {
         this.direction = _direction.normalize();
     }
 
+    /**
+     * Sets the linear attenuation coefficient.
+     *
+     * @param kL The linear attenuation coefficient.
+     * @return The current instance of SpotLight.
+     */
     @Override
     public SpotLight setKl(double kL) {
         return (SpotLight) super.setKl(kL);
     }
 
+    /**
+     * Sets the quadratic attenuation coefficient.
+     *
+     * @param kQ The quadratic attenuation coefficient.
+     * @return The current instance of SpotLight.
+     */
     @Override
     public SpotLight setKq(double kQ) {
         return (SpotLight) super.setKq(kQ);
     }
 
+    /**
+     * Sets the constant attenuation coefficient.
+     *
+     * @param kC The constant attenuation coefficient.
+     * @return The current instance of SpotLight.
+     */
     @Override
     public SpotLight setKc(double kC) {
         return (SpotLight) super.setKc(kC);

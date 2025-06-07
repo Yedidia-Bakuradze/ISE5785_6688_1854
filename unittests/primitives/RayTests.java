@@ -1,15 +1,11 @@
 package primitives;
 
-import geometries.Geometries;
-import geometries.Plane;
-import geometries.Sphere;
-import geometries.Triangle;
+import geometries.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link primitives.Ray}.
@@ -69,7 +65,6 @@ class RayTests {
             new Plane(new Vector(1, 0, 0), new Point(8, 0, 0)),
             new Sphere(new Point(4, 0, 0), 1)
     );
-
 
     /**
      * Test method for {@link Ray#getPoint(double)}.

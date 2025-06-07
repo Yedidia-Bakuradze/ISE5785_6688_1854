@@ -92,7 +92,6 @@ public class VectorTests {
         assertThrows(IllegalArgumentException.class, () -> v1.add(v2), "ERROR: opposite vectors addition is not zero");
     }
 
-
     /**
      * Test method for {@link primitives.Point#subtract(Point)}.
      */
@@ -144,7 +143,6 @@ public class VectorTests {
         //TC11: test that it throws an exception when trying to scale by zero
         assertThrows(IllegalArgumentException.class, () -> new Vector(1, 2, 3).scale(0), "ERROR: scale() results vector zero and doesn't throws an exception");
 
-
     }
 
     /**
@@ -191,7 +189,6 @@ public class VectorTests {
         assertEquals(vec1.length() * vec2.length() * Math.sin(Math.toRadians(45)), vr.length(), DELTA, "ERROR: crossProduct() wrong result length");
         assertEquals(0, vr.dotProduct(vec1), "ERROR: crossProduct() result is not orthogonal to 1st operand");
         assertEquals(0, vr.dotProduct(vec2), "ERROR: crossProduct() result is not orthogonal to 2nd operand");
-
 
         //TC02: test that the result of the cross-product of vectors with more than 90 degrees angle (135d) is correct (length and orthogonality)
         vec1 = new Vector(1, 0, 0);
@@ -245,6 +242,5 @@ public class VectorTests {
         assertEquals(v2, normalizedV2, "ERROR: normalize() should return the same unit vector");
 
     }
-
 
 }

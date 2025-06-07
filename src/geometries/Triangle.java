@@ -24,6 +24,13 @@ public class Triangle extends Polygon {
         super(point, point1, point2);
     }
 
+    /**
+     * Calculates the intersections of a ray with the triangle.
+     *
+     * @param ray         The ray to intersect with.
+     * @param maxDistance The maximum distance for intersection.
+     * @return A list of intersections, or null if none.
+     */
     @Override
     public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         // Get vertices of the triangle
@@ -62,6 +69,11 @@ public class Triangle extends Polygon {
         return List.of(new Intersection(this, ray.getPoint(t)));
     }
 
+    /**
+     * Returns a string representation of the triangle.
+     *
+     * @return a string representation of the triangle.
+     */
     @Override
     public String toString() {
         return "Triangle{" + "vertices=" + vertices + " }";

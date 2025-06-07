@@ -15,6 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * This class tests the integration between Camera and various geometric shapes.
  */
 public class CameraIntersectionsIntegrationTests {
+    /**
+     * The number of pixels for the camera integration tests.
+     */
     private static final int PIXELS = 3;
 
     /**

@@ -1,11 +1,9 @@
 package test;
 
-import static java.lang.System.out;
-
-import static primitives.Util.isZero;
-
-import geometries.Triangle;
 import primitives.*;
+
+import static java.lang.System.out;
+import static primitives.Util.isZero;
 
 /**
  * Test program for the 1st stage
@@ -19,7 +17,6 @@ public final class Main {
      */
     private Main() {
     }
-
 
     /**
      * A point for tests at (1,2,3)

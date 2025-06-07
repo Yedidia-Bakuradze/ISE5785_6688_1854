@@ -8,14 +8,13 @@ import primitives.Color;
  */
 public class AmbientLight extends Light {
 
-
     /**
-     * The default ambient light, which is black
+     * The default ambient light, which is black.
      */
     public static AmbientLight NONE = new AmbientLight(Color.BLACK);
 
     /**
-     * Initiates the ambient light with provided intensity
+     * Initiates the ambient light with provided intensity.
      *
      * @param _intensity the intensity of the ambient light (Ia)
      */

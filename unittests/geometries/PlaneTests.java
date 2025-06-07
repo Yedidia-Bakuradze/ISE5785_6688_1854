@@ -1,14 +1,9 @@
 package geometries;
 
 import org.junit.jupiter.api.Test;
+import primitives.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
-
-import java.util.List;
 
 /**
  * Unit tests for {@link geometries.Plane}.
@@ -141,7 +136,6 @@ public class PlaneTests {
         // TC12: Ray isn't included in the plane
         assertNull(plane.findIntersections(new Ray(new Point(1, 0, 1), xVec)), "ERROR: Ray which is parallel to the plane shouldn't intersect with the plane at all");
 
-
         // *** Group 2: Ray's line is orthogonal to the plane
 
         // TC21: Ray's starting point is before the plane
@@ -152,7 +146,6 @@ public class PlaneTests {
 
         // TC23: Ray's starting point is after the plane
         assertNull(plane.findIntersections(new Ray(new Point(1, 2, 1), orthVec)), "ERROR: Ray which is orthogonal to the plane and its starting point after the plane shouldn't intersect with the plane at all");
-
 
         // *** Group 3: Ray is neither orthogonal nor parallel to the plane, and its starting point is at the plane
 

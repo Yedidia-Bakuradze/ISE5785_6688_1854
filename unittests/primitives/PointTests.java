@@ -2,8 +2,7 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link primitives.Point}.
@@ -77,7 +76,6 @@ public class PointTests {
         // TC11: Test that the distance squared between two identical points is 0
         assertEquals(0, p1.distanceSquared(p1), "ERROR: distanceSquared() for the same point should be 0");
     }
-
 
     /**
      * Test method for {@link primitives.Point#distance(primitives.Point)}.

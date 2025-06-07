@@ -127,6 +127,7 @@ class ReflectionRefractionTests {
      */
     @Test
     void testDualMirrorRefractionShadow() {
+        // https://www.geogebra.org/calculator/jxhczbc2
         scene.geometries.add(
                 // Outer transparent sphere (glass)
                 new Sphere(new Point(0, 0, -70), 60d)

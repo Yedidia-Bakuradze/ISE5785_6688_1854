@@ -1,9 +1,6 @@
 package geometries;
 
-import primitives.Color;
-import primitives.Material;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 /**
  * Abstract class representing a geometric shape in 3D space.
@@ -27,7 +24,6 @@ abstract public class Geometry extends Intersectable {
      */
     private Material material = new Material();
 
-
     /**
      * Abstract method to calculate the normal vector to the geometry at a given point.
      *
@@ -35,7 +31,6 @@ abstract public class Geometry extends Intersectable {
      * @return The normal vector at the given point.
      */
     abstract public Vector getNormal(Point point);
-
 
     /**
      * Gets the emission color of the geometry.

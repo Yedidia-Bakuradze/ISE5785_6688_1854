@@ -23,7 +23,6 @@ public class Vector extends Point {
      */
     public final static Vector AXIS_Z = new Vector(0, 0, 1);
 
-
     /**
      * Constructs a Vector with given x, y, and z components.
      *

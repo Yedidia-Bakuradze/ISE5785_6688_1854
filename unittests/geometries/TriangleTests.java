@@ -1,9 +1,7 @@
 package geometries;
 
 import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +27,6 @@ class TriangleTests {
      * A vector pointing in the y direction used in the tests.
      */
     private final Vector yVec = new Vector(0, 1, 0);
-
 
     /**
      * Tests the {@link Triangle#findIntersections(primitives.Ray ray)} method.

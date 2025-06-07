@@ -1,17 +1,8 @@
 package scene;
 
-import geometries.Geometry;
-import geometries.Plane;
-import geometries.Sphere;
-import geometries.Triangle;
-import lighting.AmbientLight;
-import lighting.DirectionalLight;
-import lighting.PointLight;
-import lighting.SpotLight;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import geometries.*;
+import lighting.*;
+import org.w3c.dom.*;
 import primitives.*;
 import renderer.Camera;
 import renderer.RayTracerType;
@@ -120,7 +111,6 @@ public class XMLParser {
         );
     }
 
-
     /**
      * Parses a Material object from the given XML element.
      *
@@ -155,7 +145,6 @@ public class XMLParser {
 
         // Setting up ambient light
         sceneRes.setAmbientLight(new AmbientLight(parseToColor((Element) scene.getElementsByTagName("AmbientLight").item(0))));
-
 
         // Setting up geometries
         NodeList geometries = scene.getElementsByTagName("Geometries").item(0).getChildNodes();
@@ -205,7 +194,6 @@ public class XMLParser {
 
         // Check if any external lights are defined
         if (!elementExists(scene, "ExternalLights")) return sceneRes;
-
 
         // Setting up external lights
         NodeList lights = scene.getElementsByTagName("ExternalLights").item(0).getChildNodes();

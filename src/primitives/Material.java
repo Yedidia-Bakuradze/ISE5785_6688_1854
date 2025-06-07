@@ -20,7 +20,15 @@ public class Material {
      * Specular reflection coefficient.
      */
     public Double3 kS = Double3.ZERO;
+
+    /**
+     * Transparency coefficient.
+     */
     public Double3 kT = Double3.ZERO;
+
+    /**
+     * Reflection coefficient.
+     */
     public Double3 kR = Double3.ZERO;
 
     /**
@@ -29,7 +37,7 @@ public class Material {
     public int nShininess = 0;
 
     /**
-     * Ctor for JavaDoc
+     * Default constructor for Material.
      */
     public Material() {
     }
@@ -111,6 +119,12 @@ public class Material {
         return this;
     }
 
+    /**
+     * Set the transparency coefficient.
+     *
+     * @param _kT the transparency coefficient
+     * @return the Material object
+     */
     public Material setKT(double _kT) {
         this.kT = new Double3(_kT);
         return this;
@@ -119,7 +133,7 @@ public class Material {
     /**
      * Set the reflection coefficient.
      *
-     * @param kR the transparency coefficient
+     * @param kR the reflection coefficient
      * @return the Material object
      */
     public Material setKR(Double3 kR) {
@@ -127,6 +141,12 @@ public class Material {
         return this;
     }
 
+    /**
+     * Set the reflection coefficient.
+     *
+     * @param kR the reflection coefficient
+     * @return the Material object
+     */
     public Material setKR(double kR) {
         this.kR = new Double3(kR);
         return this;

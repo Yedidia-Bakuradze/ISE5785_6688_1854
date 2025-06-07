@@ -15,8 +15,17 @@ import static primitives.Util.alignZero;
  */
 public class SimpleRayTracer extends RayTracerBase {
 
+    /**
+     * The maximum recursion level for color calculation.
+     */
     private static final int MAX_CALC_COLOR_LEVEL = 10;
+    /**
+     * The minimum value for color contribution to be considered.
+     */
     private static final double MIN_CALC_COLOR_K = 0.001;
+    /**
+     * The initial k value for color calculation.
+     */
     private static final Double3 INITIAL_K = Double3.ONE;
 
     /**
@@ -36,6 +45,12 @@ public class SimpleRayTracer extends RayTracerBase {
                 : calcColor(closestIntersection, ray.getDirection());
     }
 
+    /**
+     * Finds the closest intersection of the given ray with the scene geometries.
+     *
+     * @param ray The ray to check for intersections.
+     * @return The closest intersection, or null if none.
+     */
     public Intersectable.Intersection findClosestIntersection(Ray ray) {
         List<Intersectable.Intersection> intersections = scene.geometries.calculateIntersections(ray);
         return intersections == null
@@ -44,7 +59,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Calculates the color on the given point with the ambient light and the emission of the geometry
+     * Calculates the color at the intersection point, including recursive effects.
      *
      * @param intersection the intersection onto the calculation is made
      * @param rayDirection the direction of the ray
@@ -57,11 +72,28 @@ public class SimpleRayTracer extends RayTracerBase {
                 .add(calcColor(intersection, MAX_CALC_COLOR_LEVEL, INITIAL_K));
     }
 
+    /**
+     * Calculates the color at the intersection point, including recursive effects.
+     *
+     * @param intersection the intersection onto the calculation is made
+     * @param level the recursion level
+     * @param k the color attenuation factor
+     * @return the calculated color to paint that pixel with
+     */
     private Color calcColor(Intersectable.Intersection intersection, int level, Double3 k) {
         Color color = calcColorLocalEffects(intersection, k);
         return 1 == level ? color : color.add(calcGlobalEffects(intersection, level, k));
     }
 
+    /**
+     * Calculates the global lighting effects (reflection and refraction).
+     *
+     * @param interactRay the ray for the effect
+     * @param level the recursion level
+     * @param k the color attenuation factor
+     * @param kx the effect coefficient
+     * @return the color contribution from the global effect
+     */
     private Color calcGlobalEffect(Ray interactRay, int level, Double3 k, Double3 kx) {
         Double3 kkx = kx.product(k);
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
@@ -71,6 +103,14 @@ public class SimpleRayTracer extends RayTracerBase {
                 ? calcColor(closestIntersection, level - 1, kkx).scale(kx) : Color.BLACK;
     }
 
+    /**
+     * Calculates the sum of all global effects (reflection and refraction).
+     *
+     * @param intersection the intersection to calculate effects for
+     * @param level the recursion level
+     * @param k the color attenuation factor
+     * @return the color contribution from all global effects
+     */
     private Color calcGlobalEffects(Intersectable.Intersection intersection, int level, Double3 k) {
         return calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT)
                 .add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
@@ -108,6 +148,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the local effects of lighting at the intersection.
      *
      * @param intersection The intersection to calculate effects for.
+     * @param k The color attenuation factor.
      * @return The color resulting from local lighting effects.
      */
     private Color calcColorLocalEffects(Intersectable.Intersection intersection, Double3 k) {
@@ -176,14 +217,32 @@ public class SimpleRayTracer extends RayTracerBase {
                 ? -intersection.lightNormalProduct : intersection.lightNormalProduct);
     }
 
+    /**
+     * Calculates the reflection ray at the intersection.
+     *
+     * @param intersection The intersection to calculate the reflection ray for.
+     * @return The reflection ray.
+     */
     private Ray calcReflectionRay(Intersectable.Intersection intersection) {
         return new Ray(intersection.point, calcReflectionCam(intersection), intersection.normal);
     }
 
+    /**
+     * Calculates the refraction ray at the intersection.
+     *
+     * @param intersection The intersection to calculate the refraction ray for.
+     * @return The refraction ray.
+     */
     private Ray calcRefractionRay(Intersectable.Intersection intersection) {
         return new Ray(intersection.point, intersection.rayDirection, intersection.normal);
     }
 
+    /**
+     * Casts a shadow ray from the intersection point to check for occlusion.
+     *
+     * @param intersection The intersection to cast the shadow ray from.
+     * @return A list of intersections with shadowing objects, or null if unshaded.
+     */
     private List<Intersectable.Intersection> castShadowRay(Intersectable.Intersection intersection) {
         if (!intersection.material.kR.lowerThan(MIN_CALC_COLOR_K)) return null;
         Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
@@ -191,10 +250,22 @@ public class SimpleRayTracer extends RayTracerBase {
         return scene.geometries.calculateIntersections(shadowRay, intersection.lightSource.getDistance(intersection.point));
     }
 
+    /**
+     * Checks if the intersection point is unshaded (not in shadow).
+     *
+     * @param intersection The intersection to check.
+     * @return true if unshaded, false otherwise.
+     */
     private boolean unshaded(Intersectable.Intersection intersection) {
         return castShadowRay(intersection) == null;
     }
 
+    /**
+     * Calculates the transparency factor at the intersection point.
+     *
+     * @param intersection The intersection to calculate transparency for.
+     * @return The transparency factor as a Double3.
+     */
     private Double3 transparency(Intersectable.Intersection intersection) {
         Double3 ktr = Double3.ONE;
         List<Intersectable.Intersection> intersections = castShadowRay(intersection);
