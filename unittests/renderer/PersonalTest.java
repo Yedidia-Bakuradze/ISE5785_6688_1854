@@ -1,5 +1,6 @@
 package renderer;
 
+import geometries.Plane;
 import geometries.Triangle;
 import lighting.AmbientLight;
 import lighting.SpotLight;
@@ -16,17 +17,57 @@ public class PersonalTest {
     public Camera.Builder cameraBuilder = Camera.getBuilder() //
             .setRayTracer(scene, RayTracerType.SIMPLE);
 
+    double TOTAL_HEIGHT = 500; // Total height of the teapot
+
+    Material midTriangleMaterial = new Material()
+            .setKD(0.4)
+            .setKS(0.6)
+            .setShininess(80)
+            .setKR(0.15)
+            .setKT(0.4);
+
+    Material topBottomTriagnlesMaterial = new Material()
+            .setKD(0.4)
+            .setKS(0.6)
+            .setShininess(80)
+            .setKR(0.15);
+
+    Color midTriangleColor = new Color(80, 50, 25);
+    Color topBottomTriangleColor = new Color(60, 40, 20);
+
     @Test
-    void testTeaPot() {
+    void Jug() {
         // Generate teapot geometry
-        generateTeapotGeometry();
+        int[] layerRadiuses = {100, 110, 150, 170, 180, 210, 210, 180, 170, 150, 150, 120, 120};
+        // Layer heights
+        int[] layerHeights = {0, 25, 50, 100, 150, 200, 220, 250, 300, 350, 400, 450, 500};
+        int pointsPerLayer = 15;
+
+        generateTeapotGeometry(400, 0, 100, layerRadiuses, layerHeights, pointsPerLayer);
+
+        scene.geometries.add(
+                new Plane(new Vector(0, 0, 1), new Point(200, 200, 70))
+                        .setEmission(new Color(0, 1, 0))
+                        .setMaterial(
+                                new Material()
+                                        .setKR(0.1)
+                                        .setKD(0.3)
+                                        .setKS(0.8)
+                                        .setShininess(100)
+                        )
+
+        );
 
         // Set up lighting - using SpotLight positioned to create good shadows
-        scene.setBackground(new Color(100, 100, 100));
-        scene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
+        scene.setBackground(new Color(0, 79, 100));
+        scene.setAmbientLight(new AmbientLight(new Color(50, 50, 50)));
         scene.lights.add(
                 new SpotLight(new Color(800, 600, 400), new Point(200, -200, 400), new Vector(1, 1, -1))
-                        .setKl(0.0001).setKq(0.00001)
+                        .setKl(0.0004).setKq(0.0000006).setNarrowBeam(8)
+        );
+        scene.lights.add(
+                new SpotLight(new Color(800, 600, 400), new Point(200, 200, 400), new Vector(1, -1, 0))
+                        .setKl(0.0004).setKq(0.0000006).setNarrowBeam(100)
         );
 
         cameraBuilder
@@ -37,25 +78,17 @@ public class PersonalTest {
                 .setResolution(600, 600)
                 .build()
                 .renderImage()
-                .writeToImage("Tea Pot");
+                .writeToImage("Jug");
     }
 
     /**
      * Generate the teapot geometry using the layered approach with triangular mesh
      */
-    private void generateTeapotGeometry() {
-        double x = 400;
-        double y = 0;
-        double z = 100;
-
+    private void generateTeapotGeometry(double x, double y, double z, int[] layerRadiuses, int[] layerHeights, int pointsPerLayer) {
         Point centerBase = new Point(x, y, z);
 
-        // Define custom radiuses for each layer
-//        double[] layerRadiuses = {150, 200, 250, 300, 250, 200, 200};
-        double[] layerRadiuses = {100, 150, 200, 250, 200, 150, 150};
-
         // Generate all layers of points
-        List<List<Point>> layers = generateTeapotLayers(centerBase, x, y, z, layerRadiuses);
+        List<List<Point>> layers = generateTeapotLayers(centerBase, x, y, z, layerRadiuses, layerHeights, pointsPerLayer);
 
         // Create triangular mesh between layers
         createTeapotMesh(layers, centerBase, x, y, z);
@@ -64,12 +97,8 @@ public class PersonalTest {
     /**
      * Generate all 7 layers of points for the teapot body
      */
-    private List<List<Point>> generateTeapotLayers(Point centerBase, double x, double y, double z, double[] layerRadiuses) {
+    private List<List<Point>> generateTeapotLayers(Point centerBase, double x, double y, double z, int[] layerRadiuses, int[] layerHeights, int pointsPerLayer) {
         List<List<Point>> layers = new ArrayList<>();
-
-        // Layer heights
-        int[] layerHeights = {0, 25, 50, 100, 150, 200, 250};
-        int pointsPerLayer = 20;
 
         if (layerRadiuses.length != layerHeights.length) {
             throw new IllegalArgumentException("Number of radiuses must match number of layers");
@@ -117,7 +146,7 @@ public class PersonalTest {
         }
 
         // Create top triangles (last layer to center point)
-        Point topCenter = new Point(x, y, z + 60);
+        Point topCenter = new Point(x, y, z + TOTAL_HEIGHT);
         createTopTriangles(layers.getLast(), topCenter);
     }
 
@@ -134,12 +163,8 @@ public class PersonalTest {
             // Create triangle with center point
             scene.geometries.add(
                     new Triangle(centerBase, p1, p2)
-                            .setEmission(new Color(60, 40, 20))
-                            .setMaterial(new Material()
-                                    .setKD(0.4)
-                                    .setKS(0.6)
-                                    .setShininess(80)
-                                    .setKR(0.1))
+                            .setEmission(topBottomTriangleColor)
+                            .setMaterial(topBottomTriagnlesMaterial)
             );
         }
     }
@@ -157,12 +182,8 @@ public class PersonalTest {
             // Create triangle with center point
             scene.geometries.add(
                     new Triangle(topCenter, p2, p1)
-                            .setEmission(new Color(60, 40, 20))
-                            .setMaterial(new Material()
-                                    .setKD(0.4)
-                                    .setKS(0.6)
-                                    .setShininess(80)
-                                    .setKR(0.1))
+                            .setEmission(topBottomTriangleColor)
+                            .setMaterial(topBottomTriagnlesMaterial)
             );
         }
     }
@@ -183,28 +204,16 @@ public class PersonalTest {
             // Triangle 1: p1, p2, p3
             scene.geometries.add(
                     new Triangle(p1, p2, p3)
-                            .setEmission(new Color(80, 50, 25))
-                            .setMaterial(new Material()
-                                    .setKD(0.4)
-                                    .setKS(0.6)
-                                    .setShininess(80)
-                                    .setKR(0.15)
-                                    .setKT(0.4)
-                            )
+                            .setEmission(midTriangleColor)
+                            .setMaterial(midTriangleMaterial)
 
             );
 
             // Triangle 2: p2, p4, p3
             scene.geometries.add(
                     new Triangle(p2, p4, p3)
-                            .setEmission(new Color(80, 50, 25))
-                            .setMaterial(new Material()
-                                    .setKD(0.4)
-                                    .setKS(0.6)
-                                    .setShininess(80)
-                                    .setKR(0.15)
-                                    .setKT(0.4)
-                            )
+                            .setEmission(midTriangleColor)
+                            .setMaterial(midTriangleMaterial)
             );
         }
     }
