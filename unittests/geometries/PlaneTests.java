@@ -161,7 +161,15 @@ public class PlaneTests {
      */
     @Test
     void testCalculateIntersectionsMaxDistance() {
+        double maxDistance = 3.5;
         // =========== Equivalence Partitions Tests ==============
-//        assertNull();
+        // TC01: Ray's starting point is before the plane and doesn't intersect with it within the max distance.
+        assertNull(plane.calculateIntersections(new Ray(new Point(0, -3, 2), yVec), maxDistance), "ERROR: Ray should not intersect with the plane within the max distance");
+
+        // TC02: Ray's starting point is before the plane and intersects with it within the max distance.
+        assertEquals(1, plane.calculateIntersections(new Ray(new Point(0, 0, 2), yVec), maxDistance).size(), "ERROR: Ray should intersect with the plane within the max distance");
+
+        // TC03: Ray's starting point is after the plane and has no intersections at all.
+        assertNull(plane.calculateIntersections(new Ray(new Point(0, 5, 2), yVec), maxDistance), "ERROR: Ray should not intersect with the plane within the max distance");
     }
 }

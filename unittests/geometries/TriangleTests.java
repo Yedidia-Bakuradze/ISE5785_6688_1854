@@ -64,10 +64,14 @@ class TriangleTests {
     void testCalculateIntersectionsMaxDistance() {
         double maxDistance = 3.5;
         // =========== Equivalence Partitions Tests ==============
+
+        // TC01: Ray's starts before the triangle and doesn't intersect with it within the max distance.
         assertNull(triangle.calculateIntersections(new Ray(new Point(2, -3, 2), yVec), maxDistance), "ERROR: Ray should not intersect with the triangle within the max distance");
 
+        // TC02: Ray's starts before the triangle and intersects with it within the max distance.
         assertEquals(1, triangle.calculateIntersections(new Ray(new Point(2, 0, 2), yVec), maxDistance).size(), "ERROR: Ray should intersect with the triangle within the max distance");
 
+        // TC03: Ray's starts after the triangle and has no intersections at all.
         assertNull(triangle.calculateIntersections(new Ray(new Point(2, 2, 2), yVec), maxDistance), "ERROR: Ray should not intersect with the triangle within the max distance");
     }
 }
