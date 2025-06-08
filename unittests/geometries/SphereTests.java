@@ -70,7 +70,6 @@ public class SphereTests {
     @Test
     void testFindIntersections() {
         // Visual: https://www.geogebra.org/calculator/hjc4tu2w
-        //TODO: Add maxDistance parameter to the findIntersections method and test it as said in the documentation
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Ray is entirely outside the sphere
