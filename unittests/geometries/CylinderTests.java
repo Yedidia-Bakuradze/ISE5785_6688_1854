@@ -2,32 +2,15 @@ package geometries;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link geometries.Cylinder}.
  * This class tests the functionality of the Cylinder class, including normal calculations and intersections.
  */
 public class CylinderTests {
-
-    /**
-     * Vector opposite to the cylinder's axis.
-     */
-    private final Vector v1 = new Vector(0, 0, -1);
-    /**
-     * Vector pointing in the cylinder's axis direction.
-     */
-    private final Vector v2 = new Vector(0, 0, 1);
-
-    /**
-     * A cylinder to be used in the tests.
-     */
-    private final Cylinder cylinder = new Cylinder(new Ray(Point.ZERO, v2), 1, 1);
 
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.

@@ -1,7 +1,5 @@
 package primitives;
 
-import java.security.InvalidParameterException;
-
 /**
  * Represents a point in 3D space.
  * Provides methods for point arithmetic and distance calculations.

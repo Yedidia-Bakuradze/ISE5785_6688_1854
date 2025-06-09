@@ -1,11 +1,11 @@
 package renderer;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
+import primitives.Color;
 
 import javax.imageio.ImageIO;
-
-import primitives.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Image writer class combines accumulation of pixel color matrix and finally
@@ -58,6 +58,7 @@ final class ImageWriter {
      *
      * @return the amount of vertical pixels
      */
+    @SuppressWarnings("unused")
     int nY() {
         return nY;
     }
@@ -67,6 +68,7 @@ final class ImageWriter {
      *
      * @return the amount of horizontal pixels
      */
+    @SuppressWarnings("unused")
     int nX() {
         return nX;
     }

@@ -2,12 +2,9 @@ package geometries;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link geometries.Tube}.
@@ -18,7 +15,7 @@ public class TubeTests {
      * Delta value for accuracy when comparing decimal numbers.
      * Allows for a small margin of error in floating-point calculations.
      */
-    private final float DELTA = 0.00001f;
+    private static final float DELTA = 0.00001f;
 
     /**
      * Default constructor - only to dismiss errors in JavaDoc generator.

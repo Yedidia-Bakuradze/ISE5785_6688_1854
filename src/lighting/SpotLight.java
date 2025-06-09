@@ -1,8 +1,6 @@
 package lighting;
 
-import primitives.Color;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 import static java.lang.Math.pow;
 import static primitives.Util.alignZero;
