@@ -35,13 +35,17 @@ public class PersonalTest {
     Color midTriangleColor = new Color(80, 50, 25);
     Color topBottomTriangleColor = new Color(60, 40, 20);
 
+    /**
+     * Test method to generate a teapot-like geometry using layered triangles
+     * and render it with appropriate lighting and camera settings.
+     */
     @Test
     void Jug() {
         // Generate teapot geometry
-        int[] layerRadiuses = {100, 110, 150, 170, 180, 210, 210, 180, 170, 150, 150, 120, 120};
+        int[] layerRadiuses = {100, 110, 120, 130, 140, 150, 150, 160, 170, 170, 165, 160, 150, 150, 150, 120, 120};
         // Layer heights
-        int[] layerHeights = {0, 25, 50, 100, 150, 200, 220, 250, 300, 350, 400, 450, 500};
-        int pointsPerLayer = 15;
+        int[] layerHeights = {0, 25, 50, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 425, 450};
+        int pointsPerLayer = 200;
 
         generateTeapotGeometry(400, 0, 100, layerRadiuses, layerHeights, pointsPerLayer);
 
@@ -52,10 +56,32 @@ public class PersonalTest {
                                 new Material()
                                         .setKR(0.1)
                                         .setKD(0.3)
+                                        .setKT(0.1)
                                         .setKS(0.8)
                                         .setShininess(100)
-                        )
-
+                        ),
+                new Plane(new Vector(1, 1, 0), new Point(0, 750, 0)).setMaterial(
+                        new Material()
+                                .setKD(0.3)
+                                .setKS(0.3)
+                                .setKT(0.4)
+                                .setShininess(100)
+                                .setKR(0.1)
+                ),
+                new Plane(new Vector(1, -1, 0), new Point(0, -750, 0)).setMaterial(
+                        new Material()
+                                .setKD(0.3)
+                                .setKS(0.8)
+                                .setShininess(100)
+                                .setKR(0.1)
+                ),
+                new Plane(new Vector(0, 0, 1), new Point(0, 0, 700)).setMaterial(
+                        new Material()
+                                .setKD(0.3)
+                                .setKS(0.8)
+                                .setShininess(100)
+                                .setKR(0.1)
+                )
         );
 
         // Set up lighting - using SpotLight positioned to create good shadows
@@ -63,19 +89,23 @@ public class PersonalTest {
         scene.setAmbientLight(new AmbientLight(new Color(50, 50, 50)));
         scene.lights.add(
                 new SpotLight(new Color(800, 600, 400), new Point(200, -200, 400), new Vector(1, 1, -1))
-                        .setKl(0.0004).setKq(0.0000006).setNarrowBeam(8)
+                        .setKl(0.0004)
+                        .setKq(0.0000006)
+                        .setNarrowBeam(8)
         );
         scene.lights.add(
                 new SpotLight(new Color(800, 600, 400), new Point(200, 200, 400), new Vector(1, -1, 0))
-                        .setKl(0.0004).setKq(0.0000006).setNarrowBeam(100)
+                        .setKl(0.0004)
+                        .setKq(0.0000006)
+                        .setNarrowBeam(100)
         );
 
         cameraBuilder
                 .setLocation(new Point(-1000, 0, 650))
                 .setDirection(new Vector(200, 0, -50), new Vector(50, 0, 200))
-                .setVpDistance(1000)
-                .setVpSize(600, 600)
-                .setResolution(600, 600)
+                .setVpDistance(700)
+                .setVpSize(800, 800)
+                .setResolution(800, 800)
                 .build()
                 .renderImage()
                 .writeToImage("Jug");

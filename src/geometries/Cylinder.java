@@ -60,7 +60,7 @@ public class Cylinder extends Tube {
      * @return A list of intersection points, or null if there are no intersections.
      */
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
+    protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         return null;
     }
 }

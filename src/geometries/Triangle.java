@@ -32,7 +32,7 @@ public class Triangle extends Polygon {
      * @return A list of intersections, or null if none.
      */
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
+    protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         // Get vertices of the triangle
         Point v0 = vertices.get(0);
         Point v1 = vertices.get(1);

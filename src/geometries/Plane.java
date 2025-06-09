@@ -59,7 +59,7 @@ public class Plane extends Geometry {
     }
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
+    protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         Vector u;
         try {
             u = this.q.subtract(ray.getHead());

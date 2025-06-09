@@ -100,7 +100,7 @@ public class Polygon extends Geometry {
     //TODO: This method is a bonus for this project. implement it later
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
+    protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         return this.plane.calculateIntersectionsHelper(ray, maxDistance);
     }
 }
