@@ -115,7 +115,7 @@ public abstract class Intersectable {
     /**
      * Calculates the intersections of a ray with the geometry up to a maximum distance.
      *
-     * @param ray The ray to intersect with.
+     * @param ray         The ray to intersect with.
      * @param maxDistance The maximum distance for intersection.
      * @return A list of intersections, or null if no intersections exist.
      */
@@ -126,7 +126,7 @@ public abstract class Intersectable {
     /**
      * Helper method to calculate intersections for specific geometries.
      *
-     * @param ray The ray to intersect with.
+     * @param ray         The ray to intersect with.
      * @param maxDistance The maximum distance for intersection.
      * @return A list of intersections, or null if no intersections exist.
      */

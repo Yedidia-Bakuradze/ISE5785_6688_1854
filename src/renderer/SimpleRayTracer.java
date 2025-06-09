@@ -76,8 +76,8 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the color at the intersection point, including recursive effects.
      *
      * @param intersection the intersection onto the calculation is made
-     * @param level the recursion level
-     * @param k the color attenuation factor
+     * @param level        the recursion level
+     * @param k            the color attenuation factor
      * @return the calculated color to paint that pixel with
      */
     private Color calcColor(Intersectable.Intersection intersection, int level, Double3 k) {
@@ -89,9 +89,9 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the global lighting effects (reflection and refraction).
      *
      * @param interactRay the ray for the effect
-     * @param level the recursion level
-     * @param k the color attenuation factor
-     * @param kx the effect coefficient
+     * @param level       the recursion level
+     * @param k           the color attenuation factor
+     * @param kx          the effect coefficient
      * @return the color contribution from the global effect
      */
     private Color calcGlobalEffect(Ray interactRay, int level, Double3 k, Double3 kx) {
@@ -107,8 +107,8 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the sum of all global effects (reflection and refraction).
      *
      * @param intersection the intersection to calculate effects for
-     * @param level the recursion level
-     * @param k the color attenuation factor
+     * @param level        the recursion level
+     * @param k            the color attenuation factor
      * @return the color contribution from all global effects
      */
     private Color calcGlobalEffects(Intersectable.Intersection intersection, int level, Double3 k) {
@@ -148,7 +148,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the local effects of lighting at the intersection.
      *
      * @param intersection The intersection to calculate effects for.
-     * @param k The color attenuation factor.
+     * @param k            The color attenuation factor.
      * @return The color resulting from local lighting effects.
      */
     private Color calcColorLocalEffects(Intersectable.Intersection intersection, Double3 k) {

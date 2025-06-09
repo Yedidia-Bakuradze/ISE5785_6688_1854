@@ -11,14 +11,44 @@ import scene.Scene;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Test class for creating a jug shape using triangular meshes and rendering it with appropriate lighting.
+ * This class demonstrates 3D object construction using layers of triangles to form a complex shape.
+ */
 public class PersonalTest {
 
+    /**
+     * Default constructor for PersonalTest class.
+     */
+    PersonalTest() {
+    }
+
+    /**
+     * Center point for the jug/teapot geometry in scene coordinates.
+     * This is the base point around which the jug is constructed.
+     */
+    Double3 center = new Double3(400, 0, 100);
+
+    /**
+     * The scene object containing all geometries, lighting and settings for rendering.
+     */
     Scene scene = new Scene("Personal Test Scene");
+
+    /**
+     * Camera builder for setting up the viewpoint and rendering parameters.
+     */
     public Camera.Builder cameraBuilder = Camera.getBuilder() //
             .setRayTracer(scene, RayTracerType.SIMPLE);
 
+    /**
+     * Total height of the jug/teapot object in scene units.
+     */
     double TOTAL_HEIGHT = 500; // Total height of the teapot
 
+    /**
+     * Material properties for the middle triangles of the jug.
+     * Contains diffuse, specular, shininess, reflection and transparency settings.
+     */
     Material midTriangleMaterial = new Material()
             .setKD(0.4)
             .setKS(0.6)
@@ -26,13 +56,24 @@ public class PersonalTest {
             .setKR(0.15)
             .setKT(0.4);
 
+    /**
+     * Material properties for the top and bottom triangles of the jug.
+     * Contains diffuse, specular, shininess and reflection settings.
+     */
     Material topBottomTriagnlesMaterial = new Material()
             .setKD(0.4)
             .setKS(0.6)
             .setShininess(80)
             .setKR(0.15);
 
+    /**
+     * Color for the middle triangles of the jug.
+     */
     Color midTriangleColor = new Color(80, 50, 25);
+
+    /**
+     * Color for the top and bottom triangles of the jug.
+     */
     Color topBottomTriangleColor = new Color(60, 40, 20);
 
     /**
@@ -45,9 +86,9 @@ public class PersonalTest {
         int[] layerRadiuses = {100, 110, 120, 130, 140, 150, 150, 160, 170, 170, 165, 160, 150, 150, 150, 120, 120};
         // Layer heights
         int[] layerHeights = {0, 25, 50, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 425, 450};
-        int pointsPerLayer = 200;
+        int pointsPerLayer = 15;
 
-        generateTeapotGeometry(400, 0, 100, layerRadiuses, layerHeights, pointsPerLayer);
+        generateTeapotGeometry(center.d1(), center.d2(), center.d3(), layerRadiuses, layerHeights, pointsPerLayer);
 
         scene.geometries.add(
                 new Plane(new Vector(0, 0, 1), new Point(200, 200, 70))
@@ -112,22 +153,38 @@ public class PersonalTest {
     }
 
     /**
-     * Generate the teapot geometry using the layered approach with triangular mesh
+     * Generate the teapot geometry using the layered approach with triangular mesh.
+     *
+     * @param x              X-coordinate of the center base point
+     * @param y              Y-coordinate of the center base point
+     * @param z              Z-coordinate of the center base point
+     * @param layerRadiuses  Array of radiuses for each layer of the teapot
+     * @param layerHeights   Array of height offsets for each layer
+     * @param pointsPerLayer Number of points to generate per layer (more points = smoother surface)
      */
     private void generateTeapotGeometry(double x, double y, double z, int[] layerRadiuses, int[] layerHeights, int pointsPerLayer) {
         Point centerBase = new Point(x, y, z);
 
         // Generate all layers of points
-        List<List<Point>> layers = generateTeapotLayers(centerBase, x, y, z, layerRadiuses, layerHeights, pointsPerLayer);
+        List<List<Point>> layers = generateTeapotLayers(x, y, z, layerRadiuses, layerHeights, pointsPerLayer);
 
         // Create triangular mesh between layers
         createTeapotMesh(layers, centerBase, x, y, z);
     }
 
     /**
-     * Generate all 7 layers of points for the teapot body
+     * Generate all layers of points for the teapot body based on the specified radiuses and heights.
+     *
+     * @param x              X-coordinate of the center
+     * @param y              Y-coordinate of the center
+     * @param z              Z-coordinate of the center
+     * @param layerRadiuses  Array of radiuses for each layer
+     * @param layerHeights   Array of height offsets for each layer
+     * @param pointsPerLayer Number of points to generate per layer
+     * @return List of layers, where each layer is a list of points forming a circular shape
+     * @throws IllegalArgumentException if the number of radiuses doesn't match the number of heights
      */
-    private List<List<Point>> generateTeapotLayers(Point centerBase, double x, double y, double z, int[] layerRadiuses, int[] layerHeights, int pointsPerLayer) {
+    private List<List<Point>> generateTeapotLayers(double x, double y, double z, int[] layerRadiuses, int[] layerHeights, int pointsPerLayer) {
         List<List<Point>> layers = new ArrayList<>();
 
         if (layerRadiuses.length != layerHeights.length) {
@@ -138,7 +195,7 @@ public class PersonalTest {
             int height = layerHeights[i];
             double radius = layerRadiuses[i];
 
-            List<Point> layer = generateCircularLayer(x, y, z, centerBase, height, radius, pointsPerLayer);
+            List<Point> layer = generateCircularLayer(x, y, z, height, radius, pointsPerLayer);
             layers.add(layer);
         }
 
@@ -146,9 +203,17 @@ public class PersonalTest {
     }
 
     /**
-     * Generate a circular layer of points around a center
+     * Generate a circular layer of points around a center point at the specified height.
+     *
+     * @param centerX      X-coordinate of the center
+     * @param centerY      Y-coordinate of the center
+     * @param centerZ      Z-coordinate of the center
+     * @param heightOffset Vertical offset from the base for this layer
+     * @param radius       Radius of the circular layer
+     * @param pointCount   Number of points to generate in the circular layer
+     * @return List of points forming a circular shape
      */
-    private List<Point> generateCircularLayer(double centerX, double centerY, double centerZ, Point center, int heightOffset, double radius, int pointCount) {
+    private List<Point> generateCircularLayer(double centerX, double centerY, double centerZ, int heightOffset, double radius, int pointCount) {
         List<Point> points = new ArrayList<>();
 
         for (int i = 0; i < pointCount; i++) {
@@ -164,7 +229,13 @@ public class PersonalTest {
     }
 
     /**
-     * Create the triangular mesh for the teapot body
+     * Create the triangular mesh for the teapot body by connecting adjacent layers.
+     *
+     * @param layers     List of layers, each containing points forming a circular shape
+     * @param centerBase The center base point of the teapot
+     * @param x          X-coordinate of the center
+     * @param y          Y-coordinate of the center
+     * @param z          Z-coordinate of the center
      */
     private void createTeapotMesh(List<List<Point>> layers, Point centerBase, double x, double y, double z) {
         // Create bottom triangles (first layer to center point)
@@ -181,7 +252,10 @@ public class PersonalTest {
     }
 
     /**
-     * Create triangles from the first layer to the bottom center point
+     * Create triangles from the first layer to the bottom center point to form the base of the teapot.
+     *
+     * @param bottomLayer List of points forming the bottom layer
+     * @param centerBase  The center point of the bottom layer
      */
     private void createBottomTriangles(List<Point> bottomLayer, Point centerBase) {
         int pointCount = bottomLayer.size();
@@ -200,7 +274,10 @@ public class PersonalTest {
     }
 
     /**
-     * Create triangles from the last layer to the top center point
+     * Create triangles from the last layer to the top center point to form the top of the teapot.
+     *
+     * @param topLayer  List of points forming the top layer
+     * @param topCenter The center point of the top layer
      */
     private void createTopTriangles(List<Point> topLayer, Point topCenter) {
         int pointCount = topLayer.size();
@@ -219,7 +296,11 @@ public class PersonalTest {
     }
 
     /**
-     * Create triangular mesh between two adjacent layers
+     * Create triangular mesh between two adjacent layers to form the sides of the teapot.
+     * Each quad between adjacent layers is divided into two triangles.
+     *
+     * @param lowerLayer List of points forming the lower layer
+     * @param upperLayer List of points forming the upper layer
      */
     private void createLayerTriangles(List<Point> lowerLayer, List<Point> upperLayer) {
         int pointCount = lowerLayer.size(); // Assuming both layers have same number of points
