@@ -1,11 +1,10 @@
 package renderer;
 
 import primitives.*;
-import primitives.Vector;
 import sampling.*;
 import scene.Scene;
 
-import java.util.*;
+import java.util.MissingResourceException;
 
 import static primitives.Util.*;
 
@@ -143,6 +142,11 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder enableDiffusiveGlass() {
+            camera.isDiffusiveGlass = true;
+            return this;
+        }
+
         /**
          * Sets the ray that would identify and paint the intersected pixels
          *
@@ -152,7 +156,10 @@ public class Camera implements Cloneable {
          */
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             switch (type) {
-                case SIMPLE -> camera.rayTracer = new SimpleRayTracer(scene);
+                case SIMPLE -> {
+                    camera.rayTracer = new SimpleRayTracer(scene)
+                            .setDiffusiveGlassSettings(camera.isDiffusiveGlass, camera.targetArea);
+                }
                 case GRID -> camera.rayTracer = null;
                 default -> throw new IllegalArgumentException("The type: " + type + " is invalid for the ray tracer");
             }
@@ -161,26 +168,6 @@ public class Camera implements Cloneable {
 
         public Builder setTargetArea(RayBeamSpreadingMode spreadingMode, SuperSamplingMode samplingMode, TargetAreaShape shape, double radius) {
             camera.targetArea = new TargetArea(spreadingMode, samplingMode, shape, radius);
-            return this;
-        }
-
-        public Builder setDiffusiveGlassEffectStatus(boolean status) {
-            camera.isDiffusiveGlassEffectEnabled = status;
-            return this;
-        }
-
-        public Builder setSuperSamplingStatus(boolean status) {
-            camera.isSuperSampling = status;
-            return this;
-        }
-
-        /**
-         * Replace the entire list of pre‑hit samplers (e.g. anti‑alias, depth‑of‑field).
-         * If you pass an empty list, the default NoSamplingStrategy will still ensure
-         * at least one ray per pixel.
-         */
-        public Builder setPreHitSamplers(List<SamplingStrategy> samplers) {
-            camera.preHitSamplers = samplers == null || samplers.isEmpty() ? List.of(new NoSamplingStrategy()) : new ArrayList<>(samplers);
             return this;
         }
 
@@ -283,11 +270,7 @@ public class Camera implements Cloneable {
 
     private TargetArea targetArea = null;
 
-    private boolean isSuperSampling = false;
-
-    private boolean isDiffusiveGlassEffectEnabled = false;
-
-    private List<SamplingStrategy> preHitSamplers;
+    private boolean isDiffusiveGlass = false;
 
     /**
      * The number of pixels in the view plane (Rows)
@@ -346,22 +329,12 @@ public class Camera implements Cloneable {
      */
     public Camera renderImage() {
         //Goes over the rows
-        if (this.isSuperSampling) {
-            for (int i = 0; i < nY; i++) {
-                //Goes over the columns
-                for (int j = 0; j < nX; j++) {
-                    castRays(j, i);
-                }
-            }
-        } else {
-            for (int i = 0; i < nY; i++) {
-                //Goes over the columns
-                for (int j = 0; j < nX; j++) {
-                    castRay(j, i);
-                }
+        for (int i = 0; i < nY; i++) {
+            //Goes over the columns
+            for (int j = 0; j < nX; j++) {
+                castRay(j, i);
             }
         }
-
         return this;
     }
 
@@ -405,34 +378,4 @@ public class Camera implements Cloneable {
         imageWriter.writePixel(j, i, color);
     }
 
-    private void castRays(int j, int i) {
-        List<Point> points = targetArea.getSamples(calcCenterPoint(nX, nY, j, i));
-        if (points.isEmpty()) return;
-
-        // Collect colors from all rays
-        List<Color> colors = points.stream()
-                .map(point -> {
-                    Ray ray = new Ray(position, point.subtract(position).normalize());
-                    return rayTracer.traceRay(ray);
-                })
-                .toList();
-
-        // Average the colors and write to the image
-        Color averagedColor = averageColors(colors);
-        imageWriter.writePixel(j, i, averagedColor);
-    }
-
-    /**
-     * Averages a list of colors.
-     *
-     * @param colors The list of colors to average.
-     * @return The averaged color.
-     */
-    private Color averageColors(List<Color> colors) {
-        Color totalColor = Color.BLACK;
-        for (Color color : colors) {
-            totalColor = totalColor.add(color);
-        }
-        return totalColor.reduce(colors.size());
-    }
 }

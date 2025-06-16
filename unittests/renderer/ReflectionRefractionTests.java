@@ -182,9 +182,6 @@ class ReflectionRefractionTests {
                 .setVpSize(250, 250)
                 .setResolution(600, 600)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
-                .setDiffusiveGlassEffectStatus(true)
-                .setSuperSamplingStatus(true)
-                .setTargetArea(RayBeamSpreadingMode.JITTER, SuperSamplingMode.DEMO, TargetAreaShape.CIRCLE, 0.5)
                 .build()
                 .renderImage()
                 .writeToImage("testDualMirrorRefractionShadow");
@@ -213,7 +210,7 @@ class ReflectionRefractionTests {
                                 .setKT(0.6).setIOR(0.1)),
 
                 // Inner solid sphere (red center)
-                new Sphere(new Point(0, 0, -200), 30d)
+                new Sphere(new Point(0, 0, -200), 20d)
                         .setEmission(new Color(5, 3, 20))
                         .setMaterial(new Material()
                                 .setKD(0.4).setKS(0.3).setShininess(50)),
@@ -256,12 +253,90 @@ class ReflectionRefractionTests {
                 .setVpDistance(800)
                 .setVpSize(250, 250)
                 .setResolution(600, 600)
-                .setRayTracer(scene, RayTracerType.SIMPLE)
-                .setDiffusiveGlassEffectStatus(true)
-                .setSuperSamplingStatus(true)
+                .enableDiffusiveGlass()
                 .setTargetArea(RayBeamSpreadingMode.JITTER, SuperSamplingMode.DEMO, TargetAreaShape.CIRCLE, 0.5)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build()
                 .renderImage()
                 .writeToImage("DiffusiveGlassTest");
+    }
+
+    /**
+     * Produce a picture of colored spheres behind a white semi-reflective wall
+     * demonstrating diffusive glass/mirror effect
+     */
+    @Test
+    void whiteBlurryMirrorTest() {
+        // Set up a clean scene
+        Scene testScene = new Scene("White Blurry Mirror Test");
+
+        // Add geometries
+        testScene.geometries.add(
+                // Semi-transparent white wall with reflective properties
+                new Triangle(
+                        new Point(-150, -150, 50),
+                        new Point(150, -150, 50),
+                        new Point(0, 150, 50))
+                        .setEmission(new Color(200, 200, 200))
+                        .setMaterial(new Material()
+                                .setKD(0.2).setKS(0.3).setShininess(50)
+                                .setKT(0.3).setKR(0.4)), // Partial transparency and reflection
+
+                // Colored spheres positioned behind the wall
+                new Sphere(new Point(-50, 0, -100), 30d)
+                        .setEmission(new Color(200, 30, 30)) // Red sphere
+                        .setMaterial(new Material()
+                                .setKD(0.6).setKS(0.4).setShininess(100)),
+
+                new Sphere(new Point(50, 0, -100), 30d)
+                        .setEmission(new Color(30, 30, 200)) // Blue sphere
+                        .setMaterial(new Material()
+                                .setKD(0.6).setKS(0.4).setShininess(100)),
+
+                new Sphere(new Point(0, 70, -100), 25d)
+                        .setEmission(new Color(30, 200, 30)) // Green sphere
+                        .setMaterial(new Material()
+                                .setKD(0.6).setKS(0.4).setShininess(100)),
+
+                // Floor plane to show shadows
+                new Triangle(
+                        new Point(-200, -100, -200),
+                        new Point(200, -100, -200),
+                        new Point(0, -100, 100))
+                        .setEmission(new Color(80, 80, 100))
+                        .setMaterial(new Material()
+                                .setKD(0.6).setKS(0.2).setShininess(30))
+        );
+
+        // Set background color and ambient light
+        testScene.setBackground(new Color(50, 50, 50));
+        testScene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
+
+        // Add light sources - REDUCED INTENSITY AND MOVED FARTHER AWAY
+        testScene.lights.add(
+                new SpotLight(new Color(40, 40, 40),
+                        new Point(-200, 200, 500), // Moved farther away
+                        new Vector(1, -1, -2))
+                        .setKl(0.0001).setKq(0.0000002)); // Reduced attenuation
+
+        testScene.lights.add(
+                new SpotLight(new Color(40, 40, 40),
+                        new Point(200, 100, 500), // Moved farther away
+                        new Vector(-1, 0, -2))
+                        .setKl(0.0001).setKq(0.0000002)); // Reduced attenuation
+
+        // Camera setup with diffusive glass effect
+        Camera.getBuilder()
+                .setLocation(new Point(0, 0, 300))
+                .setDirection(new Point(0, 0, 0), Vector.AXIS_Y)
+                .setVpDistance(200)
+                .setVpSize(200, 200)
+                .setResolution(800, 800)
+                .enableDiffusiveGlass()
+                .setTargetArea(RayBeamSpreadingMode.JITTER, SuperSamplingMode.DEMO, TargetAreaShape.CIRCLE, 0.7)
+                .setRayTracer(testScene, RayTracerType.SIMPLE)
+                .build()
+                .renderImage()
+                .writeToImage("whiteBlurryMirrorTest");
     }
 }
