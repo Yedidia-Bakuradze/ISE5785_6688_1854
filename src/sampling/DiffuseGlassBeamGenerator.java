@@ -37,9 +37,7 @@ public class DiffuseGlassBeamGenerator extends BeamGenerator {
         // 2. Compute main refracted direction via Snell's law
         Vector normal = intersection.normal;
         double ior = intersection.material.ior;
-        Vector refractedDir = Vector.refract(
-                centerRay.getDirection(), normal, ior
-        );
+        Vector refractedDir = centerRay.getDirection().refract(normal, ior);
 
         // 3. Build orthonormal basis (u,v) on tangent plane
         Vector u = normal.anyPerpendicular().normalize();

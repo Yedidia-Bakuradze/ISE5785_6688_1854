@@ -154,4 +154,16 @@ public class Vector extends Point {
                 .add(normal.scale(eta * cosi - Math.sqrt(k)))
                 .normalize();
     }
+
+    // דוגמת מימוש פשוט
+    public Vector anyPerpendicular() {
+        if (Math.abs(xyz.d3()) < Math.abs(xyz.d1()) && Math.abs(xyz.d3()) < Math.abs(xyz.d2())) {
+            // z הכי קטן — אז ניקח וקטור במישור XY
+            return new Vector(-xyz.d2(), xyz.d1(), 0);
+        } else {
+            // אחרת ניקח וקטור במישור XZ או YZ
+            return new Vector(-xyz.d3(), 0, xyz.d1());
+        }
+    }
+
 }
