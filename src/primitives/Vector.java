@@ -142,4 +142,16 @@ public class Vector extends Point {
     public Vector normalize() {
         return new Vector(xyz.reduce(this.length()));
     }
+
+    public Vector refract(Vector normal, double eta) {
+        double cosi = -this.dotProduct(normal);
+        double k = 1.0 - eta * eta * (1 - cosi * cosi);
+        if (k < 0) {
+            // internal reflection, אין שבירה
+            return null;
+        }
+        return this.scale(eta)
+                .add(normal.scale(eta * cosi - Math.sqrt(k)))
+                .normalize();
+    }
 }
