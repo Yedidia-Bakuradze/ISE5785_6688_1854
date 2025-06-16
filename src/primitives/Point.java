@@ -5,6 +5,7 @@ package primitives;
  * Provides methods for point arithmetic and distance calculations.
  */
 public class Point {
+
     /**
      * The coordinates of the point.
      */
@@ -24,6 +25,10 @@ public class Point {
      */
     public Point(double x, double y, double z) {
         xyz = new Double3(x, y, z);
+    }
+
+    public Point(double x, double y) {
+        xyz = new Double3(x, y, 0);
     }
 
     /**
