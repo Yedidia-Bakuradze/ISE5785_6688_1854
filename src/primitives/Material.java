@@ -36,6 +36,8 @@ public class Material {
      */
     public int nShininess = 0;
 
+    public double ior = 1.0; // Index of refraction for transparency and reflection
+
     /**
      * Default constructor for Material.
      */
@@ -160,6 +162,17 @@ public class Material {
      */
     public Material setShininess(int nShininess) {
         this.nShininess = nShininess;
+        return this;
+    }
+
+    /**
+     * Set the index of refraction.
+     *
+     * @param ior the index of refraction
+     * @return the Material object
+     */
+    public Material setIOR(double ior) {
+        this.ior = ior;
         return this;
     }
 }
