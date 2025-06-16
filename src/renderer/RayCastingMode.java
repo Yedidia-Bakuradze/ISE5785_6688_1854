@@ -1,4 +1,4 @@
-package sampling;
+package renderer;
 
 public enum RayCastingMode {
     BEAM,
