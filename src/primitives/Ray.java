@@ -4,8 +4,6 @@ import geometries.Intersectable.Intersection;
 
 import java.util.List;
 
-import static primitives.Util.isZero;
-
 /**
  * Represents a ray in 3D space, defined by a starting point and a direction vector.
  */
@@ -40,13 +38,13 @@ public class Ray {
      * Constructs a Ray with a given starting point and direction vector, offset by a small delta.
      *
      * @param head      the starting point of the ray
-     * @param direction the direction vector of the ray
+     * @param direction the direction vector of the ray - must be normalized ahead
      * @param normal    the normal vector to the surface at the starting point
      */
     public Ray(Point head, Vector direction, Vector normal) {
         double factor = normal.dotProduct(direction);
-        this.head = isZero(factor) ? head : head.add(normal.scale(factor > 0 ? DELTA : -DELTA));
-        this.direction = direction.normalize();
+        this.head = head.add(normal.scale(factor > 0 ? DELTA : -DELTA));
+        this.direction = direction;
     }
 
     /**

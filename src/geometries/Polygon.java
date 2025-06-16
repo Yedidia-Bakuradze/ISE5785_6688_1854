@@ -101,6 +101,6 @@ public class Polygon extends Geometry {
 
     @Override
     protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
-        return this.plane.calculateIntersectionsHelper(ray, maxDistance);
+        return this.plane.calculateIntersections(ray, maxDistance);
     }
 }

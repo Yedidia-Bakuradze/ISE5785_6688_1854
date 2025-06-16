@@ -62,11 +62,9 @@ public class Triangle extends Polygon {
 
         // Calculate t (distance)
         double t = edge2.dotProduct(qVec) * invDet;
-
         // Only consider positive t values (in front of ray)
-        if (alignZero(t) <= 0 || alignZero(maxDistance - t) < 0) return null;
-
-        return List.of(new Intersection(this, ray.getPoint(t)));
+        return alignZero(t) <= 0 || alignZero(maxDistance - t) < 0 ? null
+                : List.of(new Intersection(this, ray.getPoint(t)));
     }
 
     /**

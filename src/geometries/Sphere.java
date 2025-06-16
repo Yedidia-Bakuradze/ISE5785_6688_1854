@@ -2,7 +2,6 @@ package geometries;
 
 import primitives.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -54,13 +53,13 @@ public class Sphere extends RadialGeometry {
 
         double t2 = alignZero(tm + th);
         double t1 = alignZero(tm - th);
-
         if (t2 <= 0 || alignZero(t1 - maxDistance) > 0) return null;
-        List<Intersection> intersections = new ArrayList<>();
-        if (t1 > 0 && alignZero(t1 - maxDistance) < 0) intersections.add(new Intersection(this, ray.getPoint(t1)));
-        if (alignZero(t2 - maxDistance) < 0) intersections.add(new Intersection(this, ray.getPoint(t2)));
 
-        return intersections.isEmpty() ? null : intersections;
+        if (alignZero(t2 - maxDistance) > 0)
+            return t1 <= 0 ? null : List.of(new Intersection(this, ray.getPoint(t1)));
+        else
+            return t1 <= 0 ? List.of(new Intersection(this, ray.getPoint(t2)))
+                    : List.of(new Intersection(this, ray.getPoint(t1)), new Intersection(this, ray.getPoint(t2)));
     }
 
 }

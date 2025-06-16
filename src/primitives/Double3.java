@@ -123,7 +123,7 @@ public record Double3(double d1, double d2, double d3) {
      * @return true if all components are greater than k, false otherwise
      */
     public boolean greaterThan(double k) {
-        return d1 > k && d2 > k && d3 > k;
+        return d1 > k || d2 > k || d3 > k;
     }
 
     /**
