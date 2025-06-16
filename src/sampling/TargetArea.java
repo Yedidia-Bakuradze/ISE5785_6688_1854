@@ -23,59 +23,56 @@ public class TargetArea {
      *
      * @return list of (x,y) offsets for beam generation
      */
-    public List<Point> getSamples() {
-        return shape == TargetAreaShape.CIRCLE ? sampleCircle() : sampleSquare();
+    public List<Point> getSamples(Point center) {
+        return shape == TargetAreaShape.CIRCLE ? sampleCircle(center) : sampleSquare(center);
     }
 
     // Generate points inside a circle
-    private List<Point> sampleCircle() {
-        List<Point> list = new ArrayList<>(superSamplingMode.gridSizeSquared);
-        for (int i = 0; i < superSamplingMode.gridSizeSquared; i++) {
-            // polar sampling for uniform disk
+    private List<Point> sampleCircle(Point center) {
+        int count = superSamplingMode.gridSize * superSamplingMode.gridSize;
+        List<Point> list = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
             double u = rnd.nextDouble();
             double v = rnd.nextDouble();
             double r = Math.sqrt(u) * radius;
             double theta = 2 * Math.PI * v;
-            double x = r * Math.cos(theta);
-            double y = r * Math.sin(theta);
-            list.add(new Point(x, y));
+            double dx = r * Math.cos(theta);
+            double dy = r * Math.sin(theta);
+            list.add(new Point(center.getX() + dx, center.getY() + dy));
         }
         return list;
     }
 
     // Generate points inside a square ([-radius..+radius] x [-radius..+radius])
-    private List<Point> sampleSquare() {
-        int grid = superSamplingMode.gridSize;
-        int count = superSamplingMode.gridSizeSquared;
-        List<Point> list = new ArrayList<>(count);
-        double cellSize = (2 * radius) / grid;
-
+    private List<Point> sampleSquare(Point center) {
         return spreadingMode == RayBeamSpreadingMode.JITTER
-                ? sampleSquareJitter()
-                : sampleSquareUniform();
+                ? sampleSquareJitter(center)
+                : sampleSquareUniform(center);
     }
 
-    private List<Point> sampleSquareJitter() {
-        List<Point> list = new ArrayList<>(superSamplingMode.gridSizeSquared);
-        double cellSize = (2 * radius) / superSamplingMode.gridSize;
-        for (int i = 0; i < superSamplingMode.gridSize; i++) {
-            for (int j = 0; j < superSamplingMode.gridSize; j++) {
-                double x = -radius + (i + rnd.nextDouble()) * cellSize;
-                double y = -radius + (j + rnd.nextDouble()) * cellSize;
-                list.add(new Point(x, y));
+    private List<Point> sampleSquareJitter(Point center) {
+        int grid = superSamplingMode.gridSize;
+        double cellSize = (2 * radius) / grid;
+        List<Point> list = new ArrayList<>(grid * grid);
+        for (int i = 0; i < grid; i++) {
+            for (int j = 0; j < grid; j++) {
+                double dx = -radius + (i + rnd.nextDouble()) * cellSize;
+                double dy = -radius + (j + rnd.nextDouble()) * cellSize;
+                list.add(new Point(center.getX() + dx, center.getY() + dy));
             }
         }
         return list;
     }
 
-    public List<Point> sampleSquareUniform() {
-        List<Point> list = new ArrayList<>(superSamplingMode.gridSizeSquared);
-        double cellSize = (2 * radius) / superSamplingMode.gridSize;
-        for (int i = 0; i < superSamplingMode.gridSize; i++) {
-            for (int j = 0; j < superSamplingMode.gridSize; j++) {
-                double x = -radius + (i + 0.5) * cellSize;
-                double y = -radius + (j + 0.5) * cellSize;
-                list.add(new Point(x, y));
+    private List<Point> sampleSquareUniform(Point center) {
+        int grid = superSamplingMode.gridSize;
+        double cellSize = (2 * radius) / grid;
+        List<Point> list = new ArrayList<>(grid * grid);
+        for (int i = 0; i < grid; i++) {
+            for (int j = 0; j < grid; j++) {
+                double dx = -radius + (i + 0.5) * cellSize;
+                double dy = -radius + (j + 0.5) * cellSize;
+                list.add(new Point(center.getX() + dx, center.getY() + dy));
             }
         }
         return list;

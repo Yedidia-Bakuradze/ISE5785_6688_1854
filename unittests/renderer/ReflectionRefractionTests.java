@@ -6,6 +6,7 @@ import lighting.AmbientLight;
 import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
+import sampling.*;
 import scene.Scene;
 
 import static java.awt.Color.*;
@@ -134,7 +135,7 @@ class ReflectionRefractionTests {
                         .setEmission(new Color(0, 0, 100))
                         .setMaterial(new Material()
                                 .setKD(0.2).setKS(0.3).setShininess(100)
-                                .setKT(0.6)),
+                                .setKT(0.6).setIOR(1000)),
 
                 // Inner solid sphere (red center)
                 new Sphere(new Point(0, 0, -70), 30d)
@@ -181,8 +182,86 @@ class ReflectionRefractionTests {
                 .setVpSize(250, 250)
                 .setResolution(600, 600)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setDiffusiveGlassEffectStatus(true)
+                .setSuperSamplingStatus(true)
+                .setTargetArea(RayBeamSpreadingMode.JITTER, SuperSamplingMode.DEMO, TargetAreaShape.CIRCLE, 0.5)
                 .build()
                 .renderImage()
                 .writeToImage("testDualMirrorRefractionShadow");
+    }
+
+    /**
+     * Produce a picture of two triangles lighted by a spotlight with a
+     * partially
+     * transparent Sphere producing partial shadow
+     */
+    @Test
+    void testDiffusiveGlass() {
+        // https://www.geogebra.org/calculator/jxhczbc2
+        scene.geometries.add(
+                // Outer transparent sphere (glass)
+                new Triangle(new Point(-30, -30, 70), new Point(30, -30, 70), new Point(30, 30, 70))
+                        .setEmission(new Color(0, 40, 0))
+                        .setMaterial(new Material()
+                                .setKD(0.2).setKS(0.3).setShininess(100)
+                                .setKT(0.6)),
+
+                new Triangle(new Point(30, 30, 70), new Point(-30, 30, 70), new Point(-30, -30, 70))
+                        .setEmission(new Color(0, 0, 40))
+                        .setMaterial(new Material()
+                                .setKD(0.2).setKS(0.3).setShininess(100)
+                                .setKT(0.6).setIOR(0.1)),
+
+                // Inner solid sphere (red center)
+                new Sphere(new Point(0, 0, -200), 30d)
+                        .setEmission(new Color(5, 3, 20))
+                        .setMaterial(new Material()
+                                .setKD(0.4).setKS(0.3).setShininess(50)),
+
+                // Mirror Reflects to Camera
+                new Triangle(
+                        new Point(150, -150, -200),
+                        new Point(200, 150, -200),
+                        new Point(-50, 150, -250))
+                        .setEmission(new Color(10, 10, 10))
+                        .setMaterial(new Material().setKR(1).setKD(0.2).setKS(0.3).setShininess(50)),
+
+                // Mirror Reflects to Mirror
+                new Triangle(
+                        new Point(-150, -150, -300),
+                        new Point(-200, 100, -250),
+                        new Point(-50, 150, -250))
+                        .setEmission(new Color(30, 30, 30))
+                        .setMaterial(new Material().setKR(1)),
+
+                // Floor plane (to show shadow)
+                new Triangle(new Point(-300, 20, -500), new Point(300, 20, -500), new Point(0, -180, 200))
+                        .setEmission(new Color(0, 0, 100))
+                        .setMaterial(new Material().setKD(0.6).setKS(0.2).setShininess(30))
+        );
+
+        // Ambient light to see shadow properly
+        scene.setAmbientLight(new AmbientLight(new Color(40, 40, 40)));
+        scene.setBackground(new Color(40, 40, 40));
+        // Spotlight aimed at the center sphere (simulate sun/spotlight)
+        scene.lights.add(new SpotLight(new Color(700, 400, 400),
+                new Point(100, 100, 200),
+                new Vector(-1, -1, -2))
+                .setKl(0.0005).setKq(0.00005));
+
+        // Camera setup
+        Camera.getBuilder()
+                .setLocation(new Point(0, 0, 1000)) // looking forward
+                .setDirection(Point.ZERO, new Vector(0, 1, 0)) // looking down -Z
+                .setVpDistance(800)
+                .setVpSize(250, 250)
+                .setResolution(600, 600)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setDiffusiveGlassEffectStatus(true)
+                .setSuperSamplingStatus(true)
+                .setTargetArea(RayBeamSpreadingMode.JITTER, SuperSamplingMode.DEMO, TargetAreaShape.CIRCLE, 0.5)
+                .build()
+                .renderImage()
+                .writeToImage("DiffusiveGlassTest");
     }
 }

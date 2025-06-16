@@ -2,8 +2,8 @@ package sampling;
 
 public enum SuperSamplingMode {
     EASY(2),
-    DEMO(3),
-    PRODUCTION(4);
+    DEMO(9),
+    PRODUCTION(33);
 
     public final int gridSize;
     public final int gridSizeSquared;
