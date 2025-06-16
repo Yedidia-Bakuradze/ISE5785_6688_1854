@@ -10,6 +10,7 @@ public abstract class BeamGenerator {
     public RayBeamSpreadingMode spreadingMode = RayBeamSpreadingMode.JITTER;
     public SuperSamplingMode superSamplingMode = SuperSamplingMode.EASY;
     public TargetAreaShape shape = TargetAreaShape.CIRCLE;
+    protected double radius = 1.0;              // physical blur radius
 
     public BeamGenerator setSpreadingMode(RayBeamSpreadingMode spreadingMode) {
         this.spreadingMode = spreadingMode;
@@ -26,5 +27,10 @@ public abstract class BeamGenerator {
         return this;
     }
 
-    abstract List<Ray> generateRays(Ray centerRay, Intersectable.Intersection intersection);
+    public BeamGenerator setRadius(double radius) {
+        this.radius = radius;
+        return this;
+    }
+
+    public abstract List<Ray> generateRays(Ray centerRay, Intersectable.Intersection intersection);
 }
