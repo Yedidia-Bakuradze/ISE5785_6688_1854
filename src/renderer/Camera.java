@@ -1,11 +1,11 @@
 package renderer;
 
 import primitives.*;
+import primitives.Vector;
 import sampling.*;
 import scene.Scene;
 
-import java.util.List;
-import java.util.MissingResourceException;
+import java.util.*;
 
 import static primitives.Util.*;
 
@@ -175,6 +175,16 @@ public class Camera implements Cloneable {
         }
 
         /**
+         * Replace the entire list of pre‑hit samplers (e.g. anti‑alias, depth‑of‑field).
+         * If you pass an empty list, the default NoSamplingStrategy will still ensure
+         * at least one ray per pixel.
+         */
+        public Builder setPreHitSamplers(List<SamplingStrategy> samplers) {
+            camera.preHitSamplers = samplers == null || samplers.isEmpty() ? List.of(new NoSamplingStrategy()) : new ArrayList<>(samplers);
+            return this;
+        }
+
+        /**
          * Builds and validates the camera instance
          *
          * @return A new validated Camera instance
@@ -276,6 +286,8 @@ public class Camera implements Cloneable {
     private boolean isSuperSampling = false;
 
     private boolean isDiffusiveGlassEffectEnabled = false;
+
+    private List<SamplingStrategy> preHitSamplers;
 
     /**
      * The number of pixels in the view plane (Rows)
