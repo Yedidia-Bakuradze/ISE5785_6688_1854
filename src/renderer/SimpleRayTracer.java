@@ -112,8 +112,29 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return the color contribution from all global effects
      */
     private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
-        return calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT)
-                .add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
+        if (targetArea == null)
+            return calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT)
+                    .add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
+
+        Color refractionColor = calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT);
+        List<Ray> reflectionRays = calcReflectionRays(intersection);
+
+        Color reflectionColor = reflectionRays.stream()
+                .map(reflectionRay -> calcGlobalEffect(reflectionRay, level, k, intersection.material.kR))
+                .reduce(Color.BLACK, Color::add);
+
+        // Average the reflection color
+        if (!reflectionRays.isEmpty()) {
+            reflectionColor = reflectionColor.reduce(reflectionRays.size());
+        }
+
+        return refractionColor.add(reflectionColor);
+    }
+
+    private List<Ray> calcReflectionRays(Intersection intersection) {
+        return targetArea.generateSamplePoints(intersection).stream()
+                .map(point -> new Ray(intersection.point, point.subtract(intersection.point).normalize()))
+                .toList();
     }
 
     /**

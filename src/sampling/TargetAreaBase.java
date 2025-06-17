@@ -2,7 +2,6 @@ package sampling;
 
 import geometries.Intersectable;
 import primitives.Point;
-import primitives.Ray;
 
 import java.util.List;
 import java.util.Random;
@@ -21,23 +20,10 @@ public abstract class TargetAreaBase {
     }
 
     /**
-     * Generates secondary rays based on the intersection point and the target area shape.
-     *
-     * @param intersection contains hit point, incoming ray direction, normal, and material info
-     * @return list of secondary rays to be cast from the intersection point
-     */
-    public List<Ray> generateRays(Intersectable.Intersection intersection) {
-        List<Point> listOfPoints = generateSamplePoints(intersection);
-        return listOfPoints.stream()
-                .map(point -> new Ray(intersection.point, point.subtract(intersection.point).normalize()))
-                .toList();
-    }
-
-    /**
      * Generates target points on a disk or square around the refracted direction.
      *
      * @param intersection contains hit point, incoming ray direction, normal, and material info
      * @return list of 3D points where secondary rays will be cast
      */
-    protected abstract List<Point> generateSamplePoints(Intersectable.Intersection intersection);
+    public abstract List<Point> generateSamplePoints(Intersectable.Intersection intersection);
 }
