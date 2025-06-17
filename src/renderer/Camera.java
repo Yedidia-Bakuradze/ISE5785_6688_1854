@@ -168,21 +168,46 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Sets the sampling mode for anti-aliasing and improved rendering
+         *
+         * @param mode The sampling mode to use (determines the number of samples per pixel)
+         * @return The builder instance for method chaining
+         */
         public Builder setSamplingMode(SamplingMode mode) {
             camera.mode = mode;
             return this;
         }
 
+        /**
+         * Sets the type of target area for ray distribution
+         *
+         * @param type The type of area (circle or square) for ray sampling
+         * @return The builder instance for method chaining
+         */
         public Builder setTargetAreaType(TargetAreaType type) {
             camera.targetAreaType = type;
             return this;
         }
 
+        /**
+         * Sets the pattern used for distributing sample rays
+         *
+         * @param pattern The sampling pattern (grid, random, or jittered) to use
+         * @return The builder instance for method chaining
+         */
         public Builder setSamplingPattern(SamplingPattern pattern) {
             camera.samplingPattern = pattern;
             return this;
         }
 
+        /**
+         * Enables diffusive glass effects for transparent materials
+         * When enabled, rays passing through transparent materials will be scattered
+         * based on the material's roughness factor
+         *
+         * @return The builder instance for method chaining
+         */
         public Builder enableDiffusiveGlass() {
             camera.isDiffusiveGlassEnabled = true;
             return this;
@@ -350,14 +375,30 @@ public class Camera implements Cloneable {
      */
     private RayTracerBase rayTracer = null;
 
+    /**
+     * The sampling mode that defines the number of samples per pixel for super sampling
+     */
     private SamplingMode mode = null;
 
+    /**
+     * The target area object used for ray distribution in effects like depth of field or soft shadows
+     */
     private TargetAreaBase targetArea = null;
 
+    /**
+     * The type of area for ray distribution (circle or square)
+     */
     private TargetAreaType targetAreaType = null;
 
+    /**
+     * The pattern used for sampling ray distribution (grid, random, or jittered)
+     */
     private SamplingPattern samplingPattern = null;
 
+    /**
+     * Flag indicating whether diffusive glass effects are enabled
+     * When enabled, transparent materials with roughness will scatter transmitted rays
+     */
     private boolean isDiffusiveGlassEnabled = false;
 
     /**

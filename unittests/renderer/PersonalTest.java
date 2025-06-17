@@ -158,31 +158,31 @@ public class PersonalTest {
     @Test
     void testDiffusiveGlass() {
         Material clearGlass = new Material()
-                .setKT(0.9)           // High transparency - can see through but blurred
-                .setKR(0.1)           // Low reflection like normal glass
-                .setKD(0.0)           // No diffuse scattering
-                .setKS(0.05)          // Very low specular
-                .setShininess(20)
-                .setRoughness(0.1)    // Light scattering
-                .setIor(1.5);         // Standard glass IOR
+                .setKT(0.95)          // Very high transparency
+                .setKR(0.04)          // Natural glass reflection (~4%)
+                .setKD(0.0)           // No diffuse
+                .setKS(0.1)           // Low specular
+                .setShininess(100)
+                .setRoughness(0.003)    // ZERO roughness = perfect transmission
+                .setIor(1.5);         // Glass IOR (not 1.0 which is air)
 
         Material mediumBlurGlass = new Material()
-                .setKT(0.8)           // Good transparency but more scattering
-                .setKR(0.15)          // Slightly more reflection
-                .setKD(0.0)           // No diffuse scattering
-                .setKS(0.03)          // Very low specular
-                .setShininess(15)
-                .setRoughness(0.2)    // Medium scattering
-                .setIor(1.5);         // Standard glass IOR
+                .setKT(0.95)          // Very high transparency
+                .setKR(0.04)          // Natural glass reflection (~4%)
+                .setKD(0.0)           // No diffuse
+                .setKS(0.1)           // Low specular
+                .setShininess(100)
+                .setRoughness(0.04)    // ZERO roughness = perfect transmission
+                .setIor(1.5);         // Glass IOR (not 1.0 which is air)
 
         Material strongBlurGlass = new Material()
-                .setKT(0.7)           // Reduced transparency due to heavy scattering
-                .setKR(0.2)           // More reflection from surface irregularities
-                .setKD(0.0)           // No diffuse scattering
-                .setKS(0.02)          // Very low specular
-                .setShininess(10)
-                .setRoughness(0.4)    // Heavy scattering
-                .setIor(1.5);         // Standard glass IOR
+                .setKT(0.95)          // Very high transparency
+                .setKR(0.04)          // Natural glass reflection (~4%)
+                .setKD(0.0)           // No diffuse
+                .setKS(0.1)           // Low specular
+                .setShininess(100)
+                .setRoughness(0.05)    // ZERO roughness = perfect transmission
+                .setIor(1.5);         // Glass IOR (not 1.0 which is air)
 
         // Darker outer sphere material
         Material outerSphereMaterial = new Material()

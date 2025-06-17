@@ -28,12 +28,16 @@ public class SimpleRayTracer extends RayTracerBase {
      */
     private static final Double3 INITIAL_K = Double3.ONE;
 
+    /**
+     * The target area for distributing rays when using effects like depth of field or soft shadows
+     */
     private final TargetAreaBase targetArea;
 
     /**
      * Initiates the simple ray tracer with a scene containing the objects
      *
-     * @param scene the scene which contains the geometries that are a part of that image and scene
+     * @param scene      the scene which contains the geometries that are a part of that image and scene
+     * @param targetArea The target area used for ray distribution in advanced rendering effects
      */
     SimpleRayTracer(Scene scene, TargetAreaBase targetArea) {
         super(scene);

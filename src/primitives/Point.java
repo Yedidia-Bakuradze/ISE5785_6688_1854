@@ -27,10 +27,6 @@ public class Point {
         xyz = new Double3(x, y, z);
     }
 
-    public Point(double x, double y) {
-        xyz = new Double3(x, y, 0);
-    }
-
     /**
      * Constructor to create a Point from a Double3 object.
      *
@@ -105,17 +101,4 @@ public class Point {
     public double distance(Point rightPoint) {
         return Math.sqrt(distanceSquared(rightPoint));
     }
-
-    public double getX() {
-        return xyz.d1();
-    }
-
-    public double getY() {
-        return xyz.d2();
-    }
-
-    public double getZ() {
-        return xyz.d3();
-    }
-
 }
