@@ -83,7 +83,6 @@ public class PersonalTest {
     @Test
     void Jug() {
         //TODO: Add Spheres
-        // Generate teapot geometry
         int[] layerRadiuses = {100, 110, 120, 130, 140, 150, 150, 160, 170, 170, 165, 160, 150, 150, 150, 120, 120};
         // Layer heights
         int[] layerHeights = {0, 25, 50, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 425, 450};
