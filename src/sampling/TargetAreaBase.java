@@ -3,10 +3,12 @@ package sampling;
 import primitives.*;
 
 import java.util.List;
+import java.util.Random;
 
 public abstract class TargetAreaBase {
 
     protected final CastSamplingMode mode;
+    protected final Random random = new Random();
 
     protected TargetAreaBase(CastSamplingMode mode) {
         this.mode = mode;
@@ -23,7 +25,7 @@ public abstract class TargetAreaBase {
                 .toList();
     }
 
-    public abstract List<Point> generateCircularSpreadPoints(Point hitPoint, Vector direction, TargetAreaType shape, SamplingPattern pattern, int numSamples);
+    protected abstract List<Point> generateCircularSpreadPoints(Point hitPoint, Vector direction, TargetAreaType shape, SamplingPattern pattern, int numSamples);
 
-    public abstract List<Point> generateSquaredSpreadPoints(Point hitPoint, Vector direction, TargetAreaType shape, SamplingPattern pattern, int numSamples);
+    protected abstract List<Point> generateSquaredSpreadPoints(Point hitPoint, Vector direction, TargetAreaType shape, SamplingPattern pattern, int numSamples);
 }
