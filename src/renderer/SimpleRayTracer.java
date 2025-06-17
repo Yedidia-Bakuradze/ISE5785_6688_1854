@@ -116,7 +116,7 @@ public class SimpleRayTracer extends RayTracerBase {
         Color reflectionColor;
 
         // Handle transmission/refraction (what goes THROUGH the object)
-        if (targetArea == null) {
+        if (targetArea == null || intersection.material.roughness <= 0.0) {
             // Original behavior: single perfect refraction ray
             refractionColor = calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT);
         } else {
