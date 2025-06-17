@@ -5,6 +5,7 @@ import lighting.AmbientLight;
 import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
+import sampling.*;
 import scene.Scene;
 
 import java.util.ArrayList;
@@ -151,124 +152,161 @@ public class PersonalTest {
                 .writeToImage("Jug");
     }
 
-    // Outer sphere: more transparent, realistic color
-    Material outerSphereMaterial = new Material()
-            .setKD(0.5)    // moderate diffuse
-            .setKS(0.2)    // subtle specular
-            .setKR(0.05)   // minimal reflection
-            .setKT(0.7)    // high transparency
-            .setShininess(40);
-
-    // Inner sphere: more solid, realistic color
-    Material innerSphereMaterial = new Material()
-            .setKD(0.8)    // strong diffuse
-            .setKS(0.3)    // moderate specular
-            .setKR(0.05)   // minimal reflection
-            .setKT(0.0)    // opaque
-            .setShininess(40);
-
-    Material wallMaterial = new Material()
-            .setKD(0.8)
-            .setKS(0.2)
-            .setKR(0.1)
-            .setShininess(30);
-
-    // Softer, less saturated milky glass color
-    Color MilkyGlass = new Color(180, 180, 190);
-
-    // Strong blur (milky, frosted glass)
-    Material strongBlurGlass = new Material()
-            .setKD(0.4)
-            .setKS(0.1)
-            .setKT(0.7)
-            .setKR(0.12)      // increased reflection
-            .setShininess(15)
-            .setIOR(1.5);
-
-    // Soft blur (mildly milky)
-    Material softBlurGlass = new Material()
-            .setKD(0.3)
-            .setKS(0.15)
-            .setKT(0.75)
-            .setKR(0.14)      // increased reflection
-            .setShininess(30)
-            .setIOR(1.45);
-
-    // Almost clear (slight milkiness)
-    Material almostClearGlass = new Material()
-            .setKD(0.2)
-            .setKS(0.2)
-            .setKT(0.8)
-            .setKR(0.16)      // increased reflection
-            .setShininess(60)
-            .setIOR(1.42); // close to real glass
-
-    // Softer, more realistic color values
-    Color Green = new Color(40, 120, 40);     // less saturated green
-    Color Black = new Color(20, 20, 20);      // deep gray instead of pure black
-    Color White = new Color(180, 180, 180);   // soft white
-    Color Skyblue = new Color(100, 160, 180);  // muted sky blue
-    Color Orange = new Color(120, 80, 20);     // softer orange
-    Color Purple = new Color(60, 20, 60);      // muted purple
-    Color Pink = new Color(200, 140, 160);
-
     /**
-     * Produce a picture of two triangles lighted by a spotlight with a
-     * partially
-     * transparent Sphere producing partial shadow
+     * Improved testDiffusiveGlass with darker, more realistic appearance
      */
     @Test
     void testDiffusiveGlass() {
-        // https://www.geogebra.org/calculator/jxhczbc2
+        // Darker glass materials with reduced emission
+        Material clearGlass = new Material()
+                .setKD(0.05)     // reduced diffuse
+                .setKS(0.4)
+                .setKT(0.90)     // higher transparency
+                .setKR(0.06)
+                .setShininess(100)
+                .setIOR(1.52);
+
+        Material mediumBlurGlass = new Material()
+                .setKD(0.1)
+                .setKS(0.3)
+                .setKT(0.85)
+                .setKR(0.08)
+                .setShininess(70)
+                .setIOR(1.8);
+
+        Material strongBlurGlass = new Material()
+                .setKD(0.2)
+                .setKS(0.2)
+                .setKT(0.75)
+                .setKR(0.12)
+                .setShininess(40)
+                .setIOR(2.2);
+
+        // Darker outer sphere material
+        Material outerSphereMaterial = new Material()
+                .setKD(0.6)      // increased diffuse for less brightness
+                .setKS(0.3)      // reduced specular
+                .setKR(0.02)     // minimal reflection
+                .setKT(0.7)
+                .setShininess(50);
+
+        // Darker inner sphere material
+        Material innerSphereMaterial = new Material()
+                .setKD(0.8)
+                .setKS(0.2)      // reduced specular
+                .setKR(0.05)
+                .setKT(0.0)
+                .setShininess(60);
+
+        Material backgroundMaterial = new Material()
+                .setKD(0.7)
+                .setKS(0.2)      // reduced specular
+                .setKR(0.25)     // moderate reflection
+                .setShininess(40);
+
+        // Much darker, more subdued colors
+        Color darkBlue = new Color(60, 80, 120);        // darker blue
+        Color darkWhite = new Color(100, 90, 85);     // darker off-white
+        Color darkPink = new Color(100, 70, 85);        // darker pink
+        Color darkOrange = new Color(100, 60, 30);      // darker orange
+        Color darkGreen = new Color(40, 80, 40);        // darker green
+        Color darkPurple = new Color(70, 45, 90);       // darker purple
+        Color veryLightGlass = new Color(240, 245, 250); // very subtle glass tint
+        Color brightMirrorWhite = new Color(20, 25, 30);
+
         scene.geometries.add(
-                new Sphere(new Point(-500, 0, -300), 150)
-                        .setEmission(Orange)
+                // Left sphere pair
+                new Sphere(new Point(-400, 0, -200), 120)
+                        .setEmission(darkBlue)
                         .setMaterial(outerSphereMaterial),
-                new Sphere(new Point(0, 0, -300), 150)
-                        .setEmission(White)
-                        .setMaterial(outerSphereMaterial),
-
-                new Sphere(new Point(500, 0, -300), 150)
-                        .setEmission(Purple)
-                        .setMaterial(outerSphereMaterial),
-
-                new Sphere(new Point(-500, 0, -300), 75)
-                        .setEmission(Green)
+                new Sphere(new Point(-400, 0, -200), 65)
+                        .setEmission(darkOrange)
                         .setMaterial(innerSphereMaterial),
 
-                new Sphere(new Point(0, 0, -300), 75)
-                        .setEmission(Black)
+                // Center sphere pair
+                new Sphere(new Point(0, 0, -200), 120)
+                        .setEmission(darkWhite)
+                        .setMaterial(outerSphereMaterial),
+                new Sphere(new Point(0, 0, -200), 65)
+                        .setEmission(darkGreen)
                         .setMaterial(innerSphereMaterial),
 
-                new Sphere(new Point(500, 0, -300), 75)
-                        .setEmission(Pink)
+                // Right sphere pair
+                new Sphere(new Point(400, 0, -200), 120)
+                        .setEmission(darkPink)
+                        .setMaterial(outerSphereMaterial),
+                new Sphere(new Point(400, 0, -200), 65)
+                        .setEmission(darkPurple)
                         .setMaterial(innerSphereMaterial),
 
-                new Triangle(new Point(-570, -200, -100), new Point(-270, -200, -100), new Point(-270, 200, -100))
-                        .setEmission(MilkyGlass)
-                        .setMaterial(softBlurGlass),
-                new Triangle(new Point(-570, -200, -100), new Point(-570, 200, -100), new Point(-270, 200, -100))
-                        .setEmission(MilkyGlass)
-                        .setMaterial(softBlurGlass),
-                new Plane(new Vector(0, 0, 1), new Point(0, 0, -600))
-                        .setEmission(new Color(12, 12, 12)) // gray color
-                        .setMaterial(wallMaterial)
+                // Glass panels with minimal emission
+                // Left panel - clear glass
+                new Triangle(new Point(-480, -150, 50), new Point(-320, -150, 50), new Point(-320, 150, 50))
+                        .setEmission(brightMirrorWhite)   // no emission for glass
+                        .setMaterial(clearGlass),
+                new Triangle(new Point(-480, -150, 50), new Point(-480, 150, 50), new Point(-320, 150, 50))
+                        .setEmission(brightMirrorWhite)
+                        .setMaterial(clearGlass),
+
+                // Center panel - medium blur
+                new Triangle(new Point(-80, -150, 50), new Point(80, -150, 50), new Point(80, 150, 50))
+                        .setEmission(Color.BLACK)
+                        .setMaterial(mediumBlurGlass),
+                new Triangle(new Point(-80, -150, 50), new Point(-80, 150, 50), new Point(80, 150, 50))
+                        .setEmission(Color.BLACK)
+                        .setMaterial(mediumBlurGlass),
+
+                // Right panel - strong blur
+                new Triangle(new Point(320, -150, 50), new Point(480, -150, 50), new Point(480, 150, 50))
+                        .setEmission(brightMirrorWhite)
+                        .setMaterial(strongBlurGlass),
+                new Triangle(new Point(320, -150, 50), new Point(320, 150, 50), new Point(480, 150, 50))
+                        .setEmission(brightMirrorWhite)
+                        .setMaterial(strongBlurGlass),
+
+                // Darker background plane
+                new Plane(new Vector(0, 0, 1), new Point(0, 0, -500))
+                        .setEmission(new Color(25, 25, 30))  // darker background
+                        .setMaterial(backgroundMaterial)
         );
 
-        scene.setAmbientLight(new AmbientLight(new Color(40, 40, 40)));
-        scene.setBackground(new Color(3, 3, 3));
-        scene.lights.add(new SpotLight(new Color(700, 400, 400),
-                new Point(100, 100, 200),
-                new Vector(-1, -1, -2))
-                .setKl(0.0005).setKq(0.00005));
+        // Much darker lighting setup
+        scene.setAmbientLight(new AmbientLight(new Color(15, 18, 22)));  // very low ambient
+        scene.setBackground(new Color(8, 10, 12));  // very dark background
 
-        // Camera setup
+        // Reduced light intensities
+        scene.lights.add(new SpotLight(new Color(400, 350, 250),  // much dimmer main light
+                new Point(-300, -200, 300),
+                new Vector(1, 1, -1))
+                .setKl(0.0005)     // increased attenuation
+                .setKq(0.000002)   // increased attenuation
+                .setNarrowBeam(12));
+
+        // Dimmer fill light
+        scene.lights.add(new SpotLight(new Color(200, 220, 250),  // dimmer fill
+                new Point(300, -200, 250),
+                new Vector(-1, 1, -1))
+                .setKl(0.0008)
+                .setKq(0.000003)
+                .setNarrowBeam(18));
+
+        // Very subtle backlight
+        scene.lights.add(new SpotLight(new Color(80, 90, 120),    // very dim backlight
+                new Point(0, 300, 0),
+                new Vector(0, -1, -0.5))
+                .setKl(0.002)
+                .setKq(0.000008)
+                .setNarrowBeam(30));
+
+        // Same camera setup
         Camera.getBuilder()
-                .setLocation(new Point(0, 0, 1000)) // looking forward
-                .setDirection(Point.ZERO, new Vector(0, 1, 0)) // looking down -Z
-                .setVpDistance(1000)
-                .setVpSize(1200, 1000)
-                .setResolution(1200, 1000)
+                .setLocation(new Point(0, 0, 1000))
+                .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
+                .setVpDistance(800)
+                .setVpSize(1000, 800)
+                .setResolution(1200, 960)
+                .enableDiffusiveGlass()
+                .setTargetArea(RayBeamSpreadingMode.JITTER, SuperSamplingMode.EASY, TargetAreaShape.CIRCLE, 1)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build()
                 .renderImage()
