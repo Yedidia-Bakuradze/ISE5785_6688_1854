@@ -37,6 +37,12 @@ public class Material {
     public int nShininess = 0;
 
     /**
+     * Index of refraction for the material.
+     * Used for simulating refraction effects.
+     */
+    public double ior;
+
+    /**
      * Default constructor for Material.
      */
     public Material() {
@@ -160,6 +166,17 @@ public class Material {
      */
     public Material setShininess(int nShininess) {
         this.nShininess = nShininess;
+        return this;
+    }
+
+    /**
+     * Set the index of refraction.
+     *
+     * @param ior the index of refraction
+     * @return the Material object
+     */
+    public Material setIor(double ior) {
+        this.ior = ior;
         return this;
     }
 }
