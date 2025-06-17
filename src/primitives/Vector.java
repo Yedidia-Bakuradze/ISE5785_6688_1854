@@ -142,4 +142,40 @@ public class Vector extends Point {
     public Vector normalize() {
         return new Vector(xyz.reduce(this.length()));
     }
+
+    /**
+     * Calculate refracted ray using Snell's law
+     *
+     * @param normal Surface normal at intersection point (should be normalized)
+     * @param n1     Refractive index of medium ray is coming from
+     * @param n2     Refractive index of medium ray is entering
+     * @return Refracted ray direction, or null if total internal reflection occurs
+     */
+    public Vector calcSnellRefraction(Vector normal, double n1, double n2) {
+        // Calculate cosine of incident angle
+        double cosTheta1 = -this.dotProduct(normal);
+
+        // Handle ray coming from the opposite side of the surface
+        if (cosTheta1 < 0) {
+            cosTheta1 = -cosTheta1;
+            normal = normal.scale(-1);
+        }
+
+        // Calculate relative refractive index
+        double eta = n1 / n2;
+
+        // Calculate discriminant to check for total internal reflection
+        double discriminant = 1.0 - eta * eta * (1.0 - cosTheta1 * cosTheta1);
+
+        // Check for total internal reflection
+        if (discriminant < 0) return null;
+
+        // Calculate cosine of refracted angle
+        double cosTheta2 = Math.sqrt(discriminant);
+
+        // Calculate refracted ray direction using Snell's law vector form
+        return this.scale(eta)
+                .add(normal.scale(eta * cosTheta1 - cosTheta2)).normalize();
+    }
+
 }
