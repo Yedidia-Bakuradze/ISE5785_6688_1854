@@ -164,6 +164,8 @@ public class Vector extends Point {
         // Calculate relative refractive index
         double eta = n1 / n2;
 
+        if (eta == 1) return this;
+
         // Calculate discriminant to check for total internal reflection
         double discriminant = 1.0 - eta * eta * (1.0 - cosTheta1 * cosTheta1);
 
@@ -174,8 +176,6 @@ public class Vector extends Point {
         double cosTheta2 = Math.sqrt(discriminant);
 
         // Calculate refracted ray direction using Snell's law vector form
-        return this.scale(eta)
-                .add(normal.scale(eta * cosTheta1 - cosTheta2)).normalize();
+        return this.scale(eta).add(normal.scale(eta * cosTheta1 - cosTheta2)).normalize();
     }
-
 }

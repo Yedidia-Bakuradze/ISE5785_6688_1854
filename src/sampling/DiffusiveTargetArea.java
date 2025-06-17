@@ -52,9 +52,14 @@ public class DiffusiveTargetArea extends TargetAreaBase {
                 double dv = sy * radius;
 
                 // world-space target point
-                Vector offset = u.scale(du).add(v.scale(dv));
-                Point targetPoint = intersection.point.add(offset);
-                samples.add(targetPoint);
+                try {
+                    Vector offset = u.scale(du).add(v.scale(dv));
+                    Point targetPoint = intersection.point.add(offset);
+                    samples.add(targetPoint);
+                } catch (Exception e) {
+                    continue;
+                }
+
             }
         }
         return samples;

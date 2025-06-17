@@ -172,7 +172,9 @@ public class Camera implements Cloneable {
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             switch (type) {
                 case SIMPLE:
-                    camera.targetArea = new DiffusiveTargetArea(camera.mode, camera.targetAreaType, camera.samplingPattern);
+                    camera.targetArea = camera.mode == null || camera.targetAreaType == null || camera.samplingPattern == null
+                            ? null
+                            : new DiffusiveTargetArea(camera.mode, camera.targetAreaType, camera.samplingPattern);
                     camera.rayTracer = new SimpleRayTracer(scene, camera.targetArea);
                     break;
                 case GRID:
@@ -286,13 +288,13 @@ public class Camera implements Cloneable {
      */
     private RayTracerBase rayTracer = null;
 
-    private SamplingMode mode;
+    private SamplingMode mode = null;
 
-    private TargetAreaBase targetArea;
+    private TargetAreaBase targetArea = null;
 
-    private TargetAreaType targetAreaType;
+    private TargetAreaType targetAreaType = null;
 
-    private SamplingPattern samplingPattern;
+    private SamplingPattern samplingPattern = null;
 
     private boolean isDiffusiveGlassEnabled = false;
 
