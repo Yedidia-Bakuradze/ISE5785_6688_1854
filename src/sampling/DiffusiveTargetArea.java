@@ -15,21 +15,24 @@ public class DiffusiveTargetArea extends TargetAreaBase {
 
     @Override
     public List<Point> generateSamplePoints(Intersectable.Intersection intersection) {
-        // Calculate the perfect reflection direction
-        Vector R0 = intersection.rayDirection.subtract(
-                intersection.normal.scale(2 * intersection.rayDirection.dotProduct(intersection.normal))
-        );
+        // Calculate the perfect refraction direction using Snell's law (transmission through object)
+        Vector T0 = intersection.rayDirection.calcSnellRefraction(intersection.normal, 1.0, intersection.material.ior);
 
-        // Build orthonormal basis (u, v) around R0
-        Vector up = Math.abs(Vector.AXIS_Y.dotProduct(R0)) < 0.999 ? Vector.AXIS_Y : Vector.AXIS_X;
-        Vector u = R0.crossProduct(up).normalize();
-        Vector v = R0.crossProduct(u).normalize();
+        // If total internal reflection occurs, fall back to perfect transmission
+        if (T0 == null) {
+            T0 = intersection.rayDirection; // Continue in same direction
+        }
 
-        // Determine sampling grid size
+        // Build orthonormal basis (u, v) around T0 (transmitted direction)
+        Vector up = Math.abs(Vector.AXIS_Y.dotProduct(T0)) < 0.999 ? Vector.AXIS_Y : Vector.AXIS_X;
+        Vector u = T0.crossProduct(up).normalize();
+        Vector v = T0.crossProduct(u).normalize();
+
+        // Determine sampling area size based on material roughness
         double radius = intersection.material.roughness;
         List<Point> samples = new ArrayList<>(this.mode.numberSamples);
 
-        // Sample points in local (u,v) plane
+        // Sample points in local (u,v) plane around the transmitted direction
         double sx = 0, sy = 0;
         for (int y = 0; y < this.mode.gridValue && samples.size() < this.mode.numberSamples; y++) {
             for (int x = 0; x < this.mode.gridValue && samples.size() < this.mode.numberSamples; x++) {
@@ -48,14 +51,15 @@ public class DiffusiveTargetArea extends TargetAreaBase {
                 // Apply shape test
                 if (shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
 
-                // Map to actual radius
+                // Map to actual radius (controls how much the transmission scatters)
                 double du = sx * radius;
                 double dv = sy * radius;
 
-                // World-space target point
+                // World-space target point (offset from the perfect transmission direction)
                 try {
                     Vector offset = u.scale(du).add(v.scale(dv));
-                    Point targetPoint = intersection.point.add(offset);
+                    // Create target point along the scattered transmission direction
+                    Point targetPoint = intersection.point.add(T0.add(offset).normalize());
                     samples.add(targetPoint);
                 } catch (Exception e) {
                     continue;
