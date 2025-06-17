@@ -36,7 +36,17 @@ public class Material {
      */
     public int nShininess = 0;
 
-    public double ior = 1.0; // Index of refraction for transparency and reflection
+    /**
+     * Index of refraction for the material.
+     * Used for simulating refraction effects.
+     */
+    public double ior = 1.0; // Default value for air
+
+    /**
+     * Roughness factor for surface texture.
+     * Affects the appearance of the surface, with 0 being smooth and higher values indicating rougher surfaces.
+     */
+    public double roughness = 0.0; // Roughness factor for surface texture, default is 0 (smooth)
 
     /**
      * Default constructor for Material.
@@ -171,8 +181,19 @@ public class Material {
      * @param ior the index of refraction
      * @return the Material object
      */
-    public Material setIOR(double ior) {
+    public Material setIor(double ior) {
         this.ior = ior;
+        return this;
+    }
+
+    /**
+     * Set the roughness factor.
+     *
+     * @param roughness the roughness factor (between 0 and 1)
+     * @return the Material object
+     */
+    public Material setRoughness(double roughness) {
+        this.roughness = roughness;
         return this;
     }
 }

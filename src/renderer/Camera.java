@@ -142,8 +142,23 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setSamplingMode(SamplingMode mode) {
+            camera.mode = mode;
+            return this;
+        }
+
+        public Builder setTargetAreaType(TargetAreaType type) {
+            camera.targetAreaType = type;
+            return this;
+        }
+
+        public Builder setSamplingPattern(SamplingPattern pattern) {
+            camera.samplingPattern = pattern;
+            return this;
+        }
+
         public Builder enableDiffusiveGlass() {
-            camera.isDiffusiveGlass = true;
+            camera.isDiffusiveGlassEnabled = true;
             return this;
         }
 
@@ -156,18 +171,18 @@ public class Camera implements Cloneable {
          */
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             switch (type) {
-                case SIMPLE -> {
-                    camera.rayTracer = new SimpleRayTracer(scene)
-                            .setDiffusiveGlassSettings(camera.isDiffusiveGlass, camera.targetArea);
-                }
-                case GRID -> camera.rayTracer = null;
-                default -> throw new IllegalArgumentException("The type: " + type + " is invalid for the ray tracer");
+                case SIMPLE:
+                    camera.targetArea = camera.mode == null || camera.targetAreaType == null || camera.samplingPattern == null
+                            ? null
+                            : new DiffusiveTargetArea(camera.mode, camera.targetAreaType, camera.samplingPattern);
+                    camera.rayTracer = new SimpleRayTracer(scene, camera.targetArea);
+                    break;
+                case GRID:
+                    camera.rayTracer = null;
+                    break;
+                default:
+                    throw new IllegalArgumentException("The type: " + type + " is invalid for the ray tracer");
             }
-            return this;
-        }
-
-        public Builder setTargetArea(RayBeamSpreadingMode spreadingMode, SuperSamplingMode samplingMode, TargetAreaShape shape, double radius) {
-            camera.targetArea = new TargetArea(spreadingMode, samplingMode, shape, radius);
             return this;
         }
 
@@ -213,7 +228,7 @@ public class Camera implements Cloneable {
             camera.pixelWidth = camera.width / camera.nX;
             camera.pixelHeight = camera.height / camera.nY;
 
-            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null);
+            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null, camera.targetArea);
 
             return camera.clone();
         }
@@ -247,30 +262,41 @@ public class Camera implements Cloneable {
      * Height of the view plane
      */
     private double height = 0.0;
+
     /**
      * The center point of the view plane.
      */
     private Point viewPlaneCenter;
+
     /**
      * The width of a single pixel in the view plane.
      */
     private double pixelWidth;
+
     /**
      * The height of a single pixel in the view plane.
      */
     private double pixelHeight;
+
     /**
      * The image writer instance for rendering the image
      */
     private ImageWriter imageWriter;
+
     /**
      * The ray tracer instance for calculating the rays
      */
     private RayTracerBase rayTracer = null;
 
-    private TargetArea targetArea = null;
+    private SamplingMode mode = null;
 
-    private boolean isDiffusiveGlass = false;
+    private TargetAreaBase targetArea = null;
+
+    private TargetAreaType targetAreaType = null;
+
+    private SamplingPattern samplingPattern = null;
+
+    private boolean isDiffusiveGlassEnabled = false;
 
     /**
      * The number of pixels in the view plane (Rows)
@@ -307,10 +333,6 @@ public class Camera implements Cloneable {
      * @return The ray through pixel (j,i)
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        return new Ray(position, calcCenterPoint(nX, nY, j, i).subtract(position).normalize());
-    }
-
-    private Point calcCenterPoint(int nX, int nY, int j, int i) {
         double yI = -(i - (nY - 1) / 2.0) * pixelHeight;
         double xJ = (j - (nX - 1) / 2.0) * pixelWidth;
 
@@ -319,7 +341,7 @@ public class Camera implements Cloneable {
         if (!isZero(xJ)) pIJ = pIJ.add(vRight.scale(xJ));
         if (!isZero(yI)) pIJ = pIJ.add(vUp.scale(yI));
 
-        return pIJ;
+        return new Ray(position, pIJ.subtract(position).normalize());
     }
 
     /**
@@ -373,9 +395,8 @@ public class Camera implements Cloneable {
      * @param i the column that the ray should be sent on the ViewPlane
      */
     private void castRay(int j, int i) {
-        Ray centralRay = constructRay(nX, nY, j, i);
-        Color color = rayTracer.traceRay(centralRay);
+        Ray ray = constructRay(nX, nY, j, i);
+        Color color = rayTracer.traceRay(ray);
         imageWriter.writePixel(j, i, color);
     }
-
 }

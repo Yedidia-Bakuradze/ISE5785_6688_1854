@@ -134,7 +134,7 @@ class ReflectionRefractionTests {
                         .setEmission(new Color(0, 0, 100))
                         .setMaterial(new Material()
                                 .setKD(0.2).setKS(0.3).setShininess(100)
-                                .setKT(0.6).setIOR(1000)),
+                                .setKT(0.6).setIor(1000)),
 
                 // Inner solid sphere (red center)
                 new Sphere(new Point(0, 0, -70), 30d)
