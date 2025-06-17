@@ -1,7 +1,6 @@
 package renderer;
 
-import geometries.Plane;
-import geometries.Triangle;
+import geometries.*;
 import lighting.AmbientLight;
 import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
@@ -83,7 +82,6 @@ public class PersonalTest {
     @Test
     void Jug() {
         //TODO: Add Spheres
-        // Generate teapot geometry
         int[] layerRadiuses = {100, 110, 120, 130, 140, 150, 150, 160, 170, 170, 165, 160, 150, 150, 150, 120, 120};
         // Layer heights
         int[] layerHeights = {0, 25, 50, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 425, 450};
@@ -151,6 +149,51 @@ public class PersonalTest {
                 .build()
                 .renderImage()
                 .writeToImage("Jug");
+    }
+
+    /**
+     * Produce a picture of two triangles lighted by a spotlight with a
+     * partially
+     * transparent Sphere producing partial shadow
+     */
+    @Test
+    void testDiffusiveGlass() {
+        // https://www.geogebra.org/calculator/jxhczbc2
+        scene.geometries.add(
+                new Sphere(new Point(-500, 0, 0), 150)
+                        .setEmission(new Color(0, 100, 0)),
+                new Sphere(new Point(-500, 0, 0), 75),
+                new Sphere(new Point(0, 0, 0), 150)
+                        .setEmission(new Color(0, 100, 0)),
+                new Sphere(new Point(0, 0, 0), 75),
+                new Sphere(new Point(500, 0, 0), 150)
+                        .setEmission(new Color(0, 100, 0)),
+                new Sphere(new Point(500, 0, 0), 75),
+
+                new Triangle(new Point(-650, -200, -100), new Point(-350, -200, -100), new Point(-350, 200, -100))
+                        .setEmission(new Color(0, 0, 100)),
+                new Triangle(new Point(-650, -200, -100), new Point(-650, 200, -100), new Point(-350, 200, -100))
+                        .setEmission(new Color(0, 0, 100))
+        );
+
+        scene.setAmbientLight(new AmbientLight(new Color(40, 40, 40)));
+        scene.setBackground(new Color(40, 40, 40));
+        scene.lights.add(new SpotLight(new Color(700, 400, 400),
+                new Point(100, 100, 200),
+                new Vector(-1, -1, -2))
+                .setKl(0.0005).setKq(0.00005));
+
+        // Camera setup
+        Camera.getBuilder()
+                .setLocation(new Point(0, 0, 1000)) // looking forward
+                .setDirection(Point.ZERO, new Vector(0, 1, 0)) // looking down -Z
+                .setVpDistance(1000)
+                .setVpSize(1600, 1600)
+                .setResolution(800, 800)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .build()
+                .renderImage()
+                .writeToImage("Diffusive Glass Test");
     }
 
     /**
