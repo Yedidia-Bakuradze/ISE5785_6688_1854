@@ -1,6 +1,8 @@
 package sampling;
 
-import primitives.*;
+import geometries.Intersectable;
+import primitives.Point;
+import primitives.Ray;
 
 import java.util.List;
 import java.util.Random;
@@ -14,18 +16,28 @@ public abstract class TargetAreaBase {
         this.mode = mode;
     }
 
-    public List<Ray> generateRays(Point hitPoint, Vector direction, TargetAreaType shape, SamplingPattern pattern, int numSamples) {
-        List<Point> listOfPoints = switch (shape) {
-            case TargetAreaType.CIRCLE -> generateCircularSpreadPoints(hitPoint, direction, shape, pattern, numSamples);
-            case TargetAreaType.SQUARE -> generateSquaredSpreadPoints(hitPoint, direction, shape, pattern, numSamples);
-            default -> throw new IllegalArgumentException("Unsupported TargetAreaType: " + shape);
-        };
+    /**
+     * Generates secondary rays based on the intersection point and the target area shape.
+     *
+     * @param intersection contains hit point, incoming ray direction, normal, and material info
+     * @param shape        disk shape: CIRCLE or SQUARE
+     * @param pattern      sampling pattern: JITTERED or GRID
+     * @return list of secondary rays to be cast from the intersection point
+     */
+    public List<Ray> generateRays(Intersectable.Intersection intersection, TargetAreaType shape, SamplingPattern pattern) {
+        List<Point> listOfPoints = generateSamplePoints(intersection, shape, pattern);
         return listOfPoints.stream()
-                .map(point -> new Ray(hitPoint, point.subtract(hitPoint).normalize()))
+                .map(point -> new Ray(intersection.point, point.subtract(intersection.point).normalize()))
                 .toList();
     }
 
-    protected abstract List<Point> generateCircularSpreadPoints(Point hitPoint, Vector direction, TargetAreaType shape, SamplingPattern pattern, int numSamples);
-
-    protected abstract List<Point> generateSquaredSpreadPoints(Point hitPoint, Vector direction, TargetAreaType shape, SamplingPattern pattern, int numSamples);
+    /**
+     * Generates target points on a disk or square around the refracted direction.
+     *
+     * @param intersection contains hit point, incoming ray direction, normal, and material info
+     * @param shape        disk shape: CIRCLE or SQUARE
+     * @param pattern      sampling pattern: JITTERED or GRID
+     * @return list of 3D points where secondary rays will be cast
+     */
+    protected abstract List<Point> generateSamplePoints(Intersectable.Intersection intersection, TargetAreaType shape, SamplingPattern pattern);
 }
