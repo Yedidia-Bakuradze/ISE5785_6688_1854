@@ -151,6 +151,67 @@ public class PersonalTest {
                 .writeToImage("Jug");
     }
 
+    // Outer sphere: more transparent, realistic color
+    Material outerSphereMaterial = new Material()
+            .setKD(0.5)    // moderate diffuse
+            .setKS(0.2)    // subtle specular
+            .setKR(0.05)   // minimal reflection
+            .setKT(0.7)    // high transparency
+            .setShininess(40);
+
+    // Inner sphere: more solid, realistic color
+    Material innerSphereMaterial = new Material()
+            .setKD(0.8)    // strong diffuse
+            .setKS(0.3)    // moderate specular
+            .setKR(0.05)   // minimal reflection
+            .setKT(0.0)    // opaque
+            .setShininess(40);
+
+    Material wallMaterial = new Material()
+            .setKD(0.8)
+            .setKS(0.2)
+            .setKR(0.1)
+            .setShininess(30);
+
+    // Softer, less saturated milky glass color
+    Color MilkyGlass = new Color(180, 180, 190);
+
+    // Strong blur (milky, frosted glass)
+    Material strongBlurGlass = new Material()
+            .setKD(0.4)
+            .setKS(0.1)
+            .setKT(0.7)
+            .setKR(0.12)      // increased reflection
+            .setShininess(15)
+            .setIOR(1.5);
+
+    // Soft blur (mildly milky)
+    Material softBlurGlass = new Material()
+            .setKD(0.3)
+            .setKS(0.15)
+            .setKT(0.75)
+            .setKR(0.14)      // increased reflection
+            .setShininess(30)
+            .setIOR(1.45);
+
+    // Almost clear (slight milkiness)
+    Material almostClearGlass = new Material()
+            .setKD(0.2)
+            .setKS(0.2)
+            .setKT(0.8)
+            .setKR(0.16)      // increased reflection
+            .setShininess(60)
+            .setIOR(1.42); // close to real glass
+
+    // Softer, more realistic color values
+    Color Green = new Color(40, 120, 40);     // less saturated green
+    Color Black = new Color(20, 20, 20);      // deep gray instead of pure black
+    Color White = new Color(180, 180, 180);   // soft white
+    Color Skyblue = new Color(100, 160, 180);  // muted sky blue
+    Color Orange = new Color(120, 80, 20);     // softer orange
+    Color Purple = new Color(60, 20, 60);      // muted purple
+    Color Pink = new Color(200, 140, 160);
+
     /**
      * Produce a picture of two triangles lighted by a spotlight with a
      * partially
@@ -160,24 +221,42 @@ public class PersonalTest {
     void testDiffusiveGlass() {
         // https://www.geogebra.org/calculator/jxhczbc2
         scene.geometries.add(
-                new Sphere(new Point(-500, 0, 0), 150)
-                        .setEmission(new Color(0, 100, 0)),
-                new Sphere(new Point(-500, 0, 0), 75),
-                new Sphere(new Point(0, 0, 0), 150)
-                        .setEmission(new Color(0, 100, 0)),
-                new Sphere(new Point(0, 0, 0), 75),
-                new Sphere(new Point(500, 0, 0), 150)
-                        .setEmission(new Color(0, 100, 0)),
-                new Sphere(new Point(500, 0, 0), 75),
+                new Sphere(new Point(-500, 0, -300), 150)
+                        .setEmission(Orange)
+                        .setMaterial(outerSphereMaterial),
+                new Sphere(new Point(0, 0, -300), 150)
+                        .setEmission(White)
+                        .setMaterial(outerSphereMaterial),
 
-                new Triangle(new Point(-650, -200, -100), new Point(-350, -200, -100), new Point(-350, 200, -100))
-                        .setEmission(new Color(0, 0, 100)),
-                new Triangle(new Point(-650, -200, -100), new Point(-650, 200, -100), new Point(-350, 200, -100))
-                        .setEmission(new Color(0, 0, 100))
+                new Sphere(new Point(500, 0, -300), 150)
+                        .setEmission(Purple)
+                        .setMaterial(outerSphereMaterial),
+
+                new Sphere(new Point(-500, 0, -300), 75)
+                        .setEmission(Green)
+                        .setMaterial(innerSphereMaterial),
+
+                new Sphere(new Point(0, 0, -300), 75)
+                        .setEmission(Black)
+                        .setMaterial(innerSphereMaterial),
+
+                new Sphere(new Point(500, 0, -300), 75)
+                        .setEmission(Pink)
+                        .setMaterial(innerSphereMaterial),
+
+                new Triangle(new Point(-570, -200, -100), new Point(-270, -200, -100), new Point(-270, 200, -100))
+                        .setEmission(MilkyGlass)
+                        .setMaterial(softBlurGlass),
+                new Triangle(new Point(-570, -200, -100), new Point(-570, 200, -100), new Point(-270, 200, -100))
+                        .setEmission(MilkyGlass)
+                        .setMaterial(softBlurGlass),
+                new Plane(new Vector(0, 0, 1), new Point(0, 0, -600))
+                        .setEmission(new Color(12, 12, 12)) // gray color
+                        .setMaterial(wallMaterial)
         );
 
         scene.setAmbientLight(new AmbientLight(new Color(40, 40, 40)));
-        scene.setBackground(new Color(40, 40, 40));
+        scene.setBackground(new Color(3, 3, 3));
         scene.lights.add(new SpotLight(new Color(700, 400, 400),
                 new Point(100, 100, 200),
                 new Vector(-1, -1, -2))
@@ -188,8 +267,8 @@ public class PersonalTest {
                 .setLocation(new Point(0, 0, 1000)) // looking forward
                 .setDirection(Point.ZERO, new Vector(0, 1, 0)) // looking down -Z
                 .setVpDistance(1000)
-                .setVpSize(1600, 1600)
-                .setResolution(800, 800)
+                .setVpSize(1200, 1000)
+                .setResolution(1200, 1000)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build()
                 .renderImage()
