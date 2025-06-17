@@ -2,6 +2,7 @@ package renderer;
 
 import lighting.LightSource;
 import primitives.*;
+import sampling.TargetAreaBase;
 import scene.Scene;
 
 import java.util.List;
@@ -27,13 +28,16 @@ public class SimpleRayTracer extends RayTracerBase {
      */
     private static final Double3 INITIAL_K = Double3.ONE;
 
+    private final TargetAreaBase targetArea;
+
     /**
      * Initiates the simple ray tracer with a scene containing the objects
      *
      * @param scene the scene which contains the geometries that are a part of that image and scene
      */
-    SimpleRayTracer(Scene scene) {
+    SimpleRayTracer(Scene scene, TargetAreaBase targetArea) {
         super(scene);
+        this.targetArea = targetArea;
     }
 
     @Override

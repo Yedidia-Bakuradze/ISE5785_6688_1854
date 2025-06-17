@@ -1,6 +1,6 @@
 package sampling;
 
-public enum CastSamplingMode {
+public enum SamplingMode {
     EASY(2),
     DEMO(9),
     PRODUCTION(33);
@@ -8,7 +8,7 @@ public enum CastSamplingMode {
     public final int gridValue;
     public final int numberSamples;
 
-    CastSamplingMode(int value) {
+    SamplingMode(int value) {
         this.gridValue = value;
         this.numberSamples = value * value;
     }

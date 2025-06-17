@@ -1,6 +1,7 @@
 package renderer;
 
 import primitives.*;
+import sampling.*;
 import scene.Scene;
 
 import java.util.MissingResourceException;
@@ -141,6 +142,26 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setSamplingMode(SamplingMode mode) {
+            camera.mode = mode;
+            return this;
+        }
+
+        public Builder setTargetAreaType(TargetAreaType type) {
+            camera.targetAreaType = type;
+            return this;
+        }
+
+        public Builder setSamplingPattern(SamplingPattern pattern) {
+            camera.samplingPattern = pattern;
+            return this;
+        }
+
+        public Builder enableDiffusiveGlass() {
+            camera.isDiffusiveGlassEnabled = true;
+            return this;
+        }
+
         /**
          * Sets the ray that would identify and paint the intersected pixels
          *
@@ -151,7 +172,8 @@ public class Camera implements Cloneable {
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             switch (type) {
                 case SIMPLE:
-                    camera.rayTracer = new SimpleRayTracer(scene);
+                    camera.targetArea = new DiffusiveTargetArea(camera.mode, camera.targetAreaType, camera.samplingPattern);
+                    camera.rayTracer = new SimpleRayTracer(scene, camera.targetArea);
                     break;
                 case GRID:
                     camera.rayTracer = null;
@@ -204,7 +226,7 @@ public class Camera implements Cloneable {
             camera.pixelWidth = camera.width / camera.nX;
             camera.pixelHeight = camera.height / camera.nY;
 
-            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null);
+            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null, camera.targetArea);
 
             return camera.clone();
         }
@@ -263,6 +285,16 @@ public class Camera implements Cloneable {
      * The ray tracer instance for calculating the rays
      */
     private RayTracerBase rayTracer = null;
+
+    private SamplingMode mode;
+
+    private TargetAreaBase targetArea;
+
+    private TargetAreaType targetAreaType;
+
+    private SamplingPattern samplingPattern;
+
+    private boolean isDiffusiveGlassEnabled = false;
 
     /**
      * The number of pixels in the view plane (Rows)

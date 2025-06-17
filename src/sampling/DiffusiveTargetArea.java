@@ -9,12 +9,12 @@ import java.util.List;
 
 public class DiffusiveTargetArea extends TargetAreaBase {
 
-    public DiffusiveTargetArea(CastSamplingMode mode) {
-        super(mode);
+    public DiffusiveTargetArea(SamplingMode mode, TargetAreaType shape, SamplingPattern pattern) {
+        super(mode, shape, pattern);
     }
 
     @Override
-    public List<Point> generateSamplePoints(Intersectable.Intersection intersection, TargetAreaType shape, SamplingPattern pattern) {
+    public List<Point> generateSamplePoints(Intersectable.Intersection intersection) {
         Vector R0 = intersection.rayDirection.calcSnellRefraction(intersection.normal, 1.0, intersection.geometry.getMaterial().ior);
 
         // 2. build orthonormal basis (u, v) around R0
