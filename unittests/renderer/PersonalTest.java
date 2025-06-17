@@ -158,33 +158,31 @@ public class PersonalTest {
      */
     @Test
     void testDiffusiveGlass() {
-        // Darker glass materials with reduced emission
         Material clearGlass = new Material()
-                .setKD(0.05)     // reduced diffuse
-                .setKS(0.4)
-                .setKT(0.90)     // higher transparency
-                .setKR(0.06)
-                .setShininess(100)
-                .setRoughness(0.05)
-                .setIor(1.52);
+                .setKR(0.3)           // High reflection
+                .setKD(0.4)           // Low diffuse
+                .setKS(0.2)           // High specular
+                .setKT(0.5)
+                .setRoughness(0.05)   // Very small roughness for subtle blur
+                .setIor(1.5);         // Glass-like IOR
 
+        // 2. Medium Blurred Mirror (frosted mirror, etched glass)
         Material mediumBlurGlass = new Material()
-                .setKD(0.1)
-                .setKS(0.3)
-                .setKT(0.85)
-                .setKR(0.08)
-                .setShininess(70)
-                .setRoughness(0.4)
-                .setIor(1.8);
+                .setKR(0.8)           // Good reflection but reduced
+                .setKD(0.2)           // Slightly more diffuse
+                .setKS(0.6)           // Reduced specular
+                .setShininess(50)
+                .setRoughness(0.15)   // Medium roughness for noticeable blur
+                .setIor(1.5);         // Standard glass IOR
 
+        // 3. Heavily Blurred Mirror (heavily frosted, sandblasted surface)
         Material strongBlurGlass = new Material()
-                .setKD(0.2)
-                .setKS(0.2)
-                .setKT(0.75)
-                .setKR(0.12)
-                .setShininess(40)
-                .setRoughness(0.8)
-                .setIor(2.2);
+                .setKR(0.6)           // Reduced reflection
+                .setKD(0.4)           // Higher diffuse component
+                .setKS(0.3)           // Low specular
+                .setShininess(20)
+                .setRoughness(0.35)   // High roughness for strong blur effect
+                .setIor(1.5);
 
         // Darker outer sphere material
         Material outerSphereMaterial = new Material()
@@ -216,7 +214,7 @@ public class PersonalTest {
         Color darkGreen = new Color(40, 80, 40);        // darker green
         Color darkPurple = new Color(70, 45, 90);       // darker purple
         Color veryLightGlass = new Color(240, 245, 250); // very subtle glass tint
-        Color brightMirrorWhite = new Color(20, 25, 30);
+        Color brightMirrorWhite = new Color(150, 145, 160); // very subtle white for glass panels
 
         scene.geometries.add(
                 // Left sphere pair
@@ -314,7 +312,7 @@ public class PersonalTest {
         Camera.getBuilder()
                 .setLocation(new Point(0, 0, 1000))
                 .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
-                .setVpDistance(800)
+                .setVpDistance(1000)
                 .setVpSize(1000, 800)
                 .setResolution(1200, 960)
                 .enableDiffusiveGlass()

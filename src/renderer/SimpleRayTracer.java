@@ -112,20 +112,27 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return the color contribution from all global effects
      */
     private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
-        if (targetArea == null)
-            return calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT)
-                    .add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
-
         Color refractionColor = calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT);
-        List<Ray> reflectionRays = calcReflectionRays(intersection);
 
-        Color reflectionColor = reflectionRays.stream()
-                .map(reflectionRay -> calcGlobalEffect(reflectionRay, level, k, intersection.material.kR))
-                .reduce(Color.BLACK, Color::add);
+        Color reflectionColor;
 
-        // Average the reflection color
-        if (!reflectionRays.isEmpty()) {
-            reflectionColor = reflectionColor.reduce(reflectionRays.size());
+        // Check if this material should use diffusive reflection
+        // Only use diffusive reflection if targetArea is available AND material has roughness > 0
+        if (targetArea != null && intersection.material.roughness > 0.0) {
+            // Use diffusive reflection for rough surfaces
+            List<Ray> reflectionRays = calcReflectionRays(intersection);
+
+            reflectionColor = reflectionRays.stream()
+                    .map(reflectionRay -> calcGlobalEffect(reflectionRay, level, k, intersection.material.kR))
+                    .reduce(Color.BLACK, Color::add);
+
+            // Average the reflection color
+            if (!reflectionRays.isEmpty()) {
+                reflectionColor = reflectionColor.reduce(reflectionRays.size());
+            }
+        } else {
+            // Use perfect reflection for smooth surfaces (mirrors, etc.)
+            reflectionColor = calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR);
         }
 
         return refractionColor.add(reflectionColor);

@@ -15,43 +15,44 @@ public class DiffusiveTargetArea extends TargetAreaBase {
 
     @Override
     public List<Point> generateSamplePoints(Intersectable.Intersection intersection) {
-        Vector R0 = intersection.rayDirection.calcSnellRefraction(intersection.normal, 1.0, intersection.geometry.getMaterial().ior);
+        // Calculate the perfect reflection direction
+        Vector R0 = intersection.rayDirection.subtract(
+                intersection.normal.scale(2 * intersection.rayDirection.dotProduct(intersection.normal))
+        );
 
-        // 2. build orthonormal basis (u, v) around R0
+        // Build orthonormal basis (u, v) around R0
         Vector up = Math.abs(Vector.AXIS_Y.dotProduct(R0)) < 0.999 ? Vector.AXIS_Y : Vector.AXIS_X;
         Vector u = R0.crossProduct(up).normalize();
         Vector v = R0.crossProduct(u).normalize();
 
-        // 3. determine sampling grid size
+        // Determine sampling grid size
         double radius = intersection.material.roughness;
         List<Point> samples = new ArrayList<>(this.mode.numberSamples);
 
-        // 4. sample points in local (u,v) plane
+        // Sample points in local (u,v) plane
         double sx = 0, sy = 0;
         for (int y = 0; y < this.mode.gridValue && samples.size() < this.mode.numberSamples; y++) {
             for (int x = 0; x < this.mode.gridValue && samples.size() < this.mode.numberSamples; x++) {
-                // compute local offsets in [-1,1]
+                // Compute local offsets in [-1,1]
                 switch (pattern) {
                     case SamplingPattern.GRID -> {
                         sx = (2.0 * x + 1) / this.mode.gridValue - 1.0;
                         sy = (2.0 * y + 1) / this.mode.gridValue - 1.0;
-                        break;
                     }
                     case SamplingPattern.JITTERED -> {
                         sx = (2.0 * (x + this.random.nextDouble()) / this.mode.gridValue) - 1.0;
                         sy = (2.0 * (y + this.random.nextDouble()) / this.mode.gridValue) - 1.0;
-                        break;
                     }
                 }
 
-                // apply shape test
+                // Apply shape test
                 if (shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
 
-                // map to actual radius
+                // Map to actual radius
                 double du = sx * radius;
                 double dv = sy * radius;
 
-                // world-space target point
+                // World-space target point
                 try {
                     Vector offset = u.scale(du).add(v.scale(dv));
                     Point targetPoint = intersection.point.add(offset);
@@ -59,7 +60,6 @@ public class DiffusiveTargetArea extends TargetAreaBase {
                 } catch (Exception e) {
                     continue;
                 }
-
             }
         }
         return samples;
