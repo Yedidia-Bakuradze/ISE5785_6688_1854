@@ -17,11 +17,11 @@ public class SimpleRayTracer extends RayTracerBase {
     /**
      * The maximum recursion level for color calculation.
      */
-    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    protected static final int MAX_CALC_COLOR_LEVEL = 10;
     /**
      * The minimum value for color contribution to be considered.
      */
-    private static final double MIN_CALC_COLOR_K = 0.001;
+    protected static final double MIN_CALC_COLOR_K = 0.001;
     /**
      * The initial k value for color calculation.
      */
@@ -50,7 +50,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param ray The ray to check for intersections.
      * @return The closest intersection, or null if none.
      */
-    public Intersection findClosestIntersection(Ray ray) {
+    private Intersection findClosestIntersection(Ray ray) {
         return ray.findClosestIntersection(scene.geometries.calculateIntersections(ray));
     }
 
@@ -76,7 +76,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param k            the color attenuation factor
      * @return the calculated color to paint that pixel with
      */
-    private Color calcColor(Intersection intersection, int level, Double3 k) {
+    protected Color calcColor(Intersection intersection, int level, Double3 k) {
         Color color = calcColorLocalEffects(intersection, k);
         return 1 == level ? color : color.add(calcGlobalEffects(intersection, level, k));
     }
@@ -90,7 +90,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param kx          the effect coefficient
      * @return the color contribution from the global effect
      */
-    private Color calcGlobalEffect(Ray interactRay, int level, Double3 k, Double3 kx) {
+    protected Color calcGlobalEffect(Ray interactRay, int level, Double3 k, Double3 kx) {
         Double3 kkx = kx.product(k);
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
         Intersection closestIntersection = findClosestIntersection(interactRay);
@@ -107,7 +107,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param k            the color attenuation factor
      * @return the color contribution from all global effects
      */
-    private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
+    protected Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
         return calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT)
                 .add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
     }
@@ -119,7 +119,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param rayDirection The direction of the ray.
      * @return True if preprocessing is successful, false otherwise.
      */
-    private boolean preprocessIntersection(Intersection intersection, Vector rayDirection) {
+    protected boolean preprocessIntersection(Intersection intersection, Vector rayDirection) {
         intersection.rayDirection = rayDirection;
         intersection.normal = intersection.geometry.getNormal(intersection.point);
         intersection.rayNormalProduct = alignZero(intersection.rayDirection.dotProduct(intersection.normal));
@@ -204,7 +204,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param intersection The intersection to calculate the reflection ray for.
      * @return The reflection ray.
      */
-    private Ray calcReflectionRay(Intersection intersection) {
+    protected Ray calcReflectionRay(Intersection intersection) {
         return new Ray(intersection.point, calcReflection(intersection, intersection.rayDirection), intersection.normal);
     }
 
@@ -214,7 +214,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param intersection The intersection to calculate the refraction ray for.
      * @return The refraction ray.
      */
-    private Ray calcRefractionRay(Intersection intersection) {
+    protected Ray calcRefractionRay(Intersection intersection) {
         return new Ray(intersection.point, intersection.rayDirection, intersection.normal);
     }
 

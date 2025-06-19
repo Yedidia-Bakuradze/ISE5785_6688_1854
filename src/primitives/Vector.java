@@ -2,6 +2,8 @@ package primitives;
 
 import java.util.List;
 
+import static primitives.Util.isZero;
+
 /**
  * Represents a vector in 3D space.
  * Provides methods for vector arithmetic and operations such as dot product and cross product.
@@ -166,13 +168,13 @@ public class Vector extends Point {
         // Calculate relative refractive index
         double eta = n1 / n2;
 
-        if (eta == 1) return this;
+        if (isZero(eta - 1)) return this;
 
         // Calculate discriminant to check for total internal reflection
         double discriminant = 1.0 - eta * eta * (1.0 - cosTheta1 * cosTheta1);
 
         // Check for total internal reflection
-        if (discriminant < 0) return this;
+        if (discriminant < 0) return null;
 
         // Calculate cosine of refracted angle
         double cosTheta2 = Math.sqrt(discriminant);
@@ -185,12 +187,18 @@ public class Vector extends Point {
      * Creates a new orthogonal coordinate system based on a main direction vector.
      * This is useful for distributing samples around a given direction vector.
      *
-     * @param main      The main direction vector that will be one axis of the coordinate system
-     * @param direction A secondary vector used to establish the plane for the other axes
      * @return A list containing two vectors that, along with main, form an orthogonal coordinate system
      */
-    public static List<Vector> getNewCoordinateSystems(Vector main, Vector direction) {
-        Vector w = direction.subtract(main.scale(direction.dotProduct(main))).normalize();
-        return List.of(w.normalize(), main.crossProduct(w).normalize());
+    public List<Vector> getNewCoordinateSystems() {
+        Vector w = getOrthogonalNormalized();
+        return List.of(w, crossProduct(w).normalize());
+    }
+
+    public Vector getOrthogonalNormalized() {
+        try {
+            return new Vector(-xyz.d2(), xyz.d1(), 0).normalize();
+        } catch (IllegalArgumentException ignored) {
+            return new Vector(0, -xyz.d3(), xyz.d2()).normalize();
+        }
     }
 }

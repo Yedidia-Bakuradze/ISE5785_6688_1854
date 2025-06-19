@@ -26,6 +26,8 @@ public abstract class TargetAreaBase {
         this.config = config;
     }
 
+    //TODO Implementation should be better for other effects usages
+
     /**
      * Generates target points on a disk or square around the refracted direction.
      *
@@ -42,4 +44,5 @@ public abstract class TargetAreaBase {
      * @return A list of rays generated according to the sampling pattern and shape
      */
     public abstract List<Ray> generateRays(Intersectable.Intersection intersection);
+
 }
