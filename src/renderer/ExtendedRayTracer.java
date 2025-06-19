@@ -11,6 +11,11 @@ import java.util.Map;
 
 import static primitives.Util.alignZero;
 
+/**
+ * Extended ray tracer with support for advanced visual effects like soft shadows,
+ * diffusive glass, depth of field, and anti-aliasing through multiple sampling techniques.
+ * Extends the basic ray tracer with distribution ray capabilities.
+ */
 public class ExtendedRayTracer extends RayTracerBase {
 
     /**
@@ -32,9 +37,10 @@ public class ExtendedRayTracer extends RayTracerBase {
     private final Map<EffectType, TargetAreaBase> targetArea;
 
     /**
-     * Constructs a RayTracerBase with the specified scene.
+     * Constructs an extended ray tracer with the specified scene and target areas for special effects.
      *
-     * @param scene The scene to be rendered.
+     * @param scene      The scene to be rendered.
+     * @param targetArea Map of effect types to their respective target area implementations
      */
     public ExtendedRayTracer(Scene scene, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene);

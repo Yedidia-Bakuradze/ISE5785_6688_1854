@@ -14,7 +14,7 @@ public enum RayTracerType {
     GRID,
 
     /**
-     *
+     * Ray tracer with advanced effects like diffuse glass, soft shadows, and depth of field
      */
     EXTENDED
 }

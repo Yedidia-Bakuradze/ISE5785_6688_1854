@@ -158,13 +158,7 @@ public class Camera implements Cloneable {
          * @return The builder instance for method chaining
          */
         public Builder setEffect(EffectType type, SamplingConfiguration config) {
-            switch (type) {
-                case DIFFUSIVE_GLASS -> camera.targetAreas.put(type, new DiffusiveTargetArea(config));
-//                case DEPTH_OF_FIELD -> camera.featureTargetAreas.put(type, new DepthOfFieldTargetArea(config));
-//                case ANTI_ALIASING -> camera.featureTargetAreas.put(type, new AntiAliasingTargetArea(config));
-//                case SOFT_SHADOW -> camera.featureTargetAreas.put(type, new SoftShadowTargetArea(config));
-//                case GLOSSY_REFLECTION -> camera.featureTargetAreas.put(type, new GlossyReflectionTargetArea(config));
-            }
+            camera.targetAreas.put(type, SamplerFactory.createSampler(type, config));
             return this;
         }
 
@@ -280,7 +274,7 @@ public class Camera implements Cloneable {
     /**
      * Amount of threads to use fore rendering image by the camera
      */
-    private int threadsCount = -1;
+    private int threadsCount = 0;
     /**
      * Amount of threads to spare for Java VM threads:<br>
      * Spare threads if trying to use all the cores
@@ -355,6 +349,10 @@ public class Camera implements Cloneable {
      */
     private RayTracerBase rayTracer = null;
 
+    /**
+     * Map of special effect targets for different rendering effects.
+     * Maps each effect type to its corresponding target area implementation.
+     */
     private final Map<EffectType, TargetAreaBase> targetAreas = new HashMap<>();
 
     /**

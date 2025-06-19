@@ -12,6 +12,9 @@ import java.util.List;
  */
 public abstract class TargetAreaBase {
 
+    /**
+     * Configuration parameters for the sampling strategy
+     */
     protected final SamplingConfiguration config;
 
     /**
@@ -31,5 +34,12 @@ public abstract class TargetAreaBase {
      */
     protected abstract List<Point> getSamplePoints(Intersectable.Intersection intersection);
 
+    /**
+     * Generates a list of rays based on the sampling configuration and intersection.
+     * These rays are used for special effects like diffusive glass and depth of field.
+     *
+     * @param intersection The intersection point with information about material, normal, etc.
+     * @return A list of rays generated according to the sampling pattern and shape
+     */
     public abstract List<Ray> generateRays(Intersectable.Intersection intersection);
 }

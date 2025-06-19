@@ -181,6 +181,14 @@ public class Vector extends Point {
         return this.scale(eta).add(normal.scale(eta * cosTheta1 - cosTheta2)).normalize();
     }
 
+    /**
+     * Creates a new orthogonal coordinate system based on a main direction vector.
+     * This is useful for distributing samples around a given direction vector.
+     *
+     * @param main      The main direction vector that will be one axis of the coordinate system
+     * @param direction A secondary vector used to establish the plane for the other axes
+     * @return A list containing two vectors that, along with main, form an orthogonal coordinate system
+     */
     public static List<Vector> getNewCoordinateSystems(Vector main, Vector direction) {
         Vector w = direction.subtract(main.scale(direction.dotProduct(main))).normalize();
         return List.of(w.normalize(), main.crossProduct(w).normalize());

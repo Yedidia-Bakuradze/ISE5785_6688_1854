@@ -147,6 +147,8 @@ public class PersonalTest {
                 .setVpDistance(700)
                 .setVpSize(800, 800)
                 .setResolution(800, 800)
+                .setMultithreading(-2)
+                .setDebugPrint(0.5)
                 .build()
                 .renderImage()
                 .writeToImage("Jug");
@@ -309,6 +311,8 @@ public class PersonalTest {
                 .setResolution(1200, 960)
                 .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.MEDIUM, TargetAreaType.SQUARE, SamplingPattern.GRID, 1))
                 .setRayTracer(scene, RayTracerType.EXTENDED)
+                .setMultithreading(-1)
+                .setDebugPrint(0.3)
                 .build()
                 .renderImage()
                 .writeToImage("Diffusive Glass Test");

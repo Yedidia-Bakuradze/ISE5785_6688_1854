@@ -10,6 +10,9 @@ public enum SamplingMode {
      */
     EASY(2),
 
+    /**
+     * Medium quality sampling with 5x5 grid (25 samples)
+     */
     MEDIUM(5),
 
     /**
