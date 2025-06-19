@@ -17,12 +17,10 @@ public class DiffusiveTargetArea extends TargetAreaBase {
     /**
      * Constructs a diffusive target area for generating scattered ray samples
      *
-     * @param mode    The sampling mode that controls the number of samples generated
-     * @param shape   The shape of the sampling area (circle or square)
-     * @param pattern The distribution pattern of samples (grid, random, jittered)
+     * @param config The sampling configuration containing mode, shape, and pattern settings
      */
-    public DiffusiveTargetArea(SamplingMode mode, TargetAreaType shape, SamplingPattern pattern) {
-        super(mode, shape, pattern);
+    public DiffusiveTargetArea(SamplingConfiguration config) {
+        super(config);
     }
 
     @Override
