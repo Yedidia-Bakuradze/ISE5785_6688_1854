@@ -2,6 +2,7 @@ package sampling;
 
 import geometries.Intersectable;
 import primitives.Point;
+import primitives.Ray;
 
 import java.util.List;
 
@@ -28,5 +29,7 @@ public abstract class TargetAreaBase {
      * @param intersection contains hit point, incoming ray direction, normal, and material info
      * @return list of 3D points where secondary rays will be cast
      */
-    public abstract List<Point> generateSamplePoints(Intersectable.Intersection intersection);
+    protected abstract List<Point> generateSamplePoints(Intersectable.Intersection intersection);
+
+    public abstract List<Ray> generateRays(Intersectable.Intersection intersection);
 }
