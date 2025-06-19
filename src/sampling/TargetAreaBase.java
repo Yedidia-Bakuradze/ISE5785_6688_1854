@@ -29,7 +29,7 @@ public abstract class TargetAreaBase {
      * @param intersection contains hit point, incoming ray direction, normal, and material info
      * @return list of 3D points where secondary rays will be cast
      */
-    protected abstract List<Point> generateSamplePoints(Intersectable.Intersection intersection);
+    protected abstract List<Point> getSamplePoints(Intersectable.Intersection intersection);
 
     public abstract List<Ray> generateRays(Intersectable.Intersection intersection);
 }

@@ -23,7 +23,7 @@ public class DiffusiveTargetArea extends TargetAreaBase {
     }
 
     @Override
-    protected List<Point> generateSamplePoints(Intersectable.Intersection intersection) {
+    protected List<Point> getSamplePoints(Intersectable.Intersection intersection) {
         // Calculate the perfect refraction direction using Snell's law (transmission through object)
         Vector T0 = intersection.rayDirection.calcSnellRefraction(intersection.normal, Material.AIR_IOR, intersection.material.ior);
 
@@ -32,13 +32,22 @@ public class DiffusiveTargetArea extends TargetAreaBase {
         Vector v = listOfCoordinates.get(1);
 
         return switch (this.config.pattern) {
-            case SamplingPattern.JITTERED -> generateSamplesJittered(intersection, u, v);
-            case SamplingPattern.RANDOM -> generateSamplesRandom(intersection, u, v);
-            case SamplingPattern.GRID -> generateSamplesGrid(intersection, u, v);
+            case SamplingPattern.JITTERED -> generateSamplesJittered(intersection, T0, u, v);
+            case SamplingPattern.RANDOM -> generateSamplesRandom(intersection, T0, u, v);
+            case SamplingPattern.GRID -> generateSamplesGrid(intersection, T0, u, v);
         };
     }
 
-    private List<Point> generateSamplesJittered(Intersectable.Intersection intersection, Vector u, Vector v) {
+    /**
+     * Generates sample points in a jittered grid pattern around the intersection point.
+     *
+     * @param intersection The intersection point and material properties
+     * @param T0           The transmission vector calculated from Snell's law
+     * @param u            The first orthogonal vector in the new coordinate system
+     * @param v            The second orthogonal vector in the new coordinate system
+     * @return A list of sample points for the diffusive effect
+     */
+    private List<Point> generateSamplesJittered(Intersectable.Intersection intersection, Vector T0, Vector u, Vector v) {
         List<Point> samples = new ArrayList<>(this.config.mode.numberSamples);
         double sx, sy;
 
@@ -51,46 +60,60 @@ public class DiffusiveTargetArea extends TargetAreaBase {
                 if (config.shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
 
                 // Map to actual radius (controls how much the transmission scatters)
-                double du = sx * intersection.material.roughness;
-                double dv = sy * intersection.material.roughness;
-
-                // World-space target point (offset from the perfect transmission direction)
-                Vector offset = u.scale(du).add(v.scale(dv));
-                // Create target point along the scattered transmission direction
-                Point targetPoint = intersection.point.add(intersection.rayDirection.add(offset).normalize().scale(this.config.distance));
-                samples.add(targetPoint);
+                samples.add(intersection.point.add(T0
+                        .add(u.scale(sx * intersection.material.roughness))
+                        .add(v.scale(sy * intersection.material.roughness))
+                        .normalize()
+                        .scale(this.config.distance)
+                ));
             }
         }
         return samples;
     }
 
-    private List<Point> generateSamplesGrid(Intersectable.Intersection intersection, Vector u, Vector v) {
+    /**
+     * Generates sample points in a grid pattern around the intersection point.
+     *
+     * @param intersection The intersection point and material properties
+     * @param T0           The transmission vector calculated from Snell's law
+     * @param u            The first orthogonal vector in the new coordinate system
+     * @param v            The second orthogonal vector in the new coordinate system
+     * @return A list of sample points for the diffusive effect
+     */
+    private List<Point> generateSamplesGrid(Intersectable.Intersection intersection, Vector T0, Vector u, Vector v) {
         List<Point> samples = new ArrayList<>(this.config.mode.numberSamples);
         double sx, sy;
 
         for (int y = 0; y < this.config.mode.gridValue && samples.size() < this.config.mode.numberSamples; y++) {
             for (int x = 0; x < this.config.mode.gridValue && samples.size() < this.config.mode.numberSamples; x++) {
-                sx = (2.0 * x + 1) / this.config.mode.gridValue - 1.0;
-                sy = (2.0 * y + 1) / this.config.mode.gridValue - 1.0;
+                sx = (2.0 * x + 0.5) / this.config.mode.gridValue - 1.0;
+                sy = (2.0 * y + 0.5) / this.config.mode.gridValue - 1.0;
 
                 // Apply shape test
                 if (config.shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
 
                 // Map to actual radius (controls how much the transmission scatters)
-                double du = sx * intersection.material.roughness;
-                double dv = sy * intersection.material.roughness;
-
-                // World-space target point (offset from the perfect transmission direction)
-                Vector offset = u.scale(du).add(v.scale(dv));
-                // Create target point along the scattered transmission direction
-                Point targetPoint = intersection.point.add(intersection.rayDirection.add(offset).normalize().scale(this.config.distance));
-                samples.add(targetPoint);
+                samples.add(intersection.point.add(T0
+                        .add(u.scale(sx * intersection.material.roughness))
+                        .add(v.scale(sy * intersection.material.roughness))
+                        .normalize()
+                        .scale(this.config.distance)
+                ));
             }
         }
         return samples;
     }
 
-    private List<Point> generateSamplesRandom(Intersectable.Intersection intersection, Vector u, Vector v) {
+    /**
+     * Generates sample points in a random pattern around the intersection point.
+     *
+     * @param intersection The intersection point and material properties
+     * @param T0           The transmission vector calculated from Snell's law
+     * @param u            The first orthogonal vector in the new coordinate system
+     * @param v            The second orthogonal vector in the new coordinate system
+     * @return A list of sample points for the diffusive effect
+     */
+    private List<Point> generateSamplesRandom(Intersectable.Intersection intersection, Vector T0, Vector u, Vector v) {
         List<Point> samples = new ArrayList<>(this.config.mode.numberSamples);
         double sx, sy;
 
@@ -102,7 +125,7 @@ public class DiffusiveTargetArea extends TargetAreaBase {
             if (config.shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
 
             // Map to actual radius (controls how much the transmission scatters)
-            samples.add(intersection.point.add(intersection.rayDirection
+            samples.add(intersection.point.add(T0
                     .add(u.scale(sx * intersection.material.roughness))
                     .add(v.scale(sy * intersection.material.roughness))
                     .normalize()
@@ -114,7 +137,7 @@ public class DiffusiveTargetArea extends TargetAreaBase {
 
     @Override
     public List<Ray> generateRays(Intersectable.Intersection intersection) {
-        return generateSamplePoints(intersection).stream()
+        return getSamplePoints(intersection).stream()
                 .map(point -> new Ray(intersection.point, point.subtract(intersection.point).normalize(), intersection.normal))
                 .toList();
     }

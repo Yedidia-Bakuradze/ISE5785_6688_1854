@@ -1,11 +1,11 @@
 package renderer;
 
 import primitives.*;
+import primitives.Vector;
 import sampling.*;
 import scene.Scene;
 
-import java.util.LinkedList;
-import java.util.MissingResourceException;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static primitives.Util.*;
@@ -15,29 +15,6 @@ import static primitives.Util.*;
  * The camera defines the view point and direction for rendering images
  */
 public class Camera implements Cloneable {
-
-    /**
-     * Amount of threads to use fore rendering image by the camera
-     */
-    private int threadsCount = -1;
-    /**
-     * Amount of threads to spare for Java VM threads:<br>
-     * Spare threads if trying to use all the cores
-     */
-    private static final int SPARE_THREADS = 2;
-    /**
-     * Debug print interval in seconds (for progress percentage)<br>
-     * if it is zero - there is no progress output
-     */
-    private double printInterval = 0;
-    /**
-     * Pixel manager for supporting:
-     * <ul>
-     * <li>multi-threading</li>
-     * <li>debug print of progress percentage in Console window/tab</li>
-     * </ul>
-     */
-    private PixelManager pixelManager;
 
     /**
      * Creates a deep copy of the camera object
@@ -59,9 +36,14 @@ public class Camera implements Cloneable {
     public static class Builder {
 
         /**
-         * Default constructor for the builder to make the JavaDoc error to be gone
+         * Default constructor that initializes the camera with default target areas
          */
         public Builder() {
+            camera.targetAreas.put(EffectType.DIFFUSIVE_GLASS, null);
+            camera.targetAreas.put(EffectType.DEPTH_OF_FIELD, null);
+            camera.targetAreas.put(EffectType.ANTI_ALIASING, null);
+            camera.targetAreas.put(EffectType.SOFT_SHADOW, null);
+            camera.targetAreas.put(EffectType.GLOSSY_REFLECTION, null);
         }
 
         /**
@@ -169,47 +151,20 @@ public class Camera implements Cloneable {
         }
 
         /**
-         * Sets the sampling mode for anti-aliasing and improved rendering
+         * Sets the effect type and its configuration for the camera
          *
-         * @param mode The sampling mode to use (determines the number of samples per pixel)
+         * @param type   The type of effect to apply
+         * @param config The sampling configuration for the effect
          * @return The builder instance for method chaining
          */
-        public Builder setSamplingMode(SamplingMode mode) {
-            camera.mode = mode;
-            return this;
-        }
-
-        /**
-         * Sets the type of target area for ray distribution
-         *
-         * @param type The type of area (circle or square) for ray sampling
-         * @return The builder instance for method chaining
-         */
-        public Builder setTargetAreaType(TargetAreaType type) {
-            camera.targetAreaType = type;
-            return this;
-        }
-
-        /**
-         * Sets the pattern used for distributing sample rays
-         *
-         * @param pattern The sampling pattern (grid, random, or jittered) to use
-         * @return The builder instance for method chaining
-         */
-        public Builder setSamplingPattern(SamplingPattern pattern) {
-            camera.samplingPattern = pattern;
-            return this;
-        }
-
-        /**
-         * Enables diffusive glass effects for transparent materials
-         * When enabled, rays passing through transparent materials will be scattered
-         * based on the material's roughness factor
-         *
-         * @return The builder instance for method chaining
-         */
-        public Builder enableDiffusiveGlass() {
-            camera.isDiffusiveGlassEnabled = true;
+        public Builder setEffect(EffectType type, SamplingConfiguration config) {
+            switch (type) {
+                case DIFFUSIVE_GLASS -> camera.targetAreas.put(type, new DiffusiveTargetArea(config));
+//                case DEPTH_OF_FIELD -> camera.featureTargetAreas.put(type, new DepthOfFieldTargetArea(config));
+//                case ANTI_ALIASING -> camera.featureTargetAreas.put(type, new AntiAliasingTargetArea(config));
+//                case SOFT_SHADOW -> camera.featureTargetAreas.put(type, new SoftShadowTargetArea(config));
+//                case GLOSSY_REFLECTION -> camera.featureTargetAreas.put(type, new GlossyReflectionTargetArea(config));
+            }
             return this;
         }
 
@@ -223,13 +178,13 @@ public class Camera implements Cloneable {
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             switch (type) {
                 case SIMPLE:
-                    camera.targetArea = camera.mode == null || camera.targetAreaType == null || camera.samplingPattern == null
-                            ? null
-                            : new DiffusiveTargetArea(camera.mode, camera.targetAreaType, camera.samplingPattern);
-                    camera.rayTracer = new SimpleRayTracer(scene, camera.targetArea);
+                    camera.rayTracer = new SimpleRayTracer(scene);
                     break;
                 case GRID:
                     camera.rayTracer = null;
+                    break;
+                case EXTENDED:
+                    camera.rayTracer = new ExtendedRayTracer(scene, camera.targetAreas);
                     break;
                 default:
                     throw new IllegalArgumentException("The type: " + type + " is invalid for the ray tracer");
@@ -315,11 +270,36 @@ public class Camera implements Cloneable {
             camera.pixelWidth = camera.width / camera.nX;
             camera.pixelHeight = camera.height / camera.nY;
 
-            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null, camera.targetArea);
+            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null);
 
             return camera.clone();
         }
     }
+
+    // ========================== Multi-threading parameters ==========================
+    /**
+     * Amount of threads to use fore rendering image by the camera
+     */
+    private int threadsCount = -1;
+    /**
+     * Amount of threads to spare for Java VM threads:<br>
+     * Spare threads if trying to use all the cores
+     */
+    private static final int SPARE_THREADS = 2;
+    /**
+     * Debug print interval in seconds (for progress percentage)<br>
+     * if it is zero - there is no progress output
+     */
+    private double printInterval = 0;
+    /**
+     * Pixel manager for supporting:
+     * <ul>
+     * <li>multi-threading</li>
+     * <li>debug print of progress percentage in Console window/tab</li>
+     * </ul>
+     */
+    private PixelManager pixelManager;
+    // =================================================================================
 
     /**
      * The position of the camera in 3D space
@@ -375,31 +355,7 @@ public class Camera implements Cloneable {
      */
     private RayTracerBase rayTracer = null;
 
-    /**
-     * The sampling mode that defines the number of samples per pixel for super sampling
-     */
-    private SamplingMode mode = null;
-
-    /**
-     * The target area object used for ray distribution in effects like depth of field or soft shadows
-     */
-    private TargetAreaBase targetArea = null;
-
-    /**
-     * The type of area for ray distribution (circle or square)
-     */
-    private TargetAreaType targetAreaType = null;
-
-    /**
-     * The pattern used for sampling ray distribution (grid, random, or jittered)
-     */
-    private SamplingPattern samplingPattern = null;
-
-    /**
-     * Flag indicating whether diffusive glass effects are enabled
-     * When enabled, transparent materials with roughness will scatter transmitted rays
-     */
-    private boolean isDiffusiveGlassEnabled = false;
+    private final Map<EffectType, TargetAreaBase> targetAreas = new HashMap<>();
 
     /**
      * The number of pixels in the view plane (Rows)

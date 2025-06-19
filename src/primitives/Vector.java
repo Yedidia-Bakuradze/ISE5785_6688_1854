@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 /**
  * Represents a vector in 3D space.
  * Provides methods for vector arithmetic and operations such as dot product and cross product.
@@ -170,12 +172,17 @@ public class Vector extends Point {
         double discriminant = 1.0 - eta * eta * (1.0 - cosTheta1 * cosTheta1);
 
         // Check for total internal reflection
-        if (discriminant < 0) return null;
+        if (discriminant < 0) return this;
 
         // Calculate cosine of refracted angle
         double cosTheta2 = Math.sqrt(discriminant);
 
         // Calculate refracted ray direction using Snell's law vector form
         return this.scale(eta).add(normal.scale(eta * cosTheta1 - cosTheta2)).normalize();
+    }
+
+    public static List<Vector> getNewCoordinateSystems(Vector main, Vector direction) {
+        Vector w = direction.subtract(main.scale(direction.dotProduct(main))).normalize();
+        return List.of(w.normalize(), main.crossProduct(w).normalize());
     }
 }

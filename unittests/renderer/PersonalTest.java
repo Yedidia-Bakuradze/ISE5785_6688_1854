@@ -156,14 +156,14 @@ public class PersonalTest {
      * Improved testDiffusiveGlass with darker, more realistic appearance
      */
     @Test
-    void testDiffusiveGlass() {
+    void ThreeBallsThreeDiffusiveMirrors() {
         Material clearGlass = new Material()
                 .setKT(0.95)          // Very high transparency
                 .setKR(0.04)          // Natural glass reflection (~4%)
                 .setKD(0.0)           // No diffuse
                 .setKS(0.1)           // Low specular
                 .setShininess(100)
-                .setRoughness(0.003)    // ZERO roughness = perfect transmission
+                .setRoughness(0.01)    // ZERO roughness = perfect transmission
                 .setIor(1.5);         // Glass IOR (not 1.0 which is air)
 
         Material mediumBlurGlass = new Material()
@@ -243,10 +243,10 @@ public class PersonalTest {
 
                 // Glass panels with minimal emission
                 // Left panel - clear glass
-                new Triangle(new Point(-400, -150, 50), new Point(-200, -150, 50), new Point(-200, 150, 50))
+                new Triangle(new Point(-400, -150, 50), new Point(-230, -150, 50), new Point(-230, 150, 50))
                         .setEmission(brightMirrorWhite)   // no emission for glass
                         .setMaterial(clearGlass),
-                new Triangle(new Point(-400, -150, 50), new Point(-400, 150, 50), new Point(-200, 150, 50))
+                new Triangle(new Point(-400, -150, 50), new Point(-400, 150, 50), new Point(-230, 150, 50))
                         .setEmission(brightMirrorWhite)
                         .setMaterial(clearGlass),
 
@@ -307,11 +307,8 @@ public class PersonalTest {
                 .setVpDistance(1000)
                 .setVpSize(1000, 800)
                 .setResolution(1200, 960)
-                .enableDiffusiveGlass()
-                .setSamplingMode(SamplingMode.EASY)
-                .setTargetAreaType(TargetAreaType.CIRCLE)
-                .setSamplingPattern(SamplingPattern.JITTERED)
-                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.MEDIUM, TargetAreaType.SQUARE, SamplingPattern.GRID, 1))
+                .setRayTracer(scene, RayTracerType.EXTENDED)
                 .build()
                 .renderImage()
                 .writeToImage("Diffusive Glass Test");

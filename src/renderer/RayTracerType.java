@@ -11,5 +11,10 @@ public enum RayTracerType {
     /**
      * Ray tracer using regular grid
      */
-    GRID
+    GRID,
+
+    /**
+     *
+     */
+    EXTENDED
 }

@@ -2,7 +2,6 @@ package renderer;
 
 import lighting.LightSource;
 import primitives.*;
-import sampling.TargetAreaBase;
 import scene.Scene;
 
 import java.util.List;
@@ -29,19 +28,12 @@ public class SimpleRayTracer extends RayTracerBase {
     private static final Double3 INITIAL_K = Double3.ONE;
 
     /**
-     * The target area for distributing rays when using effects like depth of field or soft shadows
-     */
-    private final TargetAreaBase targetArea;
-
-    /**
      * Initiates the simple ray tracer with a scene containing the objects
      *
-     * @param scene      the scene which contains the geometries that are a part of that image and scene
-     * @param targetArea The target area used for ray distribution in advanced rendering effects
+     * @param scene the scene which contains the geometries that are a part of that image and scene
      */
-    SimpleRayTracer(Scene scene, TargetAreaBase targetArea) {
+    SimpleRayTracer(Scene scene) {
         super(scene);
-        this.targetArea = targetArea;
     }
 
     @Override
@@ -116,43 +108,8 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return the color contribution from all global effects
      */
     private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
-        Color refractionColor;
-        Color reflectionColor;
-
-        // Handle transmission/refraction (what goes THROUGH the object)
-        if (targetArea == null || intersection.material.roughness <= 0.0) {
-            // Original behavior: single perfect refraction ray
-            refractionColor = calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT);
-        } else {
-            // Diffusive transmission: multiple sampled rays going through the object
-            List<Ray> refractionRays = calcRefractionRays(intersection);
-
-            refractionColor = refractionRays.stream()
-                    .map(refractionRay -> calcGlobalEffect(refractionRay, level, k, intersection.material.kT))
-                    .reduce(Color.BLACK, Color::add);
-
-            // Average the refraction color
-            if (!refractionRays.isEmpty()) {
-                refractionColor = refractionColor.reduce(refractionRays.size());
-            }
-        }
-
-        // Handle reflection (always use perfect reflection for mirrors)
-        reflectionColor = calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR);
-
-        return refractionColor.add(reflectionColor);
-    }
-
-    /**
-     * Calculates multiple refraction rays for diffusive transmission.
-     *
-     * @param intersection The intersection to calculate refraction rays for.
-     * @return List of refraction rays for sampling.
-     */
-    private List<Ray> calcRefractionRays(Intersection intersection) {
-        return targetArea.generateSamplePoints(intersection).stream()
-                .map(point -> new Ray(intersection.point, point.subtract(intersection.point).normalize(), intersection.normal))
-                .toList();
+        return calcGlobalEffect(calcRefractionRay(intersection), level, k, intersection.material.kT)
+                .add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
     }
 
     /**

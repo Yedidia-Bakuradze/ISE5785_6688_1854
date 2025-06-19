@@ -43,6 +43,12 @@ public class Material {
     public double ior = 1.0; // Default value for air
 
     /**
+     * Index of refraction for air.
+     * This is a constant value used in calculations involving light transmission through air.
+     */
+    public static final double AIR_IOR = 1.0;
+
+    /**
      * Roughness factor for surface texture.
      * Affects the appearance of the surface, with 0 being smooth and higher values indicating rougher surfaces.
      */
