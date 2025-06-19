@@ -1,8 +1,7 @@
 package sampling;
 
 import geometries.Intersectable;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class DiffusiveTargetArea extends TargetAreaBase {
     }
 
     @Override
-    public List<Point> generateSamplePoints(Intersectable.Intersection intersection) {
+    protected List<Point> generateSamplePoints(Intersectable.Intersection intersection) {
         // Calculate the perfect refraction direction using Snell's law (transmission through object)
         Vector T0 = intersection.rayDirection.calcSnellRefraction(intersection.normal, 1.0, intersection.material.ior);
 
@@ -40,26 +39,26 @@ public class DiffusiveTargetArea extends TargetAreaBase {
 
         // Determine sampling area size based on material roughness
         double radius = intersection.material.roughness;
-        List<Point> samples = new ArrayList<>(this.mode.numberSamples);
+        List<Point> samples = new ArrayList<>(this.config.mode.numberSamples);
 
         // Sample points in local (u,v) plane around the transmitted direction
         double sx = 0, sy = 0;
-        for (int y = 0; y < this.mode.gridValue && samples.size() < this.mode.numberSamples; y++) {
-            for (int x = 0; x < this.mode.gridValue && samples.size() < this.mode.numberSamples; x++) {
+        for (int y = 0; y < this.config.mode.gridValue && samples.size() < this.config.mode.numberSamples; y++) {
+            for (int x = 0; x < this.config.mode.gridValue && samples.size() < this.config.mode.numberSamples; x++) {
                 // Compute local offsets in [-1,1]
-                switch (pattern) {
+                switch (config.pattern) {
                     case SamplingPattern.GRID -> {
-                        sx = (2.0 * x + 1) / this.mode.gridValue - 1.0;
-                        sy = (2.0 * y + 1) / this.mode.gridValue - 1.0;
+                        sx = (2.0 * x + 1) / this.config.mode.gridValue - 1.0;
+                        sy = (2.0 * y + 1) / this.config.mode.gridValue - 1.0;
                     }
                     case SamplingPattern.JITTERED -> {
-                        sx = (2.0 * (x + this.random.nextDouble()) / this.mode.gridValue) - 1.0;
-                        sy = (2.0 * (y + this.random.nextDouble()) / this.mode.gridValue) - 1.0;
+                        sx = (2.0 * (x + this.config.random.nextDouble()) / this.config.mode.gridValue) - 1.0;
+                        sy = (2.0 * (y + this.config.random.nextDouble()) / this.config.mode.gridValue) - 1.0;
                     }
                 }
 
                 // Apply shape test
-                if (shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
+                if (config.shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
 
                 // Map to actual radius (controls how much the transmission scatters)
                 double du = sx * radius;
@@ -77,6 +76,13 @@ public class DiffusiveTargetArea extends TargetAreaBase {
             }
         }
         return samples;
+    }
+
+    @Override
+    public List<Ray> generateRays(Intersectable.Intersection intersection) {
+        return generateSamplePoints(intersection).stream()
+                .map(point -> new Ray(intersection.point, point.subtract(intersection.point).normalize(), intersection.normal))
+                .toList();
     }
 
 }
