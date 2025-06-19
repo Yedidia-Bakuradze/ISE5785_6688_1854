@@ -25,20 +25,12 @@ public class DiffusiveTargetArea extends TargetAreaBase {
     @Override
     protected List<Point> generateSamplePoints(Intersectable.Intersection intersection) {
         // Calculate the perfect refraction direction using Snell's law (transmission through object)
-        Vector T0 = intersection.rayDirection.calcSnellRefraction(intersection.normal, 1.0, intersection.material.ior);
+        Vector T0 = intersection.rayDirection.calcSnellRefraction(intersection.normal, Material.AIR_IOR, intersection.material.ior);
 
-        // If total internal reflection occurs, fall back to perfect transmission
-        if (T0 == null) {
-            T0 = intersection.rayDirection; // Continue in same direction
-        }
+        List<Vector> listOfCoordinates = Vector.getNewCoordinateSystems(T0, Vector.AXIS_X);
+        Vector u = listOfCoordinates.get(0);
+        Vector v = listOfCoordinates.get(1);
 
-        // Build orthonormal basis (u, v) around T0 (transmitted direction)
-        Vector up = Math.abs(Vector.AXIS_Y.dotProduct(T0)) < 0.999 ? Vector.AXIS_Y : Vector.AXIS_X;
-        Vector u = T0.crossProduct(up).normalize();
-        Vector v = T0.crossProduct(u).normalize();
-
-        // Determine sampling area size based on material roughness
-        double radius = intersection.material.roughness;
         List<Point> samples = new ArrayList<>(this.config.mode.numberSamples);
 
         // Sample points in local (u,v) plane around the transmitted direction
@@ -61,18 +53,14 @@ public class DiffusiveTargetArea extends TargetAreaBase {
                 if (config.shape == TargetAreaType.CIRCLE && sx * sx + sy * sy > 1.0) continue;
 
                 // Map to actual radius (controls how much the transmission scatters)
-                double du = sx * radius;
-                double dv = sy * radius;
+                double du = sx * intersection.material.roughness;
+                double dv = sy * intersection.material.roughness;
 
                 // World-space target point (offset from the perfect transmission direction)
-                try {
-                    Vector offset = u.scale(du).add(v.scale(dv));
-                    // Create target point along the scattered transmission direction
-                    Point targetPoint = intersection.point.add(T0.add(offset).normalize());
-                    samples.add(targetPoint);
-                } catch (Exception e) {
-                    continue;
-                }
+                Vector offset = u.scale(du).add(v.scale(dv));
+                // Create target point along the scattered transmission direction
+                Point targetPoint = intersection.point.add(T0.add(offset).normalize().scale(this.config.distance));
+                samples.add(targetPoint);
             }
         }
         return samples;
