@@ -17,8 +17,6 @@ public class RegularGridConfiguration {
      */
     private final boolean automaticResolution;
 
-    public static final double EPSILON = 1e-6; // Small value for floating point comparisons
-
     /**
      * Manual grid resolution for X dimension (ignored if automaticResolution is true)
      */
@@ -463,31 +461,40 @@ public class RegularGridConfiguration {
     }
 
     public static class Factory {
+        public static RegularGridConfiguration createConfiguration(AccelerationMode mode) {
+            return switch (mode) {
+                case DEFAULT -> createDefault();
+                case PERFORMANCE -> createHighPerformance();
+                case MEMORY_SAVING -> createMemoryEfficient();
+                case DEBUG -> createDebugMode();
+            };
+        }
+
         /**
          * Create default configuration suitable for most scenes
          */
-        public static RegularGridConfiguration createDefault() {
+        private static RegularGridConfiguration createDefault() {
             return new Builder().build();
         }
 
         /**
          * Create high-performance configuration for complex scenes
          */
-        public static RegularGridConfiguration createHighPerformance() {
+        private static RegularGridConfiguration createHighPerformance() {
             return new Builder().setHighPerformanceMode().build();
         }
 
         /**
          * Create memory-efficient configuration for resource-constrained environments
          */
-        public static RegularGridConfiguration createMemoryEfficient() {
+        private static RegularGridConfiguration createMemoryEfficient() {
             return new Builder().setMemoryEfficientMode().build();
         }
 
         /**
          * Create debug configuration for development and testing
          */
-        public static RegularGridConfiguration createDebugMode() {
+        private static RegularGridConfiguration createDebugMode() {
             return new Builder().setDebugMode().build();
         }
     }

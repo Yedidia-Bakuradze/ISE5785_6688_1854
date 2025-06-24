@@ -10,21 +10,18 @@ import scene.Scene;
 import java.util.Map;
 
 public class RegularGridRayTracer extends ExtendedRayTracer {
-    private final RegularGrid grid;
     private final VoxelTraverser voxelTraverser;
     private final RegularGridConfiguration configuration;
 
-    public RegularGridRayTracer(Scene scene, RegularGrid grid, VoxelTraverser voxelTraverser, RegularGridConfiguration configuration) {
+    public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, RegularGrid grid) {
         super(scene);
-        this.grid = grid;
-        this.voxelTraverser = voxelTraverser;
+        this.voxelTraverser = new VoxelTraverser(grid);
         this.configuration = configuration;
     }
 
-    public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, RegularGrid grid, VoxelTraverser voxelTraverser, Map<EffectType, TargetAreaBase> targetArea) {
+    public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, RegularGrid grid, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene, targetArea);
-        this.grid = grid;
-        this.voxelTraverser = voxelTraverser;
+        this.voxelTraverser = new VoxelTraverser(grid);
         this.configuration = configuration;
     }
 

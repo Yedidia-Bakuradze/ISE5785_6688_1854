@@ -10,21 +10,18 @@ import static geometries.Intersectable.Intersection;
 
 /**
  * Handles 3D-DDA (Digital Differential Analyzer) traversal of the Regular Grid.
- * FIXED VERSION - Corrected critical bugs in intersection logic.
+ * Corrected critical bugs in intersection logic.
  */
 public class VoxelTraverser {
 
     private final RegularGrid grid;
-    private final RegularGridConfiguration config;
     private final Set<Intersectable> testedGeometries;
     private TraversalStatistics currentTraversalStats;
 
-    public VoxelTraverser(RegularGrid grid, RegularGridConfiguration config) {
+    public VoxelTraverser(RegularGrid grid) {
         if (grid == null) throw new IllegalArgumentException("Grid cannot be null");
-        if (config == null) throw new IllegalArgumentException("Configuration cannot be null");
 
         this.grid = grid;
-        this.config = config;
         this.testedGeometries = new HashSet<>();
     }
 
@@ -91,7 +88,7 @@ public class VoxelTraverser {
         perform3DDATraversal(ray, allIntersections);
 
         // Phase 4: Update statistics
-        if (config.isCollectMetrics()) {
+        if (grid.getConfiguration().isCollectMetrics()) {
             updateTraversalMetrics();
         }
 
@@ -194,7 +191,7 @@ public class VoxelTraverser {
                     closest = voxelClosest;
 
                     // Early termination if enabled
-                    if (config.isEnableEarlyTermination()) {
+                    if (grid.getConfiguration().isEnableEarlyTermination()) {
                         logDebug("Early termination: closest intersection found");
                         break;
                     }
@@ -220,13 +217,13 @@ public class VoxelTraverser {
 
         for (Intersectable geometry : voxel.getGeometries()) {
             // Skip if already tested (deduplication)
-            if (config.isEnableObjectDeduplication() && testedGeometries.contains(geometry)) {
+            if (grid.getConfiguration().isEnableObjectDeduplication() && testedGeometries.contains(geometry)) {
                 currentTraversalStats.duplicateTests++;
                 continue;
             }
 
             // Mark as tested
-            if (config.isEnableObjectDeduplication()) {
+            if (grid.getConfiguration().isEnableObjectDeduplication()) {
                 testedGeometries.add(geometry);
             }
 
@@ -256,12 +253,12 @@ public class VoxelTraverser {
 
         for (Intersectable geometry : voxel.getGeometries()) {
             // Skip if already tested
-            if (config.isEnableObjectDeduplication() && testedGeometries.contains(geometry)) {
+            if (grid.getConfiguration().isEnableObjectDeduplication() && testedGeometries.contains(geometry)) {
                 currentTraversalStats.duplicateTests++;
                 continue;
             }
 
-            if (config.isEnableObjectDeduplication()) {
+            if (grid.getConfiguration().isEnableObjectDeduplication()) {
                 testedGeometries.add(geometry);
             }
 
@@ -366,7 +363,7 @@ public class VoxelTraverser {
     }
 
     private void logDebug(String message) {
-        if (config.isDebugMode()) {
+        if (grid.getConfiguration().isDebugMode()) {
             System.out.println("[VoxelTraverser] " + message);
         }
     }

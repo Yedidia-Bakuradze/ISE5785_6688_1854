@@ -1,5 +1,6 @@
 package renderer;
 
+import acceleration.*;
 import primitives.*;
 import primitives.Vector;
 import sampling.*;
@@ -162,6 +163,17 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setGridConfiguration(AccelerationMode accelerationMode) {
+            camera.regularGridConfiguration = RegularGridConfiguration.Factory.createConfiguration(accelerationMode);
+            camera.accelerationMode = accelerationMode;
+            return this;
+        }
+
+        public Builder setRegularGrid(RegularGrid grid) {
+            camera.regularGrid = grid;
+            return this;
+        }
+
         /**
          * Sets the ray that would identify and paint the intersected pixels
          *
@@ -175,10 +187,13 @@ public class Camera implements Cloneable {
                     camera.rayTracer = new SimpleRayTracer(scene);
                     break;
                 case GRID:
-                    camera.rayTracer = null;
+                    camera.rayTracer = new RegularGridRayTracer(scene, camera.regularGridConfiguration, camera.regularGrid);
                     break;
                 case EXTENDED:
                     camera.rayTracer = new ExtendedRayTracer(scene, camera.targetAreas);
+                    break;
+                case GRID_EXTENDED:
+                    camera.rayTracer = new RegularGridRayTracer(scene, camera.regularGridConfiguration, camera.regularGrid, camera.targetAreas);
                     break;
                 default:
                     throw new IllegalArgumentException("The type: " + type + " is invalid for the ray tracer");
@@ -343,6 +358,12 @@ public class Camera implements Cloneable {
      * The image writer instance for rendering the image
      */
     private ImageWriter imageWriter;
+
+    private RegularGridConfiguration regularGridConfiguration = null;
+
+    private RegularGrid regularGrid = null;
+
+    private AccelerationMode accelerationMode = AccelerationMode.NONE;
 
     /**
      * The ray tracer instance for calculating the rays

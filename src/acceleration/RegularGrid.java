@@ -206,6 +206,10 @@ public class RegularGrid {
         return statistics;
     }
 
+    public RegularGridConfiguration getConfiguration() {
+        return config;
+    }
+
     // ======================= Private Helper Methods =======================
 
     private void validateInputs(Scene scene, RegularGridConfiguration config) {
