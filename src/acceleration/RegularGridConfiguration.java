@@ -17,6 +17,8 @@ public class RegularGridConfiguration {
      */
     private final boolean automaticResolution;
 
+    public static final double EPSILON = 1e-6; // Small value for floating point comparisons
+
     /**
      * Manual grid resolution for X dimension (ignored if automaticResolution is true)
      */

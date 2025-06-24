@@ -27,6 +27,6 @@ public class RegularGridRayTracer extends RayTracerBase {
 
     @Override
     public Color traceRay(Ray ray) {
-        return null;
+        return null; //TODO: Implement the ray tracing logic using the regular grid configuration
     }
 }

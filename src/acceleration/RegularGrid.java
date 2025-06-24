@@ -2,7 +2,6 @@ package acceleration;
 
 import geometries.*;
 import primitives.Point;
-import primitives.VoxelKey;
 import scene.Scene;
 
 import java.util.*;
