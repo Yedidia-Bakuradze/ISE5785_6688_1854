@@ -13,7 +13,7 @@ public class RegularGridRayTracer extends RayTracerBase {
 
     private final RegularGridConfiguration configuration;
 
-    public RegularGridRayTracer(Scene scene, RayTracerBase secondaryRayTracer, RegularGridConfiguration configuration) {
+    public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration) {
         super(scene);
         this.secondaryRayTracer = new SimpleRayTracer(scene);
         this.configuration = configuration;
@@ -22,7 +22,7 @@ public class RegularGridRayTracer extends RayTracerBase {
     public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene);
         this.secondaryRayTracer = new ExtendedRayTracer(scene, targetArea);
-        this.configuration = new RegularGridConfiguration();
+        this.configuration = configuration;
     }
 
     @Override
