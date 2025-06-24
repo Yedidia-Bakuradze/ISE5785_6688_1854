@@ -101,4 +101,16 @@ public class Point {
     public double distance(Point rightPoint) {
         return Math.sqrt(distanceSquared(rightPoint));
     }
+
+    public double getX() {
+        return xyz.d1();
+    }
+
+    public double getY() {
+        return xyz.d2();
+    }
+
+    public double getZ() {
+        return xyz.d3();
+    }
 }
