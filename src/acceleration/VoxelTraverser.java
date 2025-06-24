@@ -50,7 +50,7 @@ public class VoxelTraverser {
         }
 
         // Phase 2: Check scene bounds intersection
-        if (!grid.getSceneBounds().intersects(ray)) {
+        if (grid.getSceneBounds().intersects(ray)) {
             return closest;
         }
 

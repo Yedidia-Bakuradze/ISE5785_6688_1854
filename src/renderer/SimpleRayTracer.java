@@ -61,7 +61,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param rayDirection the direction of the ray
      * @return the calculated color to paint that pixel with
      */
-    private Color calcColor(Intersection intersection, Vector rayDirection) {
+    protected Color calcColor(Intersection intersection, Vector rayDirection) {
         return preprocessIntersection(intersection, rayDirection)
                 ? this.scene.ambientLight.getIntensity().scale(intersection.material.kA)
                 .add(calcColor(intersection, MAX_CALC_COLOR_LEVEL, INITIAL_K))
