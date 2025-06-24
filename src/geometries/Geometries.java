@@ -62,4 +62,18 @@ public class Geometries extends Intersectable {
 
         return intersections;
     }
+
+    public List<Intersectable> getGeometries() {
+        return Collections.unmodifiableList(geometries);
+    }
+
+    public List<BoundingBox> getBoundingBoxes() {
+        List<BoundingBox> boundingBoxes = new ArrayList<>();
+        for (Intersectable obj : geometries) {
+            if (obj instanceof Geometry geometry) {
+                boundingBoxes.add(geometry.getBoundingBox());
+            }
+        }
+        return boundingBoxes;
+    }
 }
