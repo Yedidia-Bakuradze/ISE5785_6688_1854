@@ -1,5 +1,8 @@
 package renderer;
 
+import acceleration.RegularGridConfiguration;
+import primitives.Color;
+import primitives.Ray;
 import sampling.TargetAreaBase;
 import scene.Scene;
 
@@ -10,14 +13,20 @@ public class RegularGridRayTracer extends RayTracerBase {
 
     private final RegularGridConfiguration configuration;
 
-    RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration) {
+    public RegularGridRayTracer(Scene scene, RayTracerBase secondaryRayTracer, RegularGridConfiguration configuration) {
         super(scene);
+        this.secondaryRayTracer = new SimpleRayTracer(scene);
         this.configuration = configuration;
     }
 
-    RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, Map<EffectType, TargetAreaBase> targetArea) {
+    public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene);
         this.secondaryRayTracer = new ExtendedRayTracer(scene, targetArea);
         this.configuration = new RegularGridConfiguration();
+    }
+
+    @Override
+    public Color traceRay(Ray ray) {
+        return null;
     }
 }
