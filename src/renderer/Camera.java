@@ -279,11 +279,7 @@ public class Camera implements Cloneable {
             camera.pixelWidth = camera.width / camera.nX;
             camera.pixelHeight = camera.height / camera.nY;
 
-            // Only set default ray tracer if none was explicitly set
-            // This prevents overriding the RegularGridRayTracer that was already configured
-            if (camera.rayTracer == null) {
-                throw new MissingResourceException("Ray tracer must be set using setRayTracer() method", "Camera", "rayTracer");
-            }
+            if (camera.rayTracer == null) camera.rayTracer = new SimpleRayTracer(null);
 
             return camera.clone();
         }

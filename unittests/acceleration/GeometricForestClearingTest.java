@@ -33,6 +33,12 @@ public class GeometricForestClearingTest {
 
     private final static Vector V_TO = new Vector(3, 2, -1);
     private final static Vector V_UP = new Vector(6, -4, 10);
+    private final static int RESOLUTION_WIDTH = 800;
+    private final static int RESOLUTION_HEIGHT = 800;
+    private final static double IMAGE_WIDTH = RESOLUTION_WIDTH;
+    private final static double IMAGE_HEIGHT = RESOLUTION_HEIGHT;
+    private final static double DISTANCE = 1000;
+
     /**
      * Scene for all tests
      */
@@ -93,9 +99,9 @@ public class GeometricForestClearingTest {
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
                 .setDirection(V_TO, V_UP)  // Orthogonal vectors
-                .setVpDistance(1000)
-                .setVpSize(1000, 1000)
-                .setResolution(800, 800)
+                .setVpDistance(DISTANCE)
+                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
+                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
                 .setMultithreading(0)  // MT deactivated
                 .setDebugPrint(0.1)
@@ -114,9 +120,9 @@ public class GeometricForestClearingTest {
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
                 .setDirection(V_TO, V_UP)  // Orthogonal vectors
-                .setVpDistance(1000)
-                .setVpSize(1000, 1000)
-                .setResolution(800, 800)
+                .setVpDistance(DISTANCE)
+                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
+                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
                 .setMultithreading(-2)  // MT activated
                 .setDebugPrint(0.1)
@@ -135,9 +141,9 @@ public class GeometricForestClearingTest {
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
                 .setDirection(V_TO, V_UP)  // Orthogonal vectors
-                .setVpDistance(1000)
-                .setVpSize(1000, 1000)
-                .setResolution(800, 800)
+                .setVpDistance(DISTANCE)
+                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
+                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
                 .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
                 .setGridConfiguration(AccelerationMode.PERFORMANCE)
                 .setRayTracer(scene, RayTracerType.GRID)
@@ -158,9 +164,9 @@ public class GeometricForestClearingTest {
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
                 .setDirection(V_TO, V_UP)
-                .setVpDistance(700)
-                .setVpSize(1000, 800)
-                .setResolution(1200, 1000)
+                .setVpDistance(DISTANCE)
+                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
+                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
                 .setGridConfiguration(AccelerationMode.PERFORMANCE)
                 .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
                 .setRayTracer(scene, RayTracerType.GRID)
@@ -169,42 +175,6 @@ public class GeometricForestClearingTest {
                 .build()
                 .renderImage()
                 .writeToImage("ForestClearing_GridOn_MTOn");
-    }
-
-    /**
-     * Debug test: Feature activated with debug output
-     */
-    @Test
-    void testRegularGridDebug() {
-        setupScene();
-
-        // Debug the scene and grid setup
-        RegularGridConfiguration config = RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE);
-        RegularGridDebugger.debugGrid(scene, config);
-
-        // Create the camera with grid
-        RegularGrid grid = new RegularGrid(scene, config);
-
-        Camera camera = Camera.getBuilder()
-                .setLocation(new Point(-1200, -800, 600))
-                .setDirection(V_TO, V_UP)
-                .setVpDistance(1000)
-                .setVpSize(1000, 1000)
-                .setResolution(400, 400)  // Smaller resolution for faster debugging
-                .setRegularGrid(grid)
-                .setGridConfiguration(AccelerationMode.PERFORMANCE)
-                .setRayTracer(scene, RayTracerType.GRID)
-                .setMultithreading(0)
-                .setDebugPrint(0.1)
-                .build();
-
-        // Test a sample ray to see if grid traversal works
-        Ray testRay = camera.constructRay(400, 400, 200, 200);  // Center ray
-        RegularGridDebugger.debugRayIntersection(grid, testRay);
-
-        // Render the image
-        camera.renderImage()
-                .writeToImage("ForestClearing_Debug");
     }
 
     /**

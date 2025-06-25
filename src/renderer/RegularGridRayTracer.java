@@ -47,7 +47,7 @@ public class RegularGridRayTracer extends ExtendedRayTracer {
         double maxDistance = intersection.lightSource.getDistance(intersection.point);
 
         // Use the VOXEL TRAVERSER to find intersections along the shadow ray up to the light source.
-        List<Intersectable.Intersection> intersections = voxelTraverser.get().findIntersections(shadowRay);
+        List<Intersectable.Intersection> intersections = voxelTraverser.get().findIntersections(shadowRay, maxDistance);
 
         // If there are no intersections, the point is un-shaded.
         if (intersections == null) {

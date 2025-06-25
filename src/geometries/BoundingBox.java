@@ -110,7 +110,7 @@ public record BoundingBox(Point min, Point max) {
             if (Math.abs(directions[i]) < EPSILON) {
                 // Ray is parallel to slab - check if ray origin is within slab
                 if (origins[i] < mins[i] || origins[i] > maxs[i]) {
-                    return false; // Ray is outside and parallel - no intersection
+                    return true;
                 }
             } else {
                 double t1 = (mins[i] - origins[i]) / directions[i];
@@ -128,13 +128,13 @@ public record BoundingBox(Point min, Point max) {
 
                 // Early termination if no intersection possible
                 if (tMin > tMax) {
-                    return false; // No intersection
+                    return true;
                 }
             }
         }
 
         // Ray intersects if tMax >= 0 (intersection is in front of ray origin)
-        return tMax >= 0;
+        return !(tMax >= 0);
     }
 
     /**

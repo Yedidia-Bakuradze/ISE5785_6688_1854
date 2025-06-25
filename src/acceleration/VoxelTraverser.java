@@ -63,10 +63,14 @@ public class VoxelTraverser {
         return closest;
     }
 
-    /**
-     * FIXED: Finds all intersections along a ray
-     */
     public List<Intersection> findIntersections(Ray ray) {
+        return findIntersections(ray, Double.POSITIVE_INFINITY);
+    }
+
+    /**
+     * Finds all intersections along a ray
+     */
+    public List<Intersection> findIntersections(Ray ray, double maxDistance) {
         // Initialize traversal state
         testedGeometries.clear();
         currentTraversalStats = new TraversalStatistics();
@@ -83,7 +87,7 @@ public class VoxelTraverser {
         }
 
         // Phase 3: Perform 3D-DDA traversal through grid
-        perform3DDATraversal(ray, allIntersections);
+        perform3DDATraversal(ray, allIntersections, maxDistance);
 
         // Phase 4: Update statistics
         if (grid.getConfiguration().isCollectMetrics()) {
@@ -93,7 +97,7 @@ public class VoxelTraverser {
         return allIntersections.isEmpty() ? null : allIntersections;
     }
 
-    // ======================= FIXED Private Helper Methods =======================
+    // ======================= Private Helper Methods =======================
 
     /**
      * FIXED: Tests intersections with infinite geometries
@@ -137,7 +141,7 @@ public class VoxelTraverser {
     /**
      * FIXED: Performs 3D-DDA traversal through the grid voxels
      */
-    private void perform3DDATraversal(Ray ray, List<Intersection> intersections) {
+    private void perform3DDATraversal(Ray ray, List<Intersection> intersections, double maxDistance) {
         // Calculate ray entry point into scene bounds
         Point entryPoint = grid.getSceneBounds().getRayEntryPoint(ray);
         if (entryPoint == null) {
@@ -151,11 +155,18 @@ public class VoxelTraverser {
         // Traverse voxels using 3D-DDA
         int[] resolution = grid.getResolution();
         while (isValidVoxel(ddaState.currentVoxel, resolution)) {
-            currentTraversalStats.voxelsVisited++;
+            // Find which axis is next
+            int minAxis = 0;
+            if (ddaState.next[1] < ddaState.next[minAxis]) minAxis = 1;
+            if (ddaState.next[2] < ddaState.next[minAxis]) minAxis = 2;
 
+            // If the distance to the next voxel is already past the light source, stop.
+            if (ddaState.next[minAxis] > maxDistance) {
+                break;
+            }
+            currentTraversalStats.voxelsVisited++;
             // Test geometries in current voxel
             testVoxelGeometries(ddaState.currentVoxel, ray, intersections);
-
             // Move to next voxel
             advanceToNextVoxel(ddaState);
         }
