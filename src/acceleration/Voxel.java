@@ -18,9 +18,10 @@ public class Voxel {
      *
      * @param geom the geometry to add
      */
-    public void addGeometry(Intersectable geom) {
+    public Voxel addGeometry(Intersectable geom) {
         if (geom == null) throw new IllegalArgumentException("Cannot add null geometry to voxel");
         geometries.add(geom);
+        return this;
     }
 
     /**

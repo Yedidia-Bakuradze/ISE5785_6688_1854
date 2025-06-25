@@ -70,10 +70,42 @@ public class Geometries extends Intersectable {
     public List<BoundingBox> getBoundingBoxes() {
         List<BoundingBox> boundingBoxes = new ArrayList<>();
         for (Intersectable obj : geometries) {
-            if (obj instanceof Geometry geometry) {
+            if (obj instanceof Geometry geometry && geometry.getBoundingBox() != null) {
                 boundingBoxes.add(geometry.getBoundingBox());
             }
         }
         return boundingBoxes;
+    }
+
+    public BoundingBox getBoundingBox() {
+        return BoundingBox.union(getBoundingBoxes());
+    }
+
+    public List<Intersectable> getFiniteInjectables() {
+        List<Intersectable> finiteGeometries = null;
+        for (Intersectable obj : geometries) {
+
+            if (obj instanceof Geometry geometry && geometry.getBoundingBox() != null) {
+                if (finiteGeometries == null) {
+                    finiteGeometries = new LinkedList<>();
+                }
+                finiteGeometries.add(geometry);
+            }
+        }
+        return finiteGeometries;
+    }
+
+    public List<Intersectable> getInfiniteInjectables() {
+        List<Intersectable> infiniteGeometries = null;
+        for (Intersectable obj : geometries) {
+
+            if (obj instanceof Geometry geometry && geometry.getBoundingBox() == null) {
+                if (infiniteGeometries == null) {
+                    infiniteGeometries = new LinkedList<>();
+                }
+                infiniteGeometries.add(geometry);
+            }
+        }
+        return infiniteGeometries;
     }
 }

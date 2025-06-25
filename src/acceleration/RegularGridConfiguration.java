@@ -15,105 +15,105 @@ public class RegularGridConfiguration {
     /**
      * Whether to automatically calculate grid resolution based on object count
      */
-    private final boolean automaticResolution;
+    public final boolean automaticResolution;
 
     /**
      * Manual grid resolution for X dimension (ignored if automaticResolution is true)
      */
-    private final int manualResolutionX;
+    public final int manualResolutionX;
 
     /**
      * Manual grid resolution for Y dimension (ignored if automaticResolution is true)
      */
-    private final int manualResolutionY;
+    public final int manualResolutionY;
 
     /**
      * Manual grid resolution for Z dimension (ignored if automaticResolution is true)
      */
-    private final int manualResolutionZ;
+    public final int manualResolutionZ;
 
     /**
      * Density factor for automatic resolution calculation.
      * Formula: resolution = densityFactor * ∛(objectCount)
      * Typical values: 1.0 to 3.0
      */
-    private final double densityFactor;
+    public final double densityFactor;
 
     /**
      * Minimum grid resolution per dimension to prevent degenerate cases
      */
-    private final int minResolution;
+    public final int minResolution;
 
     /**
      * Maximum grid resolution per dimension to prevent excessive memory usage
      */
-    private final int maxResolution;
+    public final int maxResolution;
 
     // ======================= Memory Management Settings =======================
 
     /**
      * Enable sparse storage using HashMap for empty voxels
      */
-    private final boolean enableSparseStorage;
+    public final boolean enableSparseStorage;
 
     /**
      * Maximum memory usage in MB before applying memory optimizations
      */
-    private final double maxMemoryUsageMB;
+    public final double maxMemoryUsageMB;
 
     /**
      * Maximum number of objects per voxel before subdivision warning
      */
-    private final int maxObjectsPerVoxel;
+    public final int maxObjectsPerVoxel;
 
     // ======================= Performance Tuning Settings =======================
 
     /**
      * Enable early ray termination when first intersection is found
      */
-    private final boolean enableEarlyTermination;
+    public final boolean enableEarlyTermination;
 
     /**
      * Avoid duplicate intersection tests for same object on same ray
      */
-    private final boolean enableObjectDeduplication;
+    public final boolean enableObjectDeduplication;
 
     /**
      * Use optimized 3D-DDA traversal algorithm
      */
-    private final boolean useOptimizedTraversal;
+    public final boolean useOptimizedTraversal;
 
     /**
      * Enable ray-box intersection optimization before detailed traversal
      */
-    private final boolean enableRayBoxOptimization;
+    public final boolean enableRayBoxOptimization;
 
     // ======================= Debug and Testing Settings =======================
 
     /**
      * Master switch to enable/disable entire grid acceleration
      */
-    private final boolean isEnabled;
+    public final boolean isEnabled;
 
     /**
      * Enable debug mode with additional logging and validation
      */
-    private final boolean debugMode;
+    public final boolean debugMode;
 
     /**
      * Collect performance metrics during rendering
      */
-    private final boolean collectMetrics;
+    public final boolean collectMetrics;
 
     /**
      * Enable grid visualization for debugging purposes
      */
-    private final boolean visualizeGrid;
+    public final boolean visualizeGrid;
 
     /**
      * Print detailed statistics after grid construction
      */
-    private final boolean printStatistics;
+    public final boolean printStatistics;
 
     // ======================= Constructor =======================
 
@@ -147,46 +147,6 @@ public class RegularGridConfiguration {
 
     // ======================= Getters =======================
 
-    public boolean isAutomaticResolution() {
-        return automaticResolution;
-    }
-
-    public int getManualResolutionX() {
-        return manualResolutionX;
-    }
-
-    public int getManualResolutionY() {
-        return manualResolutionY;
-    }
-
-    public int getManualResolutionZ() {
-        return manualResolutionZ;
-    }
-
-    public double getDensityFactor() {
-        return densityFactor;
-    }
-
-    public int getMinResolution() {
-        return minResolution;
-    }
-
-    public int getMaxResolution() {
-        return maxResolution;
-    }
-
-    public boolean isEnableSparseStorage() {
-        return enableSparseStorage;
-    }
-
-    public double getMaxMemoryUsageMB() {
-        return maxMemoryUsageMB;
-    }
-
-    public int getMaxObjectsPerVoxel() {
-        return maxObjectsPerVoxel;
-    }
-
     public boolean isEnableEarlyTermination() {
         return enableEarlyTermination;
     }
@@ -195,32 +155,12 @@ public class RegularGridConfiguration {
         return enableObjectDeduplication;
     }
 
-    public boolean isUseOptimizedTraversal() {
-        return useOptimizedTraversal;
-    }
-
-    public boolean isEnableRayBoxOptimization() {
-        return enableRayBoxOptimization;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
     public boolean isDebugMode() {
         return debugMode;
     }
 
     public boolean isCollectMetrics() {
         return collectMetrics;
-    }
-
-    public boolean isVisualizeGrid() {
-        return visualizeGrid;
-    }
-
-    public boolean isPrintStatistics() {
-        return printStatistics;
     }
 
     // ======================= Builder Pattern =======================
@@ -427,6 +367,7 @@ public class RegularGridConfiguration {
         public Builder setMemoryEfficientMode() {
             return setDensityFactor(1.5)
                     .setSparseStorage(true)
+                    .setEnabled(true)
                     .setMaxMemoryUsage(256.0)
                     .setMaxObjectsPerVoxel(30);
         }
@@ -438,6 +379,7 @@ public class RegularGridConfiguration {
             return setDebugMode(true)
                     .setCollectMetrics(true)
                     .setPrintStatistics(true)
+                    .setEnabled(true)
                     .setVisualizeGrid(true);
         }
 
@@ -506,27 +448,9 @@ public class RegularGridConfiguration {
     /**
      * Calculate optimal grid resolution based on object count
      */
-    public int[] calculateOptimalResolution(int objectCount) {
-        if (!automaticResolution) return new int[]{manualResolutionX, manualResolutionY, manualResolutionZ};
-
-        // Empirical formula: resolution = densityFactor * ∛(objectCount)
-        int baseResolution = (int) Math.ceil(densityFactor * Math.cbrt(objectCount));
-
-        // Apply bounds
-        baseResolution = Math.max(minResolution, Math.min(maxResolution, baseResolution));
-        return new int[]{baseResolution, baseResolution, baseResolution};
-    }
-
-    /**
-     * Estimate memory usage for given grid resolution
-     */
-    public double estimateMemoryUsage(int resX, int resY, int resZ, int objectCount) {
-        // Rough estimation based on sparse storage efficiency
-        double totalVoxels = resX * resY * resZ;
-        double occupiedVoxels = Math.min(totalVoxels, objectCount * 2); // Objects may span multiple voxels
-
-        // Each voxel entry ~100 bytes (references + overhead)
-        return (occupiedVoxels * 100.0) / (1024.0 * 1024.0); // Convert to MB
+    public int calculateOptimalResolution(int objectCount) {
+        if (!automaticResolution) return manualResolutionX;
+        return Math.max(minResolution, Math.min(maxResolution, (int) Math.ceil(densityFactor * Math.cbrt(objectCount))));
     }
 
     @Override
