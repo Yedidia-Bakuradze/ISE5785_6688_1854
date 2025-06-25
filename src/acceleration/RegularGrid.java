@@ -29,6 +29,9 @@ public class RegularGrid {
     private final double voxelSizeY;
     private final double voxelSizeZ;
 
+    protected final boolean hasInfiniteGeometries;
+    protected final boolean hasFiniteGeometries;
+
     // Geometry storage
     private final Map<VoxelKey, Voxel> voxelMap;
     private final List<Intersectable> infiniteGeometries;
@@ -47,6 +50,9 @@ public class RegularGrid {
         this.voxelMap = new HashMap<>();
         this.infiniteGeometries = scene.geometries.getInfiniteInjectables();
         this.sceneBounds = scene.geometries.getBoundingBox();
+
+        this.hasInfiniteGeometries = scene.geometries.getInfiniteInjectables() != null;
+        this.hasFiniteGeometries = scene.geometries.getFiniteInjectables() != null;
 
         //TODO: Disable the feature if no finite geometries exist
 

@@ -186,7 +186,7 @@ public class GeometricForestClearingTest {
         scene.lights.clear();
 
         // Create the forest clearing scene
-        createGroundPlane();
+//        createGroundPlane();
         createSkyDome();
         createForestTrees();
         createAncientRuins();
