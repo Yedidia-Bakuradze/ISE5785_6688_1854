@@ -1,5 +1,6 @@
 package renderer;
 
+import acceleration.*;
 import geometries.*;
 import lighting.AmbientLight;
 import lighting.SpotLight;
@@ -309,10 +310,10 @@ public class PersonalTest {
                 .setVpDistance(1000)
                 .setVpSize(1000, 800)
                 .setResolution(1200, 960)
+                .setGridConfiguration(AccelerationMode.PERFORMANCE)
+                .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
                 .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.MEDIUM, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 1))
-                .setRayTracer(scene, RayTracerType.EXTENDED)
-                .setMultithreading(-1)
-                .setDebugPrint(0.3)
+                .setRayTracer(scene, RayTracerType.GRID_EXTENDED)
                 .build()
                 .renderImage()
                 .writeToImage("Diffusive Glass Test");

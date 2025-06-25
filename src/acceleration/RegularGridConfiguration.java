@@ -463,6 +463,7 @@ public class RegularGridConfiguration {
     public static class Factory {
         public static RegularGridConfiguration createConfiguration(AccelerationMode mode) {
             return switch (mode) {
+                case NONE -> null;
                 case DEFAULT -> createDefault();
                 case PERFORMANCE -> createHighPerformance();
                 case MEMORY_SAVING -> createMemoryEfficient();
