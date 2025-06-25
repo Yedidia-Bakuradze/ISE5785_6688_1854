@@ -216,7 +216,7 @@ public class RegularGrid {
             for (int j = minGrid[1]; j <= maxGrid[1]; j++) {
                 for (int k = minGrid[2]; k <= maxGrid[2]; k++) {
                     if (isValidGridCoordinate(i, j, k))
-                        voxelMap.computeIfAbsent(new VoxelKey(i, j, k), kk -> new Voxel().addGeometry(geometry));
+                        voxelMap.computeIfAbsent(new VoxelKey(i, j, k), kk -> new Voxel()).addGeometry(geometry);
                 }
             }
         }

@@ -86,8 +86,6 @@ public class VoxelTraverser {
      */
     private Intersection findClosestVoxelIntersection(Ray ray) {
         if (!grid.hasFiniteGeometries) return null;
-
-        // Check if ray intersects scene bounds
         if (!grid.getSceneBounds().intersects(ray)) return null;
 
         // Calculate ray entry point into scene bounds
@@ -187,7 +185,6 @@ public class VoxelTraverser {
             if (ddaState.next[2] < ddaState.next[minAxis]) minAxis = 2;
             if (ddaState.next[minAxis] > maxDistance) break;
 
-            currentTraversalStats.voxelsVisited++;
             testVoxelGeometries(ddaState.currentVoxel, ray, intersections);
             advanceToNextVoxel(ddaState);
         }
