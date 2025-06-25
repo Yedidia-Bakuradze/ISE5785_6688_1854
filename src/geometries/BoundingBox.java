@@ -16,8 +16,8 @@ public record BoundingBox(Point min, Point max) {
     public static final double EPSILON = 1e-9;
 
     /**
-     * Constructs an AABB with minimum and maximum points
-     * FIXED: Added validation to prevent invalid bounding boxes
+     * Constructs an BoundingBox with minimum and maximum points
+     * Added validation to prevent invalid bounding boxes
      *
      * @param min The minimum point (lowest x, y, z coordinates)
      * @param max The maximum point (highest x, y, z coordinates)
@@ -65,10 +65,10 @@ public record BoundingBox(Point min, Point max) {
     }
 
     /**
-     * Expands this AABB to include another AABB
+     * Expands this BoundingBox to include another BoundingBox
      *
-     * @param other The other AABB to include
-     * @return A new AABB that contains both boxes
+     * @param other The other BoundingBox to include
+     * @return A new BoundingBox that contains both boxes
      * @throws IllegalArgumentException if other is null
      */
     public BoundingBox expand(BoundingBox other) {
@@ -92,7 +92,7 @@ public record BoundingBox(Point min, Point max) {
      * @return true if ray intersects this box, false otherwise
      */
     public boolean intersects(Ray ray) {
-        if (ray == null) return true;
+        if (ray == null) return false;
 
         Point rayOrigin = ray.getHead();
         Vector rayDir = ray.getDirection();
@@ -109,14 +109,12 @@ public record BoundingBox(Point min, Point max) {
         for (int i = 0; i < 3; i++) {
             if (Math.abs(directions[i]) < EPSILON) {
                 // Ray is parallel to slab - check if ray origin is within slab
-                if (origins[i] < mins[i] || origins[i] > maxs[i]) {
-                    return true;
-                }
+                if (origins[i] < mins[i] || origins[i] > maxs[i]) return false;
+
             } else {
                 double t1 = (mins[i] - origins[i]) / directions[i];
                 double t2 = (maxs[i] - origins[i]) / directions[i];
 
-                // Ensure t1 <= t2
                 if (t1 > t2) {
                     double temp = t1;
                     t1 = t2;
@@ -126,26 +124,22 @@ public record BoundingBox(Point min, Point max) {
                 tMin = Math.max(tMin, t1);
                 tMax = Math.min(tMax, t2);
 
-                // Early termination if no intersection possible
-                if (tMin > tMax) {
-                    return true;
-                }
+                if (tMin > tMax) return false;
             }
         }
 
-        // Ray intersects if tMax >= 0 (intersection is in front of ray origin)
-        return !(tMax >= 0);
+        return tMax >= 0;
     }
 
     /**
      * Calculates the entry point where a ray first intersects this bounding box
-     * FIXED: Improved logic and added better edge case handling
+     * Improved logic and added better edge case handling
      *
      * @param ray The ray to test
      * @return The entry point, or null if no intersection
      */
     public Point getRayEntryPoint(Ray ray) {
-        if (intersects(ray)) return null;
+        if (!intersects(ray)) return null;
 
         Point rayOrigin = ray.getHead();
         Vector rayDir = ray.getDirection();
@@ -184,7 +178,7 @@ public record BoundingBox(Point min, Point max) {
     }
 
     /**
-     * Checks if a point is inside this AABB
+     * Checks if a point is inside this BoundingBox
      * Added null check and improved boundary handling
      *
      * @param point The point to check
@@ -196,21 +190,6 @@ public record BoundingBox(Point min, Point max) {
         return point.getX() >= min.getX() && point.getX() <= max.getX() &&
                 point.getY() >= min.getY() && point.getY() <= max.getY() &&
                 point.getZ() >= min.getZ() && point.getZ() <= max.getZ();
-    }
-
-    /**
-     * Checks if this bounding box overlaps with another bounding box
-     * Needed for geometry distribution in RegularGrid
-     *
-     * @param other The other bounding box
-     * @return true if the boxes overlap, false otherwise
-     */
-    public boolean overlaps(BoundingBox other) {
-        if (other == null) return false;
-
-        return (min.getX() <= other.max.getX() && max.getX() >= other.min.getX()) &&
-                (min.getY() <= other.max.getY() && max.getY() >= other.min.getY()) &&
-                (min.getZ() <= other.max.getZ() && max.getZ() >= other.min.getZ());
     }
 
     /**
@@ -250,48 +229,6 @@ public record BoundingBox(Point min, Point max) {
     public double getVolume() {
         double[] dims = getDimensions();
         return dims[0] * dims[1] * dims[2];
-    }
-
-    /**
-     * Gets the surface area of this bounding box
-     * Useful for optimization decisions
-     *
-     * @return The surface area of the bounding box
-     */
-    public double getSurfaceArea() {
-        double[] dims = getDimensions();
-        return 2.0 * (dims[0] * dims[1] + dims[1] * dims[2] + dims[2] * dims[0]);
-    }
-
-    /**
-     * Creates a bounding box from a center point and extents
-     * Convenient constructor method
-     *
-     * @param center  The center point
-     * @param extentX Half-width in X direction
-     * @param extentY Half-width in Y direction
-     * @param extentZ Half-width in Z direction
-     * @return A new bounding box
-     */
-    public static BoundingBox fromCenterAndExtents(Point center, double extentX, double extentY, double extentZ) {
-        if (center == null) throw new IllegalArgumentException("Center cannot be null");
-        if (extentX < 0 || extentY < 0 || extentZ < 0) {
-            throw new IllegalArgumentException("Extents must be non-negative");
-        }
-
-        Point min = new Point(
-                center.getX() - extentX,
-                center.getY() - extentY,
-                center.getZ() - extentZ
-        );
-
-        Point max = new Point(
-                center.getX() + extentX,
-                center.getY() + extentY,
-                center.getZ() + extentZ
-        );
-
-        return new BoundingBox(min, max);
     }
 
     @Override
