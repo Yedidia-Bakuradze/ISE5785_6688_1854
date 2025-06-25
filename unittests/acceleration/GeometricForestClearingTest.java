@@ -172,6 +172,42 @@ public class GeometricForestClearingTest {
     }
 
     /**
+     * Debug test: Feature activated with debug output
+     */
+    @Test
+    void testRegularGridDebug() {
+        setupScene();
+
+        // Debug the scene and grid setup
+        RegularGridConfiguration config = RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE);
+        RegularGridDebugger.debugGrid(scene, config);
+
+        // Create the camera with grid
+        RegularGrid grid = new RegularGrid(scene, config);
+
+        Camera camera = Camera.getBuilder()
+                .setLocation(new Point(-1200, -800, 600))
+                .setDirection(V_TO, V_UP)
+                .setVpDistance(1000)
+                .setVpSize(1000, 1000)
+                .setResolution(400, 400)  // Smaller resolution for faster debugging
+                .setRegularGrid(grid)
+                .setGridConfiguration(AccelerationMode.PERFORMANCE)
+                .setRayTracer(scene, RayTracerType.GRID)
+                .setMultithreading(0)
+                .setDebugPrint(0.1)
+                .build();
+
+        // Test a sample ray to see if grid traversal works
+        Ray testRay = camera.constructRay(400, 400, 200, 200);  // Center ray
+        RegularGridDebugger.debugRayIntersection(grid, testRay);
+
+        // Render the image
+        camera.renderImage()
+                .writeToImage("ForestClearing_Debug");
+    }
+
+    /**
      * Set up the complete forest clearing scene with all geometries and lighting
      */
     private void setupScene() {

@@ -256,7 +256,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param intersection The intersection to calculate transparency for.
      * @return The transparency factor as a Double3.
      */
-    private Double3 transparency(Intersection intersection) {
+    protected Double3 transparency(Intersection intersection) {
         Double3 ktr = Double3.ONE;
         var intersections = castShadowRay(intersection);
         if (intersections == null) return ktr;
