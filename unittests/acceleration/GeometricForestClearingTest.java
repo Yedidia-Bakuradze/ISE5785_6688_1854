@@ -31,6 +31,8 @@ public class GeometricForestClearingTest {
     public GeometricForestClearingTest() {
     }
 
+    private final static Vector V_TO = new Vector(3, 2, -1);
+    private final static Vector V_UP = new Vector(6, -4, 10);
     /**
      * Scene for all tests
      */
@@ -90,7 +92,7 @@ public class GeometricForestClearingTest {
 
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
-                .setDirection(new Vector(3, 2, -1), new Vector(1, -1, 2))  // Orthogonal vectors
+                .setDirection(V_TO, V_UP)  // Orthogonal vectors
                 .setVpDistance(1000)
                 .setVpSize(1000, 1000)
                 .setResolution(800, 800)
@@ -111,7 +113,7 @@ public class GeometricForestClearingTest {
 
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
-                .setDirection(new Vector(3, 2, -1), new Vector(1, -1, 2))  // Orthogonal vectors
+                .setDirection(V_TO, V_UP)  // Orthogonal vectors
                 .setVpDistance(1000)
                 .setVpSize(1000, 1000)
                 .setResolution(800, 800)
@@ -132,7 +134,7 @@ public class GeometricForestClearingTest {
 
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
-                .setDirection(new Vector(3, 2, -1), new Vector(1, -1, 2))  // Orthogonal vectors
+                .setDirection(V_TO, V_UP)  // Orthogonal vectors
                 .setVpDistance(1000)
                 .setVpSize(1000, 1000)
                 .setResolution(800, 800)
@@ -155,10 +157,10 @@ public class GeometricForestClearingTest {
 
         Camera.getBuilder()
                 .setLocation(new Point(-1200, -800, 600))
-                .setDirection(new Vector(3, 2, -1), new Vector(6, -4, 10))  // Orthogonal vectors
-                .setVpDistance(1000)
-                .setVpSize(1000, 1000)
-                .setResolution(800, 800)
+                .setDirection(V_TO, V_UP)
+                .setVpDistance(700)
+                .setVpSize(1000, 800)
+                .setResolution(1200, 1000)
                 .setGridConfiguration(AccelerationMode.PERFORMANCE)
                 .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
                 .setRayTracer(scene, RayTracerType.GRID)
@@ -186,7 +188,7 @@ public class GeometricForestClearingTest {
         setupLighting();
 
         // Set scene properties
-        scene.setBackground(new Color(25, 25, 35));  // Dark night sky
+        scene.setBackground(new Color(25, 25, 35).scale(0.1));  // Dark night sky
         scene.setAmbientLight(new AmbientLight(new Color(15, 15, 20).scale(0.1)));
     }
 
@@ -335,26 +337,26 @@ public class GeometricForestClearingTest {
      * Setup complex lighting with 5+ light sources
      */
     private void setupLighting() {
-        // 1. Sun - Main directional light (keep as is, not too strong)
+        // 1. Sun - Main directional light (dimmer)
         scene.lights.add(
-                new DirectionalLight(new Color(120, 110, 80), new Vector(1, 1, -2))
+                new DirectionalLight(new Color(60, 55, 40), new Vector(1, 1, -2))
         );
 
-        // 2. Mystical Orb lights - Point lights inside the orbs (reduce intensity, increase attenuation)
+        // 2. Mystical Orb lights - Point lights inside the orbs (dimmer, more attenuation)
         scene.lights.add(
-                new PointLight(new Color(80, 30, 120), new Point(100, 0, 80))
-                        .setKl(0.0008).setKq(0.00008)
+                new PointLight(new Color(40, 15, 60), new Point(100, 0, 80))
+                        .setKl(0.0015).setKq(0.0000015)
         );
         scene.lights.add(
-                new PointLight(new Color(30, 80, 120), new Point(-50, 87, 110))
-                        .setKl(0.0008).setKq(0.00008)
+                new PointLight(new Color(15, 40, 60), new Point(-50, 87, 110))
+                        .setKl(0.0015).setKq(0.0000015)
         );
         scene.lights.add(
-                new PointLight(new Color(120, 80, 30), new Point(-50, -87, 140))
-                        .setKl(0.0008).setKq(0.00008)
+                new PointLight(new Color(60, 40, 15), new Point(-50, -87, 140))
+                        .setKl(0.0015).setKq(0.0000015)
         );
 
-        // 3. Firefly lights - Small scattered point lights (reduce intensity, increase attenuation)
+        // 3. Firefly lights - Small scattered point lights (dimmer, more attenuation)
         for (int i = 0; i < 8; i++) {
             double angle = (2 * Math.PI * i) / 8;
             double radius = 200 + random.nextDouble() * 600;
@@ -363,25 +365,25 @@ public class GeometricForestClearingTest {
             double z = 20 + random.nextDouble() * 40;
 
             scene.lights.add(
-                    new PointLight(new Color(60, 60, 24), new Point(x, y, z))
-                            .setKl(0.002).setKq(0.0002)
+                    new PointLight(new Color(20, 20, 8), new Point(x, y, z))
+                            .setKl(0.003).setKq(0.0003)
             );
         }
 
-        // 4. Moon - Soft ambient spotlight from above (reduce intensity, increase attenuation)
+        // 4. Moon - Soft ambient spotlight from above (dimmer, more attenuation)
         scene.lights.add(
-                new SpotLight(new Color(40, 40, 60), new Point(0, 0, 1000), new Vector(0, 0, -1))
-                        .setKl(0.0001).setKq(0.000001).setNarrowBeam(45)
+                new SpotLight(new Color(15, 15, 25), new Point(0, 0, 1000), new Vector(0, 0, -1))
+                        .setKl(0.0002).setKq(0.000002).setNarrowBeam(45)
         );
 
-        // 5. Ruin glow - Colored lights from ruin structures (reduce intensity, increase attenuation)
+        // 5. Ruin glow - Colored lights from ruin structures (dimmer, more attenuation)
         scene.lights.add(
-                new SpotLight(new Color(30, 120, 30), new Point(-600, -600, 100), new Vector(1, 1, -1))
-                        .setKl(0.001).setKq(0.0001).setNarrowBeam(30)
+                new SpotLight(new Color(10, 40, 10), new Point(-600, -600, 100), new Vector(1, 1, -1))
+                        .setKl(0.002).setKq(0.0002).setNarrowBeam(30)
         );
         scene.lights.add(
-                new SpotLight(new Color(120, 30, 30), new Point(600, 600, 100), new Vector(-1, -1, -1))
-                        .setKl(0.001).setKq(0.0001).setNarrowBeam(30)
+                new SpotLight(new Color(40, 10, 10), new Point(600, 600, 100), new Vector(-1, -1, -1))
+                        .setKl(0.002).setKq(0.0002).setNarrowBeam(30)
         );
     }
 }
