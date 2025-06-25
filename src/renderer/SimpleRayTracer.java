@@ -50,7 +50,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param ray The ray to check for intersections.
      * @return The closest intersection, or null if none.
      */
-    private Intersection findClosestIntersection(Ray ray) {
+    protected Intersection findClosestIntersection(Ray ray) {
         return ray.findClosestIntersection(scene.geometries.calculateIntersections(ray));
     }
 

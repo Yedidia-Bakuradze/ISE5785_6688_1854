@@ -27,6 +27,11 @@ public class RegularGridRayTracer extends ExtendedRayTracer {
     }
 
     @Override
+    protected Intersectable.Intersection findClosestIntersection(Ray ray) {
+        return voxelTraverser.get().findClosestIntersection(ray);
+    }
+
+    @Override
     protected Double3 transparency(Intersectable.Intersection intersection) {
         Ray shadowRay = new Ray(intersection.point, intersection.lightDirection.scale(-1), intersection.normal);
         double maxDistance = intersection.lightSource.getDistance(shadowRay.getHead());
