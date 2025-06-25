@@ -417,6 +417,7 @@ public class RegularGridConfiguration {
                     .setOptimizedTraversal(true)
                     .setRayBoxOptimization(true)
                     .setSparseStorage(true)
+                    .setEnabled(true)
                     .setMaxMemoryUsage(1024.0);
         }
 

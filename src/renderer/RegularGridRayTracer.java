@@ -27,9 +27,6 @@ public class RegularGridRayTracer extends ExtendedRayTracer {
 
     @Override
     public Color traceRay(Ray ray) {
-        // Check if grid acceleration is enabled
-        if (!configuration.isEnabled()) return super.traceRay(ray);
-
         // Use grid traversal to find the closest intersection
         Intersectable.Intersection intersection = voxelTraverser.get().findClosestIntersection(ray);
 
