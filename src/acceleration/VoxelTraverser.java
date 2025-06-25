@@ -86,7 +86,6 @@ public class VoxelTraverser {
      */
     private Intersection findClosestVoxelIntersection(Ray ray) {
         if (!grid.hasFiniteGeometries) return null;
-        if (!grid.getSceneBounds().intersects(ray)) return null;
 
         // Calculate ray entry point into scene bounds
         Point entryPoint = grid.getSceneBounds().getRayEntryPoint(ray);
@@ -110,9 +109,6 @@ public class VoxelTraverser {
                 if (distance < minDistance) {
                     minDistance = distance;
                     closest = voxelClosest;
-
-                    // Early termination if enabled
-                    if (grid.getConfiguration().isEnableEarlyTermination()) break;
                 }
             }
 
