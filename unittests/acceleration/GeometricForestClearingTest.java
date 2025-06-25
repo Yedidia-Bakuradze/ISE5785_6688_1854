@@ -138,9 +138,9 @@ public class GeometricForestClearingTest {
                 .setVpDistance(1000)
                 .setVpSize(1000, 1000)
                 .setResolution(800, 800)
-                .setRayTracer(scene, RayTracerType.GRID)
                 .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
                 .setGridConfiguration(AccelerationMode.PERFORMANCE)
+                .setRayTracer(scene, RayTracerType.GRID)
                 .setMultithreading(0)  // MT deactivated
                 .setDebugPrint(0.1)
                 .build()

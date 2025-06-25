@@ -47,9 +47,7 @@ public class VoxelTraverser {
         }
 
         // Phase 2: Check scene bounds intersection
-        if (grid.getSceneBounds().intersects(ray)) {
-            return closest;
-        }
+        if (!grid.getSceneBounds().intersects(ray)) return closest;
 
         // Phase 3: 3D-DDA traversal with early termination
         Intersection gridClosest = perform3DDATraversalForClosest(ray, minDistance);
