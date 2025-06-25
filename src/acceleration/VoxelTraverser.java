@@ -20,7 +20,6 @@ public class VoxelTraverser {
 
     public VoxelTraverser(RegularGrid grid) {
         if (grid == null) throw new IllegalArgumentException("Grid cannot be null");
-
         this.grid = grid;
         this.testedGeometries = new HashSet<>();
     }
@@ -49,7 +48,7 @@ public class VoxelTraverser {
         }
 
         // Phase 2: Check scene bounds intersection
-        if (grid.getSceneBounds().intersects(ray)) return closest;
+        if (!grid.getSceneBounds().intersects(ray)) return closest;
 
         // Phase 3: 3D-DDA traversal with early termination
         Intersection gridClosest = perform3DDATraversalForClosest(ray, minDistance);
@@ -80,12 +79,10 @@ public class VoxelTraverser {
         List<Intersection> allIntersections = new ArrayList<>();
 
         // Phase 1: Test infinite geometries first
-        if (this.grid.hasInfiniteGeometries) {
-            testInfiniteGeometries(ray, allIntersections);
-        }
+        if (this.grid.hasInfiniteGeometries) testInfiniteGeometries(ray, allIntersections);
 
         // Phase 2: Check if ray intersects scene bounds
-        if (grid.getSceneBounds().intersects(ray)) return allIntersections.isEmpty() ? null : allIntersections;
+        if (!grid.getSceneBounds().intersects(ray)) return allIntersections.isEmpty() ? null : allIntersections;
 
         // Phase 3: Perform 3D-DDA traversal through grid
         perform3DDATraversal(ray, allIntersections, maxDistance);

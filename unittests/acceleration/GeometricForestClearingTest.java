@@ -168,7 +168,7 @@ public class GeometricForestClearingTest {
                 .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
                 .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
                 .setGridConfiguration(AccelerationMode.PERFORMANCE)
-                .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
+                .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.DEBUG)))
                 .setRayTracer(scene, RayTracerType.GRID)
                 .setMultithreading(-2)
                 .setDebugPrint(0.1)
@@ -186,7 +186,7 @@ public class GeometricForestClearingTest {
         scene.lights.clear();
 
         // Create the forest clearing scene
-//        createGroundPlane();
+        createGroundPlane();
         createSkyDome();
         createForestTrees();
         createAncientRuins();
