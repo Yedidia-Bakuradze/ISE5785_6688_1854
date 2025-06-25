@@ -92,7 +92,7 @@ class PixelManager {
     }
 
     /**
-     * Function for thread-safe manipulating of main follow up Pixel object - this
+     * Function for thread-safe manipulating of main the next Pixel object - this
      * function is critical section for all the threads, and the pixel manager data
      * is the shared data of this critical section.<br/>
      * The function provides next available pixel number each call.
@@ -105,12 +105,12 @@ class PixelManager {
 
             ++cCol;
             if (cCol < maxCols)
-                return new Pixel(cRow, cCol);
+                return new Pixel(cCol, cRow);  // ✅ Fixed: Correct parameter order
 
             cCol = 0;
             ++cRow;
             if (cRow < maxRows)
-                return new Pixel(cRow, cCol);
+                return new Pixel(cCol, cRow);  // ✅ Fixed: Correct parameter order
         }
         return null;
     }

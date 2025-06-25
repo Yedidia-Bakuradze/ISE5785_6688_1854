@@ -10,18 +10,18 @@ import scene.Scene;
 import java.util.Map;
 
 public class RegularGridRayTracer extends ExtendedRayTracer {
-    private final VoxelTraverser voxelTraverser;
+    private final ThreadLocal<VoxelTraverser> voxelTraverser;
     private final RegularGridConfiguration configuration;
 
     public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, RegularGrid grid) {
         super(scene);
-        this.voxelTraverser = new VoxelTraverser(grid);
+        this.voxelTraverser = ThreadLocal.withInitial(() -> new VoxelTraverser(grid));
         this.configuration = configuration;
     }
 
     public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, RegularGrid grid, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene, targetArea);
-        this.voxelTraverser = new VoxelTraverser(grid);
+        this.voxelTraverser = ThreadLocal.withInitial(() -> new VoxelTraverser(grid));
         this.configuration = configuration;
     }
 
@@ -31,7 +31,7 @@ public class RegularGridRayTracer extends ExtendedRayTracer {
         if (!configuration.isEnabled()) return super.traceRay(ray);
 
         // Use grid traversal to find the closest intersection
-        Intersectable.Intersection intersection = voxelTraverser.findClosestIntersection(ray);
+        Intersectable.Intersection intersection = voxelTraverser.get().findClosestIntersection(ray);
 
         // Calculate color using existing shading logic
         return intersection == null
