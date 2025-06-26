@@ -24,12 +24,7 @@ public class ChessBoardTest {
     /**
      * The scene object containing all geometries, lighting and settings for rendering.
      */
-    Scene scene = new Scene("Chess Board Test Scene");
-
-    /**
-     * Camera builder for setting up the viewpoint and rendering parameters.
-     */
-    public Camera.Builder cameraBuilder = Camera.getBuilder().setRayTracer(scene, RayTracerType.SIMPLE);
+    public Scene scene = new Scene("Chess Board Test Scene");
 
     /**
      * Size of each chess square in scene units.
@@ -59,9 +54,20 @@ public class ChessBoardTest {
     private static final double DISTANCE = 400;
 
     /**
+     * Camera builder for setting up the viewpoint and rendering parameters.
+     */
+    public Camera.Builder cameraBuilder = Camera.getBuilder()
+            .setLocation(CAMERA_LOCATION)
+            .setDirection(V_TO, V_UP)
+            .setVpDistance(DISTANCE)
+            .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
+            .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
+            .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.EASY, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 0.5));
+
+    /**
      * Material for white chess pieces (frosted glass).
      */
-    Material whitePieceMaterial = new Material().setKD(0.2).setKS(0.3).setShininess(80).setKR(0.1).setKT(0.7);
+    Material whitePieceMaterial = new Material().setKD(0.2).setKS(0.3).setShininess(30).setKR(0.1);
 
     /**
      * Material for black chess pieces.
@@ -71,7 +77,7 @@ public class ChessBoardTest {
     /**
      * White chess piece color (frosted glass) - dimmer than board squares.
      */
-    Color whitePieceColor = new Color(200, 200, 210); // Dimmed from (250, 250, 255)
+    Color whitePieceColor = new Color(176, 196, 222); // Dimmed from (250, 250, 255)
 
     /**
      * Black chess piece color - dimmer than board squares.
@@ -154,7 +160,7 @@ public class ChessBoardTest {
     /**
      * Color for trophy display case (clear glass with slight tint).
      */
-    Color trophyCaseColor = new Color(230, 240, 250).scale(0.1);
+    Color trophyCaseColor = new Color(12, 120, 56).scale(0.3);
 
     /**
      * Material for chess clock body (dark plastic/metal).
@@ -209,12 +215,6 @@ public class ChessBoardTest {
         createChessBoardScene();
 
         cameraBuilder
-                .setLocation(CAMERA_LOCATION)
-                .setDirection(V_TO, V_UP)
-                .setVpDistance(DISTANCE)
-                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
-                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
-                .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.EASY, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 0.5))
                 .setRayTracer(scene, RayTracerType.EXTENDED)
                 .setMultithreading(0) // No multithreading
                 .setDebugPrint(0.1)
@@ -231,12 +231,6 @@ public class ChessBoardTest {
         createChessBoardScene();
 
         cameraBuilder
-                .setLocation(CAMERA_LOCATION)
-                .setDirection(V_TO, V_UP)
-                .setVpDistance(DISTANCE)
-                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
-                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
-                .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.EASY, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 0.5))
                 .setRayTracer(scene, RayTracerType.EXTENDED)
                 .setMultithreading(-2) // Multithreading activated
                 .setDebugPrint(0.1)
@@ -253,12 +247,6 @@ public class ChessBoardTest {
         createChessBoardScene();
 
         cameraBuilder
-                .setLocation(CAMERA_LOCATION)
-                .setDirection(V_TO, V_UP)
-                .setVpDistance(DISTANCE)
-                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
-                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
-                .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.EASY, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 0.5))
                 .setRegularGrid(new RegularGrid(scene))
                 .setRayTracer(scene, RayTracerType.GRID_EXTENDED)
                 .setMultithreading(0) // No multithreading
@@ -276,12 +264,6 @@ public class ChessBoardTest {
         createChessBoardScene();
 
         cameraBuilder
-                .setLocation(CAMERA_LOCATION)
-                .setDirection(V_TO, V_UP)
-                .setVpDistance(DISTANCE)
-                .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
-                .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
-                .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.EASY, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 0.5))
                 .setRegularGrid(new RegularGrid(scene))
                 .setRayTracer(scene, RayTracerType.GRID_EXTENDED)
                 .setMultithreading(-2)
