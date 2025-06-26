@@ -19,6 +19,10 @@ public class ExtendedRayTracer extends SimpleRayTracer {
      * The target area for distributing rays when using effects like depth of field or soft shadows
      */
     private final Map<EffectType, TargetAreaBase> targetArea;
+    /**
+     * Indicates whether advanced features are enabled.
+     */
+    protected boolean isFeatureEnabled = false;
 
     //TODO: Effect -> Effects
 
@@ -31,6 +35,17 @@ public class ExtendedRayTracer extends SimpleRayTracer {
     public ExtendedRayTracer(Scene scene, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene);
         this.targetArea = targetArea;
+        this.isFeatureEnabled = true;
+    }
+
+    /**
+     * Constructs an extended ray tracer with the specified scene.
+     *
+     * @param scene The scene to be rendered.
+     */
+    public ExtendedRayTracer(Scene scene) {
+        super(scene);
+        this.targetArea = null;
     }
 
     /**
@@ -42,6 +57,8 @@ public class ExtendedRayTracer extends SimpleRayTracer {
      * @return the color contribution from all global effects
      */
     protected Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
+        if (!isFeatureEnabled) return super.calcGlobalEffects(intersection, level, k);
+
         Color refractionColor;
         // Handle transmission/refraction (what goes THROUGH the object)
         if (intersection.material.roughness <= 0.0)
@@ -62,5 +79,4 @@ public class ExtendedRayTracer extends SimpleRayTracer {
 
         return refractionColor.add(calcGlobalEffect(calcReflectionRay(intersection), level, k, intersection.material.kR));
     }
-
 }

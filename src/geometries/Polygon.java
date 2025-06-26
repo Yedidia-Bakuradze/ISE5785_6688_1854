@@ -97,6 +97,11 @@ public class Polygon extends Geometry {
         return plane.getNormal(point);
     }
 
+    @Override
+    public BoundingBox getBoundingBox() {
+        return null;
+    }
+
     //TODO: This method is a bonus for this project. implement it later
 
     @Override

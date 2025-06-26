@@ -71,4 +71,11 @@ abstract public class Geometry extends Intersectable {
         this.material = material;
         return this;
     }
+
+    /**
+     * Returns a string representation of the geometry.
+     *
+     * @return A string describing the geometry.
+     */
+    public abstract BoundingBox getBoundingBox();
 }

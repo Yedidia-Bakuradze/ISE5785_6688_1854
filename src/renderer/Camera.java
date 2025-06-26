@@ -1,5 +1,7 @@
 package renderer;
 
+import acceleration.AccelerationMode;
+import acceleration.RegularGrid;
 import primitives.*;
 import primitives.Vector;
 import sampling.*;
@@ -163,6 +165,17 @@ public class Camera implements Cloneable {
         }
 
         /**
+         * Sets the regular grid for acceleration.
+         *
+         * @param grid The regular grid to use.
+         * @return The builder instance for method chaining.
+         */
+        public Builder setRegularGrid(RegularGrid grid) {
+            camera.regularGrid = grid;
+            return this;
+        }
+
+        /**
          * Sets the ray that would identify and paint the intersected pixels
          *
          * @param scene the scene of objects
@@ -175,10 +188,13 @@ public class Camera implements Cloneable {
                     camera.rayTracer = new SimpleRayTracer(scene);
                     break;
                 case GRID:
-                    camera.rayTracer = null;
+                    camera.rayTracer = new RegularGridRayTracer(scene, camera.regularGrid);
                     break;
                 case EXTENDED:
                     camera.rayTracer = new ExtendedRayTracer(scene, camera.targetAreas);
+                    break;
+                case GRID_EXTENDED:
+                    camera.rayTracer = new RegularGridRayTracer(scene, camera.regularGrid, camera.targetAreas);
                     break;
                 default:
                     throw new IllegalArgumentException("The type: " + type + " is invalid for the ray tracer");
@@ -343,6 +359,16 @@ public class Camera implements Cloneable {
      * The image writer instance for rendering the image
      */
     private ImageWriter imageWriter;
+
+    /**
+     * The regular grid used for acceleration.
+     */
+    private RegularGrid regularGrid = null;
+
+    /**
+     * The acceleration mode used for rendering.
+     */
+    private AccelerationMode accelerationMode = AccelerationMode.NONE;
 
     /**
      * The ray tracer instance for calculating the rays

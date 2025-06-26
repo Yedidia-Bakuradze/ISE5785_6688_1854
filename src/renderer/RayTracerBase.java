@@ -30,4 +30,5 @@ public abstract class RayTracerBase {
      * @return The color at the intersection point.
      */
     public abstract Color traceRay(Ray ray);
+    
 }

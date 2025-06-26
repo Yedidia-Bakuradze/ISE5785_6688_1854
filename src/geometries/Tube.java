@@ -38,6 +38,11 @@ public class Tube extends RadialGeometry {
         return point.subtract(o).normalize();
     }
 
+    @Override
+    public BoundingBox getBoundingBox() {
+        return null;
+    }
+
     //TODO: This method is a bonus for this project. implement it later
 
     @Override

@@ -76,4 +76,24 @@ public class Triangle extends Polygon {
     public String toString() {
         return "Triangle{" + "vertices=" + vertices + " }";
     }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        Point v0 = vertices.get(0);
+        Point v1 = vertices.get(1);
+        Point v2 = vertices.get(2);
+
+        double minX = Math.min(Math.min(v0.getX(), v1.getX()), v2.getX());
+        double minY = Math.min(Math.min(v0.getY(), v1.getY()), v2.getY());
+        double minZ = Math.min(Math.min(v0.getZ(), v1.getZ()), v2.getZ());
+
+        double maxX = Math.max(Math.max(v0.getX(), v1.getX()), v2.getX());
+        double maxY = Math.max(Math.max(v0.getY(), v1.getY()), v2.getY());
+        double maxZ = Math.max(Math.max(v0.getZ(), v1.getZ()), v2.getZ());
+
+        return new BoundingBox(
+                new Point(minX, minY, minZ),
+                new Point(maxX, maxY, maxZ)
+        );
+    }
 }
