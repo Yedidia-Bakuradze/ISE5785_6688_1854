@@ -14,9 +14,21 @@ import static geometries.Intersectable.Intersection;
  */
 public class VoxelTraverser {
 
+    /**
+     * The regular grid used for voxel traversal.
+     */
     private final RegularGrid grid;
+
+    /**
+     * Set of geometries that have already been tested for intersections.
+     */
     private final Set<Intersectable> testedGeometries;
 
+    /**
+     * Constructs a voxel traverser for the specified regular grid.
+     *
+     * @param grid The regular grid to use for traversal.
+     */
     public VoxelTraverser(RegularGrid grid) {
         if (grid == null) throw new IllegalArgumentException("Grid cannot be null");
         this.grid = grid;
@@ -24,7 +36,10 @@ public class VoxelTraverser {
     }
 
     /**
-     * Finds the closest intersection along a ray
+     * Finds the closest intersection along a ray.
+     *
+     * @param ray The ray to test for intersections.
+     * @return The closest intersection, or null if none exist.
      */
     public Intersection findClosestIntersection(Ray ray) {
         Intersection infiniteClosest = findClosestInfiniteIntersection(ray);
@@ -110,12 +125,12 @@ public class VoxelTraverser {
         return closest;
     }
 
-    public List<Intersection> findIntersections(Ray ray) {
-        return findIntersections(ray, Double.POSITIVE_INFINITY);
-    }
-
     /**
-     * Finds all intersections along a ray
+     * Finds all intersections along a ray up to a maximum distance.
+     *
+     * @param ray         The ray to test for intersections.
+     * @param maxDistance The maximum distance for intersections.
+     * @return A list of intersections, or null if none exist.
      */
     public List<Intersection> findIntersections(Ray ray, double maxDistance) {
         // Initialize traversal state
@@ -138,6 +153,9 @@ public class VoxelTraverser {
 
     /**
      * Tests intersections with infinite geometries
+     *
+     * @param ray          The ray to test for intersections.
+     * @param intersections The list to store intersections.
      */
     private void castRayToInfiniteObjects(Ray ray, List<Intersection> intersections) {
         if (!grid.hasInfiniteGeometries) return;
@@ -151,7 +169,11 @@ public class VoxelTraverser {
     }
 
     /**
-     * Performs 3D-DDA traversal through the grid voxels
+     * Performs 3D-DDA traversal through the grid voxels.
+     *
+     * @param ray          The ray to test for intersections.
+     * @param intersections The list to store intersections.
+     * @param maxDistance   The maximum distance for intersections.
      */
     private void preform3DDDAWalk(Ray ray, List<Intersection> intersections, double maxDistance) {
         // Calculate ray entry point into scene bounds
@@ -175,7 +197,11 @@ public class VoxelTraverser {
     }
 
     /**
-     * Tests all geometries in a specific voxel for intersections
+     * Tests all geometries in a specific voxel for intersections.
+     *
+     * @param voxelCoords   The grid coordinates of the voxel.
+     * @param ray           The ray to test for intersections.
+     * @param intersections The list to store intersections.
      */
     private void castRayToFiniteObjects(int[] voxelCoords, Ray ray, List<Intersection> intersections) {
         Optional<Voxel> voxelOpt = grid.getVoxel(voxelCoords[0], voxelCoords[1], voxelCoords[2]);
@@ -193,7 +219,12 @@ public class VoxelTraverser {
     }
 
     /**
-     * Tests geometries in a voxel for closest intersection only
+     * Tests geometries in a voxel for the closest intersection only.
+     *
+     * @param voxelCoords        The grid coordinates of the voxel.
+     * @param ray                The ray to test for intersections.
+     * @param currentMinDistance The current minimum distance to beat.
+     * @return The closest intersection, or null if none exist.
      */
     private Intersection castRayToClosestFiniteObjects(int[] voxelCoords, Ray ray, double currentMinDistance) {
         Optional<Voxel> voxelOpt = grid.getVoxel(voxelCoords[0], voxelCoords[1], voxelCoords[2]);
@@ -221,6 +252,13 @@ public class VoxelTraverser {
         return closest;
     }
 
+    /**
+     * Initializes the 3D-DDA traversal state for a ray.
+     *
+     * @param ray        The ray to initialize traversal for.
+     * @param entryPoint The entry point of the ray into the grid.
+     * @return The initialized DDA state.
+     */
     private DDAState initializeDDA(Ray ray, Point entryPoint) {
         Vector rayDir = ray.getDirection();
         int[] currentVoxel = grid.worldToGrid(entryPoint);
@@ -242,6 +280,16 @@ public class VoxelTraverser {
         return new DDAState(currentVoxel, step, delta, calculateInitialDistances(entryPoint, currentVoxel, step, delta, rayDir));
     }
 
+    /**
+     * Calculates the initial distances to voxel boundaries for 3D-DDA traversal.
+     *
+     * @param entryPoint   The entry point of the ray into the grid.
+     * @param currentVoxel The current voxel coordinates.
+     * @param step         The step direction for traversal.
+     * @param delta        The delta distances for traversal.
+     * @param rayDir       The direction of the ray.
+     * @return An array of initial distances to voxel boundaries.
+     */
     private double[] calculateInitialDistances(Point entryPoint, int[] currentVoxel, int[] step, double[] delta, Vector rayDir) {
         double[] next = new double[3];
         Point sceneMin = grid.getSceneBounds().min();
@@ -263,6 +311,11 @@ public class VoxelTraverser {
         return next;
     }
 
+    /**
+     * Advances the DDA state to the next voxel.
+     *
+     * @param state The current DDA state.
+     */
     private void getNextVoxel(DDAState state) {
         int minAxis = 0;
         if (state.next[1] < state.next[minAxis]) minAxis = 1;
@@ -272,14 +325,36 @@ public class VoxelTraverser {
         state.currentVoxel[minAxis] += state.step[minAxis];
     }
 
+    /**
+     * Checks if the given voxel coordinates are valid within the grid resolution.
+     *
+     * @param voxel      The voxel coordinates to check.
+     * @param resolution The grid resolution.
+     * @return True if the voxel coordinates are valid, false otherwise.
+     */
     private boolean isValidVoxel(int[] voxel, int[] resolution) {
         return voxel[0] >= 0 && voxel[0] < resolution[0] &&
                 voxel[1] >= 0 && voxel[1] < resolution[1] &&
                 voxel[2] >= 0 && voxel[2] < resolution[2];
     }
 
-    // Inner classes remain the same
+    /**
+     * Represents the state of the 3D-DDA traversal.
+     *
+     * @param currentVoxel The current voxel coordinates being traversed.
+     * @param step         The step direction for traversal along each axis.
+     * @param delta        The delta distances for traversal along each axis.
+     * @param next         The distances to the next voxel boundaries along each axis.
+     */
     private record DDAState(int[] currentVoxel, int[] step, double[] delta, double[] next) {
+        /**
+         * Constructs a DDAState with the specified traversal parameters.
+         *
+         * @param currentVoxel The current voxel coordinates being traversed.
+         * @param step         The step direction for traversal along each axis.
+         * @param delta        The delta distances for traversal along each axis.
+         * @param next         The distances to the next voxel boundaries along each axis.
+         */
         private DDAState(int[] currentVoxel, int[] step, double[] delta, double[] next) {
             this.currentVoxel = currentVoxel.clone();
             this.step = step.clone();

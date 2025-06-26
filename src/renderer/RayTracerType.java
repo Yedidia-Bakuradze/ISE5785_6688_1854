@@ -18,5 +18,8 @@ public enum RayTracerType {
      */
     EXTENDED,
 
+    /**
+     * Represents an extended ray tracer that uses a regular grid for acceleration.
+     */
     GRID_EXTENDED,
 }

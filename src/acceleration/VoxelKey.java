@@ -2,6 +2,14 @@ package acceleration;
 
 import java.util.Objects;
 
+/**
+ * Represents a unique key for identifying a voxel in the RegularGrid.
+ * The key is defined by the voxel's grid coordinates (x, y, z).
+ *
+ * @param x The x coordinate of the voxel.
+ * @param y The y coordinate of the voxel.
+ * @param z The z coordinate of the voxel.
+ */
 public record VoxelKey(int x, int y, int z) {
 
     /**

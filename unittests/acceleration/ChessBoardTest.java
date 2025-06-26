@@ -41,17 +41,45 @@ public class ChessBoardTest {
      */
     private static final double BOARD_HEIGHT = 5.0;
 
+    /**
+     * The vector pointing towards the view plane.
+     */
     private static final Vector V_TO = new Vector(0, 1, -0.5);
+
+    /**
+     * The vector pointing upwards relative to the view plane.
+     */
     private static final Vector V_UP = new Vector(0, 0.5, 1);
+
+    /**
+     * The location of the camera in the chessboard scene.
+     */
     private static final Point CAMERA_LOCATION = new Point(0, -600, 300);
 
-    private static final int RESOLUTION_WIDTH = 1200;
+    /**
+     * The distance from the camera to the view plane.
+     */
+    private static final double DISTANCE = 400;
+
+    /**
+     * The resolution height of the image.
+     */
     private static final int RESOLUTION_HEIGHT = 1000;
 
-    private static final double IMAGE_WIDTH = RESOLUTION_WIDTH;
+    /**
+     * The resolution width of the image.
+     */
+    private static final int RESOLUTION_WIDTH = 1200;
+
+    /**
+     * The height of the image in pixels.
+     */
     private static final double IMAGE_HEIGHT = RESOLUTION_HEIGHT;
 
-    private static final double DISTANCE = 400;
+    /**
+     * The width of the image in pixels.
+     */
+    private static final double IMAGE_WIDTH = RESOLUTION_WIDTH;
 
     /**
      * Camera builder for setting up the viewpoint and rendering parameters.
@@ -149,7 +177,9 @@ public class ChessBoardTest {
      */
     Color floorColor = new Color(101, 67, 33);// Dark walnut
 
-    // Background: Soft neutral
+    /**
+     * The background color of the chessboard scene.
+     */
     Color backgroundColor = Color.BLACK;
 
     /**
@@ -1539,6 +1569,7 @@ public class ChessBoardTest {
         double interiorHeight = PIECE_HEIGHT_OFFSET + SQUARE_SIZE * 1.5; // Inside the case, mid-height
 
         scene.lights.add(
+                              
                 new PointLight(new Color(255, 0, 0), new Point(trophyX, trophyY, interiorHeight)) // Bright red glow
                         .setKl(0.001) // Higher attenuation since it's close-range interior lighting
                         .setKq(0.0001)

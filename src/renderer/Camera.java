@@ -164,6 +164,12 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Sets the regular grid for acceleration.
+         *
+         * @param grid The regular grid to use.
+         * @return The builder instance for method chaining.
+         */
         public Builder setRegularGrid(RegularGrid grid) {
             camera.regularGrid = grid;
             return this;
@@ -354,8 +360,14 @@ public class Camera implements Cloneable {
      */
     private ImageWriter imageWriter;
 
+    /**
+     * The regular grid used for acceleration.
+     */
     private RegularGrid regularGrid = null;
 
+    /**
+     * The acceleration mode used for rendering.
+     */
     private AccelerationMode accelerationMode = AccelerationMode.NONE;
 
     /**

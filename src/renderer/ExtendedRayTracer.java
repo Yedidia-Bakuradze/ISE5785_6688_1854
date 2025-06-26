@@ -19,6 +19,9 @@ public class ExtendedRayTracer extends SimpleRayTracer {
      * The target area for distributing rays when using effects like depth of field or soft shadows
      */
     private final Map<EffectType, TargetAreaBase> targetArea;
+    /**
+     * Indicates whether advanced features are enabled.
+     */
     protected boolean isFeatureEnabled = false;
 
     //TODO: Effect -> Effects
@@ -35,6 +38,11 @@ public class ExtendedRayTracer extends SimpleRayTracer {
         this.isFeatureEnabled = true;
     }
 
+    /**
+     * Constructs an extended ray tracer with the specified scene.
+     *
+     * @param scene The scene to be rendered.
+     */
     public ExtendedRayTracer(Scene scene) {
         super(scene);
         this.targetArea = null;

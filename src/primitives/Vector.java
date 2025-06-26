@@ -194,6 +194,11 @@ public class Vector extends Point {
         return List.of(w, crossProduct(w).normalize());
     }
 
+    /**
+     * Returns a normalized vector orthogonal to this vector.
+     *
+     * @return A normalized orthogonal vector.
+     */
     public Vector getOrthogonalNormalized() {
         try {
             return new Vector(-xyz.d2(), xyz.d1(), 0).normalize();

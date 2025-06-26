@@ -20,23 +20,75 @@ import java.util.*;
 public class RegularGrid {
 
     // Grid structure and dimensions
+    /**
+     * The bounding box of the scene.
+     */
     private final BoundingBox sceneBounds;
+
+    /**
+     * The resolution of the grid along the X-axis.
+     */
     private final int resolutionX;
+
+    /**
+     * The resolution of the grid along the Y-axis.
+     */
     private final int resolutionY;
+
+    /**
+     * The resolution of the grid along the Z-axis.
+     */
     private final int resolutionZ;
+
+    /**
+     * The size of a voxel along the X-axis.
+     */
     private final double voxelSizeX;
+
+    /**
+     * The size of a voxel along the Y-axis.
+     */
     private final double voxelSizeY;
+
+    /**
+     * The size of a voxel along the Z-axis.
+     */
     private final double voxelSizeZ;
 
+    /**
+     * Recommended density factor for calculating optimal grid resolution.
+     */
     public final static double RECOMMENDED_DENSITY_FACTOR = 3.0;
+
+    /**
+     * Minimum resolution for the grid.
+     */
     public final static int MIN_RESOLUTION = 1;
+
+    /**
+     * Maximum resolution for the grid.
+     */
     public final static int MAX_RESOLUTION = 100;
 
+    /**
+     * Indicates whether the grid contains infinite geometries.
+     */
     protected final boolean hasInfiniteGeometries;
+
+    /**
+     * Indicates whether the grid contains finite geometries.
+     */
     protected final boolean hasFiniteGeometries;
 
     // Geometry storage
+    /**
+     * Map storing the voxels in the grid.
+     */
     private final Map<VoxelKey, Voxel> voxelMap;
+
+    /**
+     * List of infinite geometries in the scene.
+     */
     private final List<Intersectable> infiniteGeometries;
 
     /**
@@ -175,7 +227,11 @@ public class RegularGrid {
     // ======================= Private Helper Methods =======================
 
     /**
-     * Calculates voxel size with protection against degenerate cases.
+     * Calculates the voxel size based on the dimension and resolution.
+     *
+     * @param dimension The size of the dimension in world space.
+     * @param resolution The number of voxels along the dimension.
+     * @return The size of a single voxel along the dimension.
      */
     private double calculateVoxelSize(double dimension, int resolution) {
         if (resolution <= 0) throw new IllegalArgumentException("Resolution must be positive");
@@ -183,7 +239,9 @@ public class RegularGrid {
     }
 
     /**
-     * Builds the grid by distributing geometries into appropriate voxels.
+     * Converts the geometries in the scene into voxels.
+     *
+     * @param scene The scene containing the geometries.
      */
     private void convertToVoxels(Scene scene) {
         for (Intersectable intersectable : scene.geometries.getGeometries()) {
@@ -195,7 +253,10 @@ public class RegularGrid {
     }
 
     /**
-     * Distributes a single geometry to all voxels it overlaps with consistent boundary handling.
+     * Distributes a geometry into the voxels it overlaps.
+     *
+     * @param geometry The geometry to distribute.
+     * @param bounds The bounding box of the geometry.
      */
     private void distributeGeometryToVoxels(Intersectable geometry, BoundingBox bounds) {
         int[] minGrid = worldToGrid(bounds.min());
@@ -213,7 +274,12 @@ public class RegularGrid {
     }
 
     /**
-     * Validates that the current voxel coordinates are within grid bounds.
+     * Checks if the given voxel coordinates are valid within the grid resolution.
+     *
+     * @param i The X-coordinate of the voxel.
+     * @param j The Y-coordinate of the voxel.
+     * @param k The Z-coordinate of the voxel.
+     * @return True if the voxel coordinates are valid, false otherwise.
      */
     private boolean isValidGridCoordinate(int i, int j, int k) {
         return i >= 0 && i < resolutionX &&
@@ -221,6 +287,12 @@ public class RegularGrid {
                 k >= 0 && k < resolutionZ;
     }
 
+    /**
+     * Calculates the optimal resolution for the grid based on the number of objects.
+     *
+     * @param objectCount The number of objects in the scene.
+     * @return The optimal resolution for the grid.
+     */
     public int calculateOptimalResolution(int objectCount) {
         return Math.max(MIN_RESOLUTION, Math.min(MAX_RESOLUTION, (int) Math.ceil(RECOMMENDED_DENSITY_FACTOR * Math.cbrt(objectCount))));
     }

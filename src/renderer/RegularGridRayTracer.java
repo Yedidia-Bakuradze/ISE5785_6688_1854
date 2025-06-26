@@ -11,14 +11,34 @@ import scene.Scene;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Ray tracer that uses a regular grid acceleration structure for efficient ray traversal.
+ * Extends the capabilities of the extended ray tracer.
+ */
 public class RegularGridRayTracer extends ExtendedRayTracer {
+    /**
+     * Thread-local voxel traverser for efficient ray traversal.
+     */
     private final ThreadLocal<VoxelTraverser> voxelTraverser;
 
+    /**
+     * Constructs a regular grid ray tracer with the specified scene and grid.
+     *
+     * @param scene The scene to be rendered.
+     * @param grid  The regular grid for acceleration.
+     */
     public RegularGridRayTracer(Scene scene, RegularGrid grid) {
         super(scene);
         this.voxelTraverser = ThreadLocal.withInitial(() -> new VoxelTraverser(grid));
     }
 
+    /**
+     * Constructs a regular grid ray tracer with the specified scene, grid, and target areas.
+     *
+     * @param scene      The scene to be rendered.
+     * @param grid       The regular grid for acceleration.
+     * @param targetArea Map of effect types to their respective target area implementations.
+     */
     public RegularGridRayTracer(Scene scene, RegularGrid grid, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene, targetArea);
         this.voxelTraverser = ThreadLocal.withInitial(() -> new VoxelTraverser(grid));

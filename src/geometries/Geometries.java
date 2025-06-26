@@ -63,10 +63,20 @@ public class Geometries extends Intersectable {
         return intersections;
     }
 
+    /**
+     * Returns an unmodifiable list of all geometries in the collection.
+     *
+     * @return A list of intersectable geometries.
+     */
     public List<Intersectable> getGeometries() {
         return Collections.unmodifiableList(geometries);
     }
 
+    /**
+     * Returns a list of bounding boxes for all geometries in the collection.
+     *
+     * @return A list of bounding boxes.
+     */
     public List<BoundingBox> getBoundingBoxes() {
         List<BoundingBox> boundingBoxes = new ArrayList<>();
         for (Intersectable obj : geometries) {
@@ -77,14 +87,23 @@ public class Geometries extends Intersectable {
         return boundingBoxes;
     }
 
+    /**
+     * Returns the bounding box that encompasses all geometries in the collection.
+     *
+     * @return The union bounding box of all geometries.
+     */
     public BoundingBox getBoundingBox() {
         return BoundingBox.union(getBoundingBoxes());
     }
 
+    /**
+     * Returns a list of finite geometries (those with bounding boxes) in the collection.
+     *
+     * @return A list of finite geometries.
+     */
     public List<Intersectable> getFiniteInjectables() {
         List<Intersectable> finiteGeometries = null;
         for (Intersectable obj : geometries) {
-
             if (obj instanceof Geometry geometry && geometry.getBoundingBox() != null) {
                 if (finiteGeometries == null) {
                     finiteGeometries = new LinkedList<>();
@@ -95,10 +114,14 @@ public class Geometries extends Intersectable {
         return finiteGeometries;
     }
 
+    /**
+     * Returns a list of infinite geometries (those without bounding boxes) in the collection.
+     *
+     * @return A list of infinite geometries.
+     */
     public List<Intersectable> getInfiniteInjectables() {
         List<Intersectable> infiniteGeometries = null;
         for (Intersectable obj : geometries) {
-
             if (obj instanceof Geometry geometry && geometry.getBoundingBox() == null) {
                 if (infiniteGeometries == null) {
                     infiniteGeometries = new LinkedList<>();

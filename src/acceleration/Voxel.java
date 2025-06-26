@@ -9,7 +9,18 @@ import java.util.*;
  * Holds references to all geometries that overlap this cell.
  */
 public class Voxel {
+    /**
+     * List of geometries contained in this voxel.
+     */
     private final List<Intersectable> geometries = new ArrayList<>();
+
+    /**
+     * Default constructor for Voxel.
+     * Initializes an empty voxel with no geometries.
+     */
+    public Voxel() {
+        // Default constructor
+    }
 
     /**
      * Adds a geometry to this voxel.
@@ -17,6 +28,7 @@ public class Voxel {
      * filtered during traversal if deduplication is enabled.
      *
      * @param geom the geometry to add
+     * @return The current voxel instance for method chaining.
      */
     public Voxel addGeometry(Intersectable geom) {
         if (geom == null) throw new IllegalArgumentException("Cannot add null geometry to voxel");
