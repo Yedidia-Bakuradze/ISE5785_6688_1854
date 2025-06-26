@@ -76,7 +76,7 @@ public class ChessBoardTest {
     /**
      * Black chess piece color - dimmer than board squares.
      */
-    Color blackPieceColor = new Color(15, 15, 20); // Dimmed from (30, 30, 30)
+    Color blackPieceColor = new Color(30, 15, 20); // Dimmed from (30, 30, 30)
 
     /**
      * Height offset for pieces above the board.
@@ -92,11 +92,6 @@ public class ChessBoardTest {
      * Material for black squares.
      */
     Material blackMaterial = new Material().setKD(0.7).setKS(0.3).setShininess(40).setKR(0.05);
-
-    /**
-     * Material for the mirror.
-     */
-    Material mirrorMaterial = new Material().setKD(0.1).setKS(0.2).setShininess(100).setKR(0.9);
 
     /**
      * Material for the base/floor.
@@ -150,28 +145,6 @@ public class ChessBoardTest {
 
     // Background: Soft neutral
     Color backgroundColor = Color.BLACK;
-
-    /**
-     * Material for corner mirrors with milky/blurred effect.
-     */
-    Material cornerMirrorMaterial = new Material().setKD(0.1).setKS(0.3).setShininess(80).setKR(0.7).setKT(0.2);
-
-    /**
-     * Material for milky/frosted areas of mirrors.
-     */
-    Material milkyMirrorMaterial = new Material().setKD(0.2).setKS(0.2).setShininess(40).setKR(0.5).setKT(0.4);
-
-    /**
-     * Clear mirror color.
-     */
-    Color clearMirrorColor = new Color(230, 235, 240);
-
-    /**
-     * Milky/frosted mirror color.
-     */
-    Color milkyMirrorColor = new Color(200, 210, 220);
-
-    AmbientLight ambientLight = new AmbientLight(new Color(50, 50, 60).scale(0.001));
 
     /**
      * Material for trophy display case (diffusive glass).
@@ -279,7 +252,6 @@ public class ChessBoardTest {
     private void createChessBoardScene() {
         // Clear any existing geometries
         scene.geometries = new Geometries();
-
         // Create chess board
         createChessBoard();
 
@@ -292,209 +264,10 @@ public class ChessBoardTest {
         // Create floor/base
         createFloor();
 
-        // Add some decorative spheres around the board
-        addDecorativeSpheres();
+        placeChessClock();
 
         // Set up lighting
         setupLighting();
-    }
-
-    /**
-     * Creates corner display mirrors positioned around the chess board.
-     * Each mirror has graduated frosting (milky at top, clear at bottom).
-     */
-    private void createCornerMirrors() {
-        double mirrorWidth = SQUARE_SIZE * 1.5;
-        double mirrorHeight = SQUARE_SIZE * 2.0; // Taller than tallest piece (King)
-        double distanceFromCenter = BOARD_SIZE * 0.8; // Distance from board center
-        double mirrorThickness = 2.0;
-
-        // Calculate corner positions (45° angles around the board)
-        Point[] cornerPositions = {
-                // Front-Left Corner (between camera and left side)
-                new Point(-distanceFromCenter * 0.7, -distanceFromCenter * 0.7, 0),
-                // Front-Right Corner (between camera and right side)
-                new Point(distanceFromCenter * 0.7, -distanceFromCenter * 0.7, 0),
-                // Back-Left Corner (far left, behind board)
-                new Point(-distanceFromCenter * 0.7, distanceFromCenter * 0.7, 0),
-                // Back-Right Corner (far right, behind board)
-                new Point(distanceFromCenter * 0.7, distanceFromCenter * 0.7, 0)
-        };
-
-        // Angles for each mirror (pointing toward board center)
-        double[] mirrorAngles = {
-                Math.PI / 4,      // Front-Left: 45°
-                3 * Math.PI / 4,  // Front-Right: 135°
-                -Math.PI / 4,     // Back-Left: -45°
-                -3 * Math.PI / 4  // Back-Right: -135°
-        };
-
-        for (int mirrorIndex = 0; mirrorIndex < 4; mirrorIndex++) {
-            Point baseCenter = cornerPositions[mirrorIndex];
-            double angle = mirrorAngles[mirrorIndex];
-
-            // Calculate mirror corner points
-            double halfWidth = mirrorWidth / 2;
-            double cosAngle = Math.cos(angle);
-            double sinAngle = Math.sin(angle);
-
-            // Base corners (bottom of mirror)
-            Point bottomLeft = new Point(
-                    baseCenter.getX() + halfWidth * cosAngle - mirrorThickness * sinAngle,
-                    baseCenter.getY() + halfWidth * sinAngle + mirrorThickness * cosAngle,
-                    PIECE_HEIGHT_OFFSET
-            );
-            Point bottomRight = new Point(
-                    baseCenter.getX() - halfWidth * cosAngle - mirrorThickness * sinAngle,
-                    baseCenter.getY() - halfWidth * sinAngle + mirrorThickness * cosAngle,
-                    PIECE_HEIGHT_OFFSET
-            );
-
-            // Top corners (top of mirror)
-            Point topLeft = new Point(
-                    bottomLeft.getX(),
-                    bottomLeft.getY(),
-                    PIECE_HEIGHT_OFFSET + mirrorHeight
-            );
-            Point topRight = new Point(
-                    bottomRight.getX(),
-                    bottomRight.getY(),
-                    PIECE_HEIGHT_OFFSET + mirrorHeight
-            );
-
-            // Back face corners (for thickness)
-            Point bottomLeftBack = new Point(
-                    baseCenter.getX() + halfWidth * cosAngle + mirrorThickness * sinAngle,
-                    baseCenter.getY() + halfWidth * sinAngle - mirrorThickness * cosAngle,
-                    PIECE_HEIGHT_OFFSET
-            );
-            Point bottomRightBack = new Point(
-                    baseCenter.getX() - halfWidth * cosAngle + mirrorThickness * sinAngle,
-                    baseCenter.getY() - halfWidth * sinAngle - mirrorThickness * cosAngle,
-                    PIECE_HEIGHT_OFFSET
-            );
-            Point topLeftBack = new Point(
-                    bottomLeftBack.getX(),
-                    bottomLeftBack.getY(),
-                    PIECE_HEIGHT_OFFSET + mirrorHeight
-            );
-            Point topRightBack = new Point(
-                    bottomRightBack.getX(),
-                    bottomRightBack.getY(),
-                    PIECE_HEIGHT_OFFSET + mirrorHeight
-            );
-
-            // Create mirror sections with graduated frosting
-            createMirrorSection(bottomLeft, bottomRight, topRight, topLeft,
-                    true, mirrorIndex); // Front face (reflective)
-
-            // Create mirror frame/back
-            createMirrorFrame(bottomLeft, bottomRight, topRight, topLeft,
-                    bottomLeftBack, bottomRightBack, topRightBack, topLeftBack);
-        }
-    }
-
-    /**
-     * Creates a mirror section with graduated frosting effect.
-     *
-     * @param bottomLeft  bottom left corner
-     * @param bottomRight bottom right corner
-     * @param topRight    top right corner
-     * @param topLeft     top left corner
-     * @param isFrontFace true if this is the reflective front face
-     * @param mirrorIndex index of the mirror (0-3)
-     */
-    private void createMirrorSection(Point bottomLeft, Point bottomRight, Point topRight, Point topLeft, boolean isFrontFace, int mirrorIndex) {
-        if (!isFrontFace) return; // Only create front reflective face
-
-        // Divide mirror into 3 horizontal sections for graduated effect
-        double sectionHeight = (topLeft.getZ() - bottomLeft.getZ()) / 3;
-
-        // Bottom third - Clear reflection
-        Point midBottomLeft = new Point(bottomLeft.getX(), bottomLeft.getY(),
-                bottomLeft.getZ() + sectionHeight);
-        Point midBottomRight = new Point(bottomRight.getX(), bottomRight.getY(),
-                bottomRight.getZ() + sectionHeight);
-
-        // Middle third boundary
-        Point midTopLeft = new Point(bottomLeft.getX(), bottomLeft.getY(),
-                bottomLeft.getZ() + 2 * sectionHeight);
-        Point midTopRight = new Point(bottomRight.getX(), bottomRight.getY(),
-                bottomRight.getZ() + 2 * sectionHeight);
-
-        // Bottom section - Clear mirror (sharp reflections)
-        scene.geometries.add(
-                new Triangle(bottomLeft, bottomRight, midBottomRight)
-                        .setEmission(clearMirrorColor).setMaterial(cornerMirrorMaterial),
-                new Triangle(bottomLeft, midBottomRight, midBottomLeft)
-                        .setEmission(clearMirrorColor).setMaterial(cornerMirrorMaterial)
-        );
-
-        // Middle section - Light frosting
-        Material lightMilkyMaterial = new Material().setKD(0.15).setKS(0.25).setShininess(60)
-                .setKR(0.6).setKT(0.3);
-        scene.geometries.add(
-                new Triangle(midBottomLeft, midBottomRight, midTopRight)
-                        .setEmission(milkyMirrorColor).setMaterial(lightMilkyMaterial),
-                new Triangle(midBottomLeft, midTopRight, midTopLeft)
-                        .setEmission(milkyMirrorColor).setMaterial(lightMilkyMaterial)
-        );
-
-        // Top section - Heavy frosting (milky patina effect)
-        scene.geometries.add(
-                new Triangle(midTopLeft, midTopRight, topRight)
-                        .setEmission(milkyMirrorColor).setMaterial(milkyMirrorMaterial),
-                new Triangle(midTopLeft, topRight, topLeft)
-                        .setEmission(milkyMirrorColor).setMaterial(milkyMirrorMaterial)
-        );
-    }
-
-    /**
-     * Creates the frame/backing of the mirror for structural support.
-     */
-    private void createMirrorFrame(Point frontBL, Point frontBR, Point frontTR, Point frontTL, Point backBL, Point backBR, Point backTR, Point backTL) {
-        Material frameMaterial = new Material().setKD(0.7).setKS(0.3).setShininess(30).setKR(0.1);
-        Color frameColor = new Color(80, 60, 40); // Dark bronze frame
-
-        // Left side
-        scene.geometries.add(
-                new Triangle(frontBL, frontTL, backTL)
-                        .setEmission(frameColor).setMaterial(frameMaterial),
-                new Triangle(frontBL, backTL, backBL)
-                        .setEmission(frameColor).setMaterial(frameMaterial)
-        );
-
-        // Right side
-        scene.geometries.add(
-                new Triangle(frontBR, backBR, backTR)
-                        .setEmission(frameColor).setMaterial(frameMaterial),
-                new Triangle(frontBR, backTR, frontTR)
-                        .setEmission(frameColor).setMaterial(frameMaterial)
-        );
-
-        // Top
-        scene.geometries.add(
-                new Triangle(frontTL, frontTR, backTR)
-                        .setEmission(frameColor).setMaterial(frameMaterial),
-                new Triangle(frontTL, backTR, backTL)
-                        .setEmission(frameColor).setMaterial(frameMaterial)
-        );
-
-        // Bottom
-        scene.geometries.add(
-                new Triangle(frontBL, backBR, frontBR)
-                        .setEmission(frameColor).setMaterial(frameMaterial),
-                new Triangle(frontBL, backBL, backBR)
-                        .setEmission(frameColor).setMaterial(frameMaterial)
-        );
-
-        // Back face
-        scene.geometries.add(
-                new Triangle(backBL, backTR, backBR)
-                        .setEmission(frameColor).setMaterial(frameMaterial),
-                new Triangle(backBL, backTL, backTR)
-                        .setEmission(frameColor).setMaterial(frameMaterial)
-        );
     }
 
     /**
@@ -984,6 +757,268 @@ public class ChessBoardTest {
     }
 
     /**
+     * Material for chess clock body (dark plastic/metal).
+     */
+    Material clockBoxMaterial = new Material().setKD(0.7).setKS(0.3).setShininess(50).setKR(0.1);
+
+    /**
+     * Material for clock buttons (smooth plastic).
+     */
+    Material clockButtonMaterial = new Material().setKD(0.5).setKS(0.5).setShininess(80).setKR(0.2);
+
+    /**
+     * Material for clock faces (white display).
+     */
+    Material clockFaceMaterial = new Material().setKD(0.8).setKS(0.2).setShininess(30).setKR(0.05);
+
+    /**
+     * Material for clock hands (black indicators).
+     */
+    Material clockHandMaterial = new Material().setKD(0.9).setKS(0.1).setShininess(20).setKR(0.0);
+
+    /**
+     * Color for chess clock body.
+     */
+    Color clockBoxColor = new Color(40, 40, 45); // Dark gray
+
+    /**
+     * Color for player 1 button (white side).
+     */
+    Color button1Color = new Color(220, 220, 230); // Light gray/white
+
+    /**
+     * Color for player 2 button (black side).
+     */
+    Color button2Color = new Color(50, 50, 60); // Dark gray/black
+
+    /**
+     * Color for clock faces.
+     */
+    Color clockFaceColor = new Color(250, 250, 250); // White
+
+    /**
+     * Color for clock hands.
+     */
+    Color clockHandColor = new Color(10, 10, 10); // Black
+
+    /**
+     * Creates a chess clock with rectangular box, buttons, and clock faces.
+     *
+     * @param centerX X coordinate of the clock center
+     * @param centerY Y coordinate of the clock center
+     * @return array of geometries representing the chess clock
+     */
+    private Geometry[] createChessClock(double centerX, double centerY) {
+        double boxWidth = SQUARE_SIZE * 1.5;
+        double boxDepth = SQUARE_SIZE * 0.8;
+        double boxHeight = SQUARE_SIZE * 0.6;
+        double buttonRadius = SQUARE_SIZE * 0.15;
+        double clockFaceRadius = SQUARE_SIZE * 0.25;
+        double handLength = SQUARE_SIZE * 0.18;
+        double handWidth = SQUARE_SIZE * 0.02;
+
+        double clockZ = PIECE_HEIGHT_OFFSET;
+
+        // Box corner points
+        Point boxBottomFrontLeft = new Point(centerX - boxWidth / 2, centerY - boxDepth / 2, clockZ);
+        Point boxBottomFrontRight = new Point(centerX + boxWidth / 2, centerY - boxDepth / 2, clockZ);
+        Point boxBottomBackLeft = new Point(centerX - boxWidth / 2, centerY + boxDepth / 2, clockZ);
+        Point boxBottomBackRight = new Point(centerX + boxWidth / 2, centerY + boxDepth / 2, clockZ);
+
+        Point boxTopFrontLeft = new Point(centerX - boxWidth / 2, centerY - boxDepth / 2, clockZ + boxHeight);
+        Point boxTopFrontRight = new Point(centerX + boxWidth / 2, centerY - boxDepth / 2, clockZ + boxHeight);
+        Point boxTopBackLeft = new Point(centerX - boxWidth / 2, centerY + boxDepth / 2, clockZ + boxHeight);
+        Point boxTopBackRight = new Point(centerX + boxWidth / 2, centerY + boxDepth / 2, clockZ + boxHeight);
+
+        // Button positions on top of the box
+        Point button1Center = new Point(centerX - boxWidth / 4, centerY, clockZ + boxHeight + buttonRadius);
+        Point button2Center = new Point(centerX + boxWidth / 4, centerY, clockZ + boxHeight + buttonRadius);
+
+        // Clock face positions on front and back faces
+        Point clockFace1Center = new Point(centerX - boxWidth / 4, centerY - boxDepth / 2 - 2, clockZ + boxHeight / 2);
+        Point clockFace2Center = new Point(centerX + boxWidth / 4, centerY - boxDepth / 2 - 2, clockZ + boxHeight / 2);
+
+        // Create geometry array
+        Geometry[] geometries = new Geometry[100]; // Estimated size
+        int index = 0;
+
+        // === CREATE BOX (6 faces, each made of 2 triangles) ===
+
+        // Bottom face
+        geometries[index++] = new Triangle(boxBottomFrontLeft, boxBottomFrontRight, boxBottomBackRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+        geometries[index++] = new Triangle(boxBottomFrontLeft, boxBottomBackRight, boxBottomBackLeft)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+
+        // Top face
+        geometries[index++] = new Triangle(boxTopFrontLeft, boxTopBackLeft, boxTopBackRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+        geometries[index++] = new Triangle(boxTopFrontLeft, boxTopBackRight, boxTopFrontRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+
+        // Front face
+        geometries[index++] = new Triangle(boxBottomFrontLeft, boxTopFrontLeft, boxTopFrontRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+        geometries[index++] = new Triangle(boxBottomFrontLeft, boxTopFrontRight, boxBottomFrontRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+
+        // Back face
+        geometries[index++] = new Triangle(boxBottomBackLeft, boxBottomBackRight, boxTopBackRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+        geometries[index++] = new Triangle(boxBottomBackLeft, boxTopBackRight, boxTopBackLeft)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+
+        // Left face
+        geometries[index++] = new Triangle(boxBottomFrontLeft, boxBottomBackLeft, boxTopBackLeft)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+        geometries[index++] = new Triangle(boxBottomFrontLeft, boxTopBackLeft, boxTopFrontLeft)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+
+        // Right face
+        geometries[index++] = new Triangle(boxBottomFrontRight, boxTopFrontRight, boxTopBackRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+        geometries[index++] = new Triangle(boxBottomFrontRight, boxTopBackRight, boxBottomBackRight)
+                .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
+
+        // === CREATE BUTTONS (2 spheres) ===
+        geometries[index++] = new Sphere(button1Center, buttonRadius)
+                .setEmission(button1Color).setMaterial(clockButtonMaterial);
+        geometries[index++] = new Sphere(button2Center, buttonRadius)
+                .setEmission(button2Color).setMaterial(clockButtonMaterial);
+
+        // === CREATE CLOCK FACES (2 circular faces made of triangles) ===
+        index = createClockFace(geometries, index, clockFace1Center, clockFaceRadius, centerY - boxDepth / 2 - 2);
+        index = createClockFace(geometries, index, clockFace2Center, clockFaceRadius, centerY - boxDepth / 2 - 2);
+
+        // === CREATE CLOCK HANDS (4 small triangles) ===
+        // Clock 1 hands (showing 10:15)
+        index = createClockHands(geometries, index, clockFace1Center, handLength, handWidth, 10, 15);
+
+        // Clock 2 hands (showing 2:45)
+        index = createClockHands(geometries, index, clockFace2Center, handLength, handWidth, 2, 45);
+
+        return java.util.Arrays.copyOf(geometries, index);
+    }
+
+    /**
+     * Creates a circular clock face using triangular segments.
+     *
+     * @param geometries array to add triangles to
+     * @param startIndex starting index in the array
+     * @param center     center point of the clock face
+     * @param radius     radius of the clock face
+     * @param zOffset    Z offset for positioning
+     * @return updated index after adding triangles
+     */
+    private int createClockFace(Geometry[] geometries, int startIndex, Point center, double radius, double zOffset) {
+        int segments = 12; // 12-sided circle for smooth appearance
+        int index = startIndex;
+
+        // Create circle edge points
+        Point[] edgePoints = new Point[segments];
+        for (int i = 0; i < segments; i++) {
+            double angle = i * 2 * Math.PI / segments;
+            edgePoints[i] = new Point(
+                    center.getX() + radius * Math.cos(angle),
+                    center.getY(),
+                    center.getZ() + radius * Math.sin(angle)
+            );
+        }
+
+        // Create triangular fan from center to edges
+        for (int i = 0; i < segments; i++) {
+            geometries[index++] = new Triangle(center, edgePoints[i], edgePoints[(i + 1) % segments])
+                    .setEmission(clockFaceColor).setMaterial(clockFaceMaterial);
+        }
+
+        return index;
+    }
+
+    /**
+     * Creates clock hands (hour and minute hands) as small triangles.
+     *
+     * @param geometries array to add triangles to
+     * @param startIndex starting index in the array
+     * @param center     center point of the clock face
+     * @param handLength length of the hands
+     * @param handWidth  width of the hands
+     * @param hour       hour to display (0-12)
+     * @param minute     minute to display (0-59)
+     * @return updated index after adding triangles
+     */
+    private int createClockHands(Geometry[] geometries, int startIndex, Point center, double handLength, double handWidth, int hour, int minute) {
+        int index = startIndex;
+
+        // Calculate angles for hands
+        double hourAngle = ((hour % 12) * 30 + minute * 0.5) * Math.PI / 180; // Hour hand
+        double minuteAngle = (minute * 6) * Math.PI / 180; // Minute hand
+
+        // Hour hand (shorter, thicker)
+        double hourHandLength = handLength * 0.6;
+        Point hourHandTip = new Point(
+                center.getX(),
+                center.getY() - 1, // Slightly in front of clock face
+                center.getZ() + hourHandLength * Math.sin(hourAngle)
+        );
+        Point hourHandBase1 = new Point(
+                center.getX() - handWidth,
+                center.getY() - 1,
+                center.getZ() - handWidth
+        );
+        Point hourHandBase2 = new Point(
+                center.getX() + handWidth,
+                center.getY() - 1,
+                center.getZ() - handWidth
+        );
+
+        geometries[index++] = new Triangle(center, hourHandTip, hourHandBase1)
+                .setEmission(clockHandColor).setMaterial(clockHandMaterial);
+        geometries[index++] = new Triangle(center, hourHandBase2, hourHandTip)
+                .setEmission(clockHandColor).setMaterial(clockHandMaterial);
+
+        // Minute hand (longer, thinner)
+        Point minuteHandTip = new Point(
+                center.getX(),
+                center.getY() - 1, // Slightly in front of clock face
+                center.getZ() + handLength * Math.sin(minuteAngle)
+        );
+        Point minuteHandBase1 = new Point(
+                center.getX() - handWidth * 0.5,
+                center.getY() - 1,
+                center.getZ() - handWidth * 0.5
+        );
+        Point minuteHandBase2 = new Point(
+                center.getX() + handWidth * 0.5,
+                center.getY() - 1,
+                center.getZ() - handWidth * 0.5
+        );
+
+        geometries[index++] = new Triangle(center, minuteHandTip, minuteHandBase1)
+                .setEmission(clockHandColor).setMaterial(clockHandMaterial);
+        geometries[index++] = new Triangle(center, minuteHandBase2, minuteHandTip)
+                .setEmission(clockHandColor).setMaterial(clockHandMaterial);
+
+        return index;
+    }
+
+    /**
+     * Places the chess clock next to the chess board on the right side.
+     */
+    private void placeChessClock() {
+        // Position clock to the right of the chess board
+        double clockX = BOARD_SIZE / 2 + SQUARE_SIZE * 2; // Right of the board
+        double clockY = 0; // Center aligned with board
+
+        // Create and place the chess clock
+        Geometry[] clockGeometries = createChessClock(clockX, clockY);
+        for (Geometry geometry : clockGeometries) {
+            if (geometry != null) {
+                scene.geometries.add(geometry);
+            }
+        }
+    }
+
+    /**
      * Places chess pieces on the board in starting positions.
      */
     private void placeChessPieces() {
@@ -1410,34 +1445,6 @@ public class ChessBoardTest {
     }
 
     /**
-     * Adds decorative spheres around the chess board.
-     */
-    private void addDecorativeSpheres() {
-        Material sphereMaterial = new Material()
-                .setKD(0.5)
-                .setKS(0.5)
-                .setShininess(80)
-                .setKR(0.2)
-                .setKT(0.1);
-
-        // Add spheres at corners
-        scene.geometries.add(
-                new Sphere(new Point(-250, -250, 20), 25)
-                        .setEmission(new Color(200, 100, 100))
-                        .setMaterial(sphereMaterial),
-                new Sphere(new Point(250, -250, 20), 25)
-                        .setEmission(new Color(100, 200, 100))
-                        .setMaterial(sphereMaterial),
-                new Sphere(new Point(-250, 250, 20), 25)
-                        .setEmission(new Color(100, 100, 200))
-                        .setMaterial(sphereMaterial),
-                new Sphere(new Point(250, 250, 20), 25)
-                        .setEmission(new Color(200, 200, 100))
-                        .setMaterial(sphereMaterial)
-        );
-    }
-
-    /**
      * Sets up the lighting for the scene.
      */
     private void setupLighting() {
@@ -1450,7 +1457,7 @@ public class ChessBoardTest {
                 new SpotLight(new Color(255, 255, 0), new Point(0, 0, 1500), new Vector(0, 0, -1)) // Pure bright yellow
                         .setKl(0.00001)
                         .setKq(0.0000001)
-                        .setNarrowBeam(300) // Creates circular spotlight on center of board
+                        .setNarrowBeam(250) // Creates circular spotlight on center of board
         );
 
         // Calculate queen positions for targeting
@@ -1504,7 +1511,6 @@ public class ChessBoardTest {
         );
 
         // LIGHT 4: Trophy Shadow Light - Right-Black Side (SpotLight) - ORANGE
-        // Position: Far right side with DIAGONAL angle to trophy
         double trophyX = -BOARD_SIZE / 2 - SQUARE_SIZE * 2;
         double trophyY = 0;
         Point trophyPos = new Point(trophyX, trophyY, PIECE_HEIGHT_OFFSET + SQUARE_SIZE * 2);
@@ -1520,7 +1526,6 @@ public class ChessBoardTest {
         );
 
         // LIGHT 5: Trophy Shadow Light - Left-Back Black Side (SpotLight) - LIME GREEN
-        // Position: Far left-back with DIAGONAL angle to trophy
         Point trophy2LightPos = new Point(-1000, 800, 1200); // Further away for more diagonal angle
         Vector trophy2Direction = trophyPos.subtract(trophy2LightPos).normalize();
 
@@ -1532,7 +1537,6 @@ public class ChessBoardTest {
         );
 
         // LIGHT 6: Trophy Case Interior Glow (PointLight) - DEEP RED
-        // Position: Inside the trophy display case, slightly offset from trophy center
         double interiorHeight = PIECE_HEIGHT_OFFSET + SQUARE_SIZE * 1.5; // Inside the case, mid-height
 
         scene.lights.add(
