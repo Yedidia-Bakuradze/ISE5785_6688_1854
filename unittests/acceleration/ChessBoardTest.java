@@ -60,17 +60,17 @@ public class ChessBoardTest {
     /**
      * The distance from the camera to the view plane.
      */
-    private static final double DISTANCE = 200;
+    private static final double DISTANCE = 500;
 
     /**
      * The resolution height of the image.
      */
-    private static final int RESOLUTION_HEIGHT = 500;
+    private static final int RESOLUTION_HEIGHT = 1000;
 
     /**
      * The resolution width of the image.
      */
-    private static final int RESOLUTION_WIDTH = 500;
+    private static final int RESOLUTION_WIDTH = 1000;
 
     /**
      * The height of the image in pixels.
@@ -91,7 +91,7 @@ public class ChessBoardTest {
             .setVpDistance(DISTANCE)
             .setVpSize(IMAGE_WIDTH, IMAGE_HEIGHT)
             .setResolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT)
-            .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.EASY, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 0.5));
+            .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.BASIC, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 0.5));
 
     /**
      * Material for white chess pieces (frosted glass).
@@ -238,21 +238,21 @@ public class ChessBoardTest {
      */
     Color clockHandColor = new Color(10, 10, 10); // Black
 
-//    /**
-//     * Test method for Chess Board with Regular Grid - Feature Deactivated; MT Deactivated
-//     */
-//    @Test
-//    void testChessBoard_NoGrid_NoMT() {
-//        createChessBoardScene();
-//
-//        cameraBuilder
-//                .setRayTracer(scene, RayTracerType.EXTENDED)
-//                .setMultithreading(0) // No multithreading
-//                .setDebugPrint(0.1)
-//                .build()
-//                .renderImage()
-//                .writeToImage("ChessBoard With Without Grid & MT");
-//    }
+    /**
+     * Test method for Chess Board with Regular Grid - Feature Deactivated; MT Deactivated
+     */
+    @Test
+    void testChessBoard_NoGrid_NoMT() {
+        createChessBoardScene();
+
+        cameraBuilder
+                .setRayTracer(scene, RayTracerType.EXTENDED)
+                .setMultithreading(0) // No multithreading
+                .setDebugPrint(0.1)
+                .build()
+                .renderImage()
+                .writeToImage("ChessBoard With Without Grid & MT");
+    }
 
     /**
      * Test method for Chess Board with Regular Grid - Feature Deactivated; MT Activated
@@ -297,8 +297,8 @@ public class ChessBoardTest {
         cameraBuilder
                 .setRegularGrid(new RegularGrid(scene))
                 .setRayTracer(scene, RayTracerType.GRID_EXTENDED)
-                .setMultithreading(-2)
-                .setDebugPrint(0.1)
+                .setMultithreading(-1)
+                .setDebugPrint(0.5)
                 .build()
                 .renderImage()
                 .writeToImage("ChessBoard With Grid With MT");
