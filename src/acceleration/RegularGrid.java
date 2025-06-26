@@ -20,7 +20,6 @@ import java.util.*;
 public class RegularGrid {
 
     // Grid structure and dimensions
-    private final RegularGridConfiguration config;
     private final BoundingBox sceneBounds;
     private final int resolutionX;
     private final int resolutionY;
@@ -28,6 +27,10 @@ public class RegularGrid {
     private final double voxelSizeX;
     private final double voxelSizeY;
     private final double voxelSizeZ;
+
+    public final static double RECOMMENDED_DENSITY_FACTOR = 3.0;
+    public final static int MIN_RESOLUTION = 1;
+    public final static int MAX_RESOLUTION = 100;
 
     protected final boolean hasInfiniteGeometries;
     protected final boolean hasFiniteGeometries;
@@ -39,14 +42,12 @@ public class RegularGrid {
     /**
      * Constructs the regular grid from a scene and configuration.
      *
-     * @param scene  The scene containing geometries to accelerate
-     * @param config Configuration parameters for grid construction
+     * @param scene The scene containing geometries to accelerate
      * @throws IllegalArgumentException if scene or config is null
      */
-    public RegularGrid(Scene scene, RegularGridConfiguration config) {
-        validateInputs(scene, config);
+    public RegularGrid(Scene scene) {
+        if (scene == null) throw new IllegalArgumentException("Scene cannot be null");
 
-        this.config = config;
         this.voxelMap = new HashMap<>();
         this.infiniteGeometries = scene.geometries.getInfiniteInjectables();
         this.sceneBounds = scene.geometries.getBoundingBox();
@@ -54,9 +55,7 @@ public class RegularGrid {
         this.hasInfiniteGeometries = scene.geometries.getInfiniteInjectables() != null;
         this.hasFiniteGeometries = scene.geometries.getFiniteInjectables() != null;
 
-        //TODO: Disable the feature if no finite geometries exist
-
-        int resolution = config.calculateOptimalResolution(scene.geometries.getFiniteInjectables().size());
+        int resolution = calculateOptimalResolution(scene.geometries.getFiniteInjectables().size());
         this.resolutionX = resolution;
         this.resolutionY = resolution;
         this.resolutionZ = resolution;
@@ -173,16 +172,7 @@ public class RegularGrid {
         return new double[]{voxelSizeX, voxelSizeY, voxelSizeZ};
     }
 
-    public RegularGridConfiguration getConfiguration() {
-        return config;
-    }
-
     // ======================= Private Helper Methods =======================
-
-    private void validateInputs(Scene scene, RegularGridConfiguration config) {
-        if (scene == null) throw new IllegalArgumentException("Scene cannot be null");
-        if (config == null) throw new IllegalArgumentException("Configuration cannot be null");
-    }
 
     /**
      * Calculates voxel size with protection against degenerate cases.
@@ -229,5 +219,9 @@ public class RegularGrid {
         return i >= 0 && i < resolutionX &&
                 j >= 0 && j < resolutionY &&
                 k >= 0 && k < resolutionZ;
+    }
+
+    public int calculateOptimalResolution(int objectCount) {
+        return Math.max(MIN_RESOLUTION, Math.min(MAX_RESOLUTION, (int) Math.ceil(RECOMMENDED_DENSITY_FACTOR * Math.cbrt(objectCount))));
     }
 }

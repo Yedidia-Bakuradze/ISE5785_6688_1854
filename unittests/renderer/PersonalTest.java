@@ -1,6 +1,6 @@
 package renderer;
 
-import acceleration.*;
+import acceleration.RegularGrid;
 import geometries.*;
 import lighting.AmbientLight;
 import lighting.SpotLight;
@@ -148,8 +148,7 @@ public class PersonalTest {
                 .setVpDistance(700)
                 .setVpSize(800, 800)
                 .setResolution(800, 800)
-                .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
-                .setGridConfiguration(AccelerationMode.PERFORMANCE)
+                .setRegularGrid(new RegularGrid(scene))
                 .setRayTracer(scene, RayTracerType.GRID)
                 .setMultithreading(-2)
                 .setDebugPrint(0.5)
@@ -313,8 +312,7 @@ public class PersonalTest {
                 .setVpDistance(1000)
                 .setVpSize(1000, 800)
                 .setResolution(1200, 960)
-                .setGridConfiguration(AccelerationMode.PERFORMANCE)
-                .setRegularGrid(new RegularGrid(scene, RegularGridConfiguration.Factory.createConfiguration(AccelerationMode.PERFORMANCE)))
+                .setRegularGrid(new RegularGrid(scene))
                 .setEffect(EffectType.DIFFUSIVE_GLASS, new SamplingConfiguration(SamplingMode.MEDIUM, TargetAreaType.CIRCLE, SamplingPattern.JITTERED, 1))
                 .setMultithreading(-2)
                 .setRayTracer(scene, RayTracerType.GRID_EXTENDED)

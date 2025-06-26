@@ -16,7 +16,6 @@ public class VoxelTraverser {
 
     private final RegularGrid grid;
     private final Set<Intersectable> testedGeometries;
-    private TraversalStatistics currentTraversalStats;
 
     public VoxelTraverser(RegularGrid grid) {
         if (grid == null) throw new IllegalArgumentException("Grid cannot be null");
@@ -28,10 +27,6 @@ public class VoxelTraverser {
      * Finds the closest intersection along a ray
      */
     public Intersection findClosestIntersection(Ray ray) {
-        // Initialize traversal state
-        testedGeometries.clear();
-        currentTraversalStats = new TraversalStatistics();
-
         Intersection infiniteClosest = findClosestInfiniteIntersection(ray);
         Intersection voxelClosest = findClosestVoxelIntersection(ray);
 
@@ -71,7 +66,6 @@ public class VoxelTraverser {
                         closest = intersection;
                     }
                 }
-                currentTraversalStats.infiniteGeometryTests++;
             }
         }
 
@@ -85,6 +79,7 @@ public class VoxelTraverser {
      * @return The closest intersection with voxel geometries, or null if none
      */
     private Intersection findClosestVoxelIntersection(Ray ray) {
+        testedGeometries.clear();
         if (!grid.hasFiniteGeometries) return null;
 
         // Calculate ray entry point into scene bounds
@@ -100,10 +95,9 @@ public class VoxelTraverser {
         // Traverse voxels using 3D-DDA
         int[] resolution = grid.getResolution();
         while (isValidVoxel(ddaState.currentVoxel, resolution)) {
-            currentTraversalStats.voxelsVisited++;
 
             // Test geometries in current voxel
-            Intersection voxelClosest = testVoxelGeometriesForClosest(ddaState.currentVoxel, ray, minDistance);
+            Intersection voxelClosest = castRayToClosestFiniteObjects(ddaState.currentVoxel, ray, minDistance);
             if (voxelClosest != null) {
                 double distance = voxelClosest.point.distance(ray.getHead());
                 if (distance < minDistance) {
@@ -111,11 +105,8 @@ public class VoxelTraverser {
                     closest = voxelClosest;
                 }
             }
-
-            // Move to next voxel
-            advanceToNextVoxel(ddaState);
+            getNextVoxel(ddaState);
         }
-
         return closest;
     }
 
@@ -129,18 +120,16 @@ public class VoxelTraverser {
     public List<Intersection> findIntersections(Ray ray, double maxDistance) {
         // Initialize traversal state
         testedGeometries.clear();
-        currentTraversalStats = new TraversalStatistics();
-
         List<Intersection> allIntersections = new ArrayList<>();
 
         // Phase 1: Test infinite geometries first
-        if (this.grid.hasInfiniteGeometries) testInfiniteGeometries(ray, allIntersections);
+        if (this.grid.hasInfiniteGeometries) castRayToInfiniteObjects(ray, allIntersections);
 
         // Phase 2: Check if ray intersects scene bounds
         if (grid.getSceneBounds().intersects(ray)) return allIntersections.isEmpty() ? null : allIntersections;
 
         // Phase 3: Perform 3D-DDA traversal through grid
-        perform3DDATraversal(ray, allIntersections, maxDistance);
+        preform3DDDAWalk(ray, allIntersections, maxDistance);
 
         return allIntersections.isEmpty() ? null : allIntersections;
     }
@@ -150,7 +139,7 @@ public class VoxelTraverser {
     /**
      * Tests intersections with infinite geometries
      */
-    private void testInfiniteGeometries(Ray ray, List<Intersection> intersections) {
+    private void castRayToInfiniteObjects(Ray ray, List<Intersection> intersections) {
         if (!grid.hasInfiniteGeometries) return;
 
         for (Intersectable geometry : grid.getInfiniteGeometries()) {
@@ -164,7 +153,7 @@ public class VoxelTraverser {
     /**
      * Performs 3D-DDA traversal through the grid voxels
      */
-    private void perform3DDATraversal(Ray ray, List<Intersection> intersections, double maxDistance) {
+    private void preform3DDDAWalk(Ray ray, List<Intersection> intersections, double maxDistance) {
         // Calculate ray entry point into scene bounds
         Point entryPoint = grid.getSceneBounds().getRayEntryPoint(ray);
         if (entryPoint == null) return;
@@ -175,73 +164,47 @@ public class VoxelTraverser {
         // Traverse voxels using 3D-DDA
         int[] resolution = grid.getResolution();
         while (isValidVoxel(ddaState.currentVoxel, resolution)) {
-            // Find which axis is next
             int minAxis = 0;
             if (ddaState.next[1] < ddaState.next[minAxis]) minAxis = 1;
             if (ddaState.next[2] < ddaState.next[minAxis]) minAxis = 2;
             if (ddaState.next[minAxis] > maxDistance) break;
 
-            testVoxelGeometries(ddaState.currentVoxel, ray, intersections);
-            advanceToNextVoxel(ddaState);
+            castRayToFiniteObjects(ddaState.currentVoxel, ray, intersections);
+            getNextVoxel(ddaState);
         }
     }
 
     /**
      * Tests all geometries in a specific voxel for intersections
      */
-    private void testVoxelGeometries(int[] voxelCoords, Ray ray, List<Intersection> intersections) {
+    private void castRayToFiniteObjects(int[] voxelCoords, Ray ray, List<Intersection> intersections) {
         Optional<Voxel> voxelOpt = grid.getVoxel(voxelCoords[0], voxelCoords[1], voxelCoords[2]);
         if (voxelOpt.isEmpty()) return;
-
-        Voxel voxel = voxelOpt.get();
-        currentTraversalStats.nonEmptyVoxelsVisited++;
-
-        for (Intersectable geometry : voxel.getGeometries()) {
-            // Skip if already tested (deduplication)
-            if (grid.getConfiguration().isEnableObjectDeduplication() && testedGeometries.contains(geometry)) {
-                currentTraversalStats.duplicateTests++;
-                continue;
-            }
-
-            // Mark as tested
-            if (grid.getConfiguration().isEnableObjectDeduplication()) {
-                testedGeometries.add(geometry);
-            }
+        for (Intersectable geometry : voxelOpt.get().getGeometries()) {
+            if (testedGeometries.contains(geometry)) continue;
+            testedGeometries.add(geometry);
 
             // Test intersection
             List<Intersection> geoIntersections = geometry.calculateIntersections(ray);
             if (geoIntersections != null) {
                 intersections.addAll(geoIntersections);
-                currentTraversalStats.intersectionsFound += geoIntersections.size();
             }
-
-            currentTraversalStats.geometryTests++;
         }
     }
 
     /**
      * Tests geometries in a voxel for closest intersection only
      */
-    private Intersection testVoxelGeometriesForClosest(int[] voxelCoords, Ray ray, double currentMinDistance) {
+    private Intersection castRayToClosestFiniteObjects(int[] voxelCoords, Ray ray, double currentMinDistance) {
         Optional<Voxel> voxelOpt = grid.getVoxel(voxelCoords[0], voxelCoords[1], voxelCoords[2]);
         if (voxelOpt.isEmpty()) return null;
-
-        Voxel voxel = voxelOpt.get();
-        currentTraversalStats.nonEmptyVoxelsVisited++;
 
         Intersection closest = null;
         double minDistance = currentMinDistance;
 
-        for (Intersectable geometry : voxel.getGeometries()) {
-            // Skip if already tested
-            if (grid.getConfiguration().isEnableObjectDeduplication() && testedGeometries.contains(geometry)) {
-                currentTraversalStats.duplicateTests++;
-                continue;
-            }
-
-            if (grid.getConfiguration().isEnableObjectDeduplication()) {
-                testedGeometries.add(geometry);
-            }
+        for (Intersectable geometry : voxelOpt.get().getGeometries()) {
+            if (testedGeometries.contains(geometry)) continue;
+            testedGeometries.add(geometry);
 
             List<Intersection> geoIntersections = geometry.calculateIntersections(ray);
             if (geoIntersections != null) {
@@ -252,10 +215,7 @@ public class VoxelTraverser {
                         closest = intersection;
                     }
                 }
-                currentTraversalStats.intersectionsFound += geoIntersections.size();
             }
-
-            currentTraversalStats.geometryTests++;
         }
 
         return closest;
@@ -263,34 +223,23 @@ public class VoxelTraverser {
 
     private DDAState initializeDDA(Ray ray, Point entryPoint) {
         Vector rayDir = ray.getDirection();
-
-        // Convert entry point to grid coordinates
         int[] currentVoxel = grid.worldToGrid(entryPoint);
-
-        // Calculate step directions
         int[] step = {
                 rayDir.getX() > 0 ? 1 : -1,
                 rayDir.getY() > 0 ? 1 : -1,
                 rayDir.getZ() > 0 ? 1 : -1
         };
 
-        // Get voxel dimensions
         double[] voxelSize = grid.getVoxelSize();
-
-        // Calculate delta distances
         double[] delta = new double[3];
         double[] rayDirComponents = {rayDir.getX(), rayDir.getY(), rayDir.getZ()};
 
         for (int i = 0; i < 3; i++) {
-            delta[i] = Math.abs(rayDirComponents[i]) < 1e-10 ?
-                    Double.MAX_VALUE :
-                    Math.abs(voxelSize[i] / rayDirComponents[i]);
+            delta[i] = Math.abs(rayDirComponents[i]) < 1e-10 ? Double.MAX_VALUE : Math.abs(voxelSize[i] / rayDirComponents[i]);
         }
 
         // Calculate initial distances to next voxel boundaries
-        double[] next = calculateInitialDistances(entryPoint, currentVoxel, step, delta, rayDir);
-
-        return new DDAState(currentVoxel, step, delta, next);
+        return new DDAState(currentVoxel, step, delta, calculateInitialDistances(entryPoint, currentVoxel, step, delta, rayDir));
     }
 
     private double[] calculateInitialDistances(Point entryPoint, int[] currentVoxel, int[] step, double[] delta, Vector rayDir) {
@@ -306,9 +255,7 @@ public class VoxelTraverser {
             if (Math.abs(rayDirComponents[axis]) < 1e-10) {
                 next[axis] = Double.MAX_VALUE;
             } else {
-                // Calculate distance to next voxel boundary
-                double boundary = sceneMinComponents[axis] +
-                        (currentVoxel[axis] + (step[axis] > 0 ? 1 : 0)) * voxelSize[axis];
+                double boundary = sceneMinComponents[axis] + (currentVoxel[axis] + (step[axis] > 0 ? 1 : 0)) * voxelSize[axis];
                 next[axis] = Math.abs((boundary - entryComponents[axis]) / rayDirComponents[axis]);
             }
         }
@@ -316,13 +263,11 @@ public class VoxelTraverser {
         return next;
     }
 
-    private void advanceToNextVoxel(DDAState state) {
-        // Find the axis with minimum next distance
+    private void getNextVoxel(DDAState state) {
         int minAxis = 0;
         if (state.next[1] < state.next[minAxis]) minAxis = 1;
         if (state.next[2] < state.next[minAxis]) minAxis = 2;
 
-        // Advance along that axis
         state.next[minAxis] += state.delta[minAxis];
         state.currentVoxel[minAxis] += state.step[minAxis];
     }
@@ -341,18 +286,5 @@ public class VoxelTraverser {
             this.delta = delta.clone();
             this.next = next.clone();
         }
-    }
-
-    private static class TraversalStatistics {
-        int voxelsVisited = 0;
-        int nonEmptyVoxelsVisited = 0;
-        int geometryTests = 0;
-        int duplicateTests = 0;
-        int intersectionsFound = 0;
-        int infiniteGeometryTests = 0;
-    }
-
-    public TraversalStatistics getCurrentTraversalStats() {
-        return currentTraversalStats;
     }
 }

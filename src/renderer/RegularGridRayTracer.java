@@ -1,6 +1,7 @@
 package renderer;
 
-import acceleration.*;
+import acceleration.RegularGrid;
+import acceleration.VoxelTraverser;
 import geometries.Intersectable;
 import primitives.Double3;
 import primitives.Ray;
@@ -12,18 +13,15 @@ import java.util.Map;
 
 public class RegularGridRayTracer extends ExtendedRayTracer {
     private final ThreadLocal<VoxelTraverser> voxelTraverser;
-    private final RegularGridConfiguration configuration;
 
-    public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, RegularGrid grid) {
+    public RegularGridRayTracer(Scene scene, RegularGrid grid) {
         super(scene);
         this.voxelTraverser = ThreadLocal.withInitial(() -> new VoxelTraverser(grid));
-        this.configuration = configuration;
     }
 
-    public RegularGridRayTracer(Scene scene, RegularGridConfiguration configuration, RegularGrid grid, Map<EffectType, TargetAreaBase> targetArea) {
+    public RegularGridRayTracer(Scene scene, RegularGrid grid, Map<EffectType, TargetAreaBase> targetArea) {
         super(scene, targetArea);
         this.voxelTraverser = ThreadLocal.withInitial(() -> new VoxelTraverser(grid));
-        this.configuration = configuration;
     }
 
     @Override

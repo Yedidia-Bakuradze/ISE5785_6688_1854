@@ -120,10 +120,8 @@ public record BoundingBox(Point min, Point max) {
                     t1 = t2;
                     t2 = temp;
                 }
-
                 tMin = Math.max(tMin, t1);
                 tMax = Math.min(tMax, t2);
-
                 if (tMin > tMax) return false;
             }
         }
