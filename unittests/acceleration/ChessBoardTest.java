@@ -1,7 +1,8 @@
 package acceleration;
 
 import geometries.*;
-import lighting.*;
+import lighting.PointLight;
+import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import renderer.*;
@@ -29,7 +30,7 @@ public class ChessBoardTest {
     /**
      * Size of each chess square in scene units.
      */
-    private static final double SQUARE_SIZE = 100.0;
+    private static final double SQUARE_SIZE = 75.0;
 
     /**
      * Total size of the chess board (8x8 squares).
@@ -44,32 +45,32 @@ public class ChessBoardTest {
     /**
      * The vector pointing towards the view plane.
      */
-    private static final Vector V_TO = new Vector(0, 1, -0.5);
+    private static final Vector V_TO = new Vector(0, 1, -1.25);
 
     /**
      * The vector pointing upwards relative to the view plane.
      */
-    private static final Vector V_UP = new Vector(0, 0.5, 1);
+    private static final Vector V_UP = new Vector(0, 1.25, 1);
 
     /**
      * The location of the camera in the chessboard scene.
      */
-    private static final Point CAMERA_LOCATION = new Point(0, -600, 300);
+    private static final Point CAMERA_LOCATION = new Point(0, -400, 400);
 
     /**
      * The distance from the camera to the view plane.
      */
-    private static final double DISTANCE = 400;
+    private static final double DISTANCE = 200;
 
     /**
      * The resolution height of the image.
      */
-    private static final int RESOLUTION_HEIGHT = 1000;
+    private static final int RESOLUTION_HEIGHT = 500;
 
     /**
      * The resolution width of the image.
      */
-    private static final int RESOLUTION_WIDTH = 1200;
+    private static final int RESOLUTION_WIDTH = 500;
 
     /**
      * The height of the image in pixels.
@@ -237,21 +238,21 @@ public class ChessBoardTest {
      */
     Color clockHandColor = new Color(10, 10, 10); // Black
 
-    /**
-     * Test method for Chess Board with Regular Grid - Feature Deactivated; MT Deactivated
-     */
-    @Test
-    void testChessBoard_NoGrid_NoMT() {
-        createChessBoardScene();
-
-        cameraBuilder
-                .setRayTracer(scene, RayTracerType.EXTENDED)
-                .setMultithreading(0) // No multithreading
-                .setDebugPrint(0.1)
-                .build()
-                .renderImage()
-                .writeToImage("ChessBoard With Without Grid & MT");
-    }
+//    /**
+//     * Test method for Chess Board with Regular Grid - Feature Deactivated; MT Deactivated
+//     */
+//    @Test
+//    void testChessBoard_NoGrid_NoMT() {
+//        createChessBoardScene();
+//
+//        cameraBuilder
+//                .setRayTracer(scene, RayTracerType.EXTENDED)
+//                .setMultithreading(0) // No multithreading
+//                .setDebugPrint(0.1)
+//                .build()
+//                .renderImage()
+//                .writeToImage("ChessBoard With Without Grid & MT");
+//    }
 
     /**
      * Test method for Chess Board with Regular Grid - Feature Deactivated; MT Activated
@@ -1479,7 +1480,6 @@ public class ChessBoardTest {
     private void setupLighting() {
         // Set background and ambient light
         scene.setBackground(backgroundColor);
-        scene.setAmbientLight(new AmbientLight(new Color(20, 25, 30).scale(0.05))); // Very subtle ambient light
 
         // LIGHT 1: Center Board Spotlight (SpotLight) - BRIGHT YELLOW circular illumination
         scene.lights.add(
@@ -1569,7 +1569,7 @@ public class ChessBoardTest {
         double interiorHeight = PIECE_HEIGHT_OFFSET + SQUARE_SIZE * 1.5; // Inside the case, mid-height
 
         scene.lights.add(
-                              
+
                 new PointLight(new Color(255, 0, 0), new Point(trophyX, trophyY, interiorHeight)) // Bright red glow
                         .setKl(0.001) // Higher attenuation since it's close-range interior lighting
                         .setKq(0.0001)
