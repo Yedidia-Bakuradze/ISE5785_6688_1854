@@ -157,6 +157,51 @@ public class ChessBoardTest {
     Color trophyCaseColor = new Color(230, 240, 250).scale(0.1);
 
     /**
+     * Material for chess clock body (dark plastic/metal).
+     */
+    Material clockBoxMaterial = new Material().setKD(0.7).setKS(0.3).setShininess(50).setKR(0.1);
+
+    /**
+     * Material for clock buttons (smooth plastic).
+     */
+    Material clockButtonMaterial = new Material().setKD(0.5).setKS(0.5).setShininess(80).setKR(0.2);
+
+    /**
+     * Material for clock faces (white display).
+     */
+    Material clockFaceMaterial = new Material().setKD(0.8).setKS(0.2).setShininess(30).setKR(0.05);
+
+    /**
+     * Material for clock hands (black indicators).
+     */
+    Material clockHandMaterial = new Material().setKD(0.9).setKS(0.1).setShininess(20).setKR(0.0);
+
+    /**
+     * Color for chess clock body.
+     */
+    Color clockBoxColor = new Color(40, 40, 45); // Dark gray
+
+    /**
+     * Color for player 1 button (white side).
+     */
+    Color button1Color = new Color(220, 220, 230); // Light gray/white
+
+    /**
+     * Color for player 2 button (black side).
+     */
+    Color button2Color = new Color(50, 50, 60); // Dark gray/black
+
+    /**
+     * Color for clock faces.
+     */
+    Color clockFaceColor = new Color(250, 250, 250); // White
+
+    /**
+     * Color for clock hands.
+     */
+    Color clockHandColor = new Color(10, 10, 10); // Black
+
+    /**
      * Test method for Chess Board with Regular Grid - Feature Deactivated; MT Deactivated
      */
     @Test
@@ -757,51 +802,6 @@ public class ChessBoardTest {
     }
 
     /**
-     * Material for chess clock body (dark plastic/metal).
-     */
-    Material clockBoxMaterial = new Material().setKD(0.7).setKS(0.3).setShininess(50).setKR(0.1);
-
-    /**
-     * Material for clock buttons (smooth plastic).
-     */
-    Material clockButtonMaterial = new Material().setKD(0.5).setKS(0.5).setShininess(80).setKR(0.2);
-
-    /**
-     * Material for clock faces (white display).
-     */
-    Material clockFaceMaterial = new Material().setKD(0.8).setKS(0.2).setShininess(30).setKR(0.05);
-
-    /**
-     * Material for clock hands (black indicators).
-     */
-    Material clockHandMaterial = new Material().setKD(0.9).setKS(0.1).setShininess(20).setKR(0.0);
-
-    /**
-     * Color for chess clock body.
-     */
-    Color clockBoxColor = new Color(40, 40, 45); // Dark gray
-
-    /**
-     * Color for player 1 button (white side).
-     */
-    Color button1Color = new Color(220, 220, 230); // Light gray/white
-
-    /**
-     * Color for player 2 button (black side).
-     */
-    Color button2Color = new Color(50, 50, 60); // Dark gray/black
-
-    /**
-     * Color for clock faces.
-     */
-    Color clockFaceColor = new Color(250, 250, 250); // White
-
-    /**
-     * Color for clock hands.
-     */
-    Color clockHandColor = new Color(10, 10, 10); // Black
-
-    /**
      * Creates a chess clock with rectangular box, buttons, and clock faces.
      *
      * @param centerX X coordinate of the clock center
@@ -809,34 +809,41 @@ public class ChessBoardTest {
      * @return array of geometries representing the chess clock
      */
     private Geometry[] createChessClock(double centerX, double centerY) {
-        double boxWidth = SQUARE_SIZE * 1.5;
-        double boxDepth = SQUARE_SIZE * 0.8;
-        double boxHeight = SQUARE_SIZE * 0.6;
-        double buttonRadius = SQUARE_SIZE * 0.15;
-        double clockFaceRadius = SQUARE_SIZE * 0.25;
-        double handLength = SQUARE_SIZE * 0.18;
-        double handWidth = SQUARE_SIZE * 0.02;
+        // Scale factor to make clock bigger
+        double scaleFactor = 2.5;
+
+        double boxWidth = SQUARE_SIZE * 1.5 * scaleFactor;
+        double boxDepth = SQUARE_SIZE * 0.8 * scaleFactor;
+        double boxHeight = SQUARE_SIZE * 0.6 * scaleFactor;
+        double buttonRadius = SQUARE_SIZE * 0.15 * scaleFactor;
+        double clockFaceRadius = SQUARE_SIZE * 0.25 * scaleFactor;
+        double handLength = SQUARE_SIZE * 0.18 * scaleFactor;
+        double handWidth = SQUARE_SIZE * 0.02 * scaleFactor;
 
         double clockZ = PIECE_HEIGHT_OFFSET;
 
-        // Box corner points
-        Point boxBottomFrontLeft = new Point(centerX - boxWidth / 2, centerY - boxDepth / 2, clockZ);
-        Point boxBottomFrontRight = new Point(centerX + boxWidth / 2, centerY - boxDepth / 2, clockZ);
-        Point boxBottomBackLeft = new Point(centerX - boxWidth / 2, centerY + boxDepth / 2, clockZ);
-        Point boxBottomBackRight = new Point(centerX + boxWidth / 2, centerY + boxDepth / 2, clockZ);
+        // Rotate the clock to face toward the board (90-degree rotation around Z-axis)
+        // Original orientation: clock faces on front (Y-negative side)
+        // New orientation: clock faces on left side (X-negative side, facing the board)
 
-        Point boxTopFrontLeft = new Point(centerX - boxWidth / 2, centerY - boxDepth / 2, clockZ + boxHeight);
-        Point boxTopFrontRight = new Point(centerX + boxWidth / 2, centerY - boxDepth / 2, clockZ + boxHeight);
-        Point boxTopBackLeft = new Point(centerX - boxWidth / 2, centerY + boxDepth / 2, clockZ + boxHeight);
-        Point boxTopBackRight = new Point(centerX + boxWidth / 2, centerY + boxDepth / 2, clockZ + boxHeight);
+        // Box corner points - rotated 90 degrees to face the board
+        Point boxBottomFrontLeft = new Point(centerX - boxDepth / 2, centerY - boxWidth / 2, clockZ);
+        Point boxBottomFrontRight = new Point(centerX - boxDepth / 2, centerY + boxWidth / 2, clockZ);
+        Point boxBottomBackLeft = new Point(centerX + boxDepth / 2, centerY - boxWidth / 2, clockZ);
+        Point boxBottomBackRight = new Point(centerX + boxDepth / 2, centerY + boxWidth / 2, clockZ);
 
-        // Button positions on top of the box
-        Point button1Center = new Point(centerX - boxWidth / 4, centerY, clockZ + boxHeight + buttonRadius);
-        Point button2Center = new Point(centerX + boxWidth / 4, centerY, clockZ + boxHeight + buttonRadius);
+        Point boxTopFrontLeft = new Point(centerX - boxDepth / 2, centerY - boxWidth / 2, clockZ + boxHeight);
+        Point boxTopFrontRight = new Point(centerX - boxDepth / 2, centerY + boxWidth / 2, clockZ + boxHeight);
+        Point boxTopBackLeft = new Point(centerX + boxDepth / 2, centerY - boxWidth / 2, clockZ + boxHeight);
+        Point boxTopBackRight = new Point(centerX + boxDepth / 2, centerY + boxWidth / 2, clockZ + boxHeight);
 
-        // Clock face positions on front and back faces
-        Point clockFace1Center = new Point(centerX - boxWidth / 4, centerY - boxDepth / 2 - 2, clockZ + boxHeight / 2);
-        Point clockFace2Center = new Point(centerX + boxWidth / 4, centerY - boxDepth / 2 - 2, clockZ + boxHeight / 2);
+        // Button positions on top of the box (rotated coordinates)
+        Point button1Center = new Point(centerX, centerY - boxWidth / 4, clockZ + boxHeight);
+        Point button2Center = new Point(centerX, centerY + boxWidth / 4, clockZ + boxHeight);
+
+        // Clock face positions on the front face (now facing toward the board)
+        Point clockFace1Center = new Point(centerX - boxDepth / 2 - 2, centerY - boxWidth / 4, clockZ + boxHeight / 2);
+        Point clockFace2Center = new Point(centerX - boxDepth / 2 - 2, centerY + boxWidth / 4, clockZ + boxHeight / 2);
 
         // Create geometry array
         Geometry[] geometries = new Geometry[100]; // Estimated size
@@ -856,7 +863,7 @@ public class ChessBoardTest {
         geometries[index++] = new Triangle(boxTopFrontLeft, boxTopBackRight, boxTopFrontRight)
                 .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
 
-        // Front face
+        // Front face (now facing toward the board)
         geometries[index++] = new Triangle(boxBottomFrontLeft, boxTopFrontLeft, boxTopFrontRight)
                 .setEmission(clockBoxColor).setMaterial(clockBoxMaterial);
         geometries[index++] = new Triangle(boxBottomFrontLeft, boxTopFrontRight, boxBottomFrontRight)
@@ -887,42 +894,52 @@ public class ChessBoardTest {
                 .setEmission(button2Color).setMaterial(clockButtonMaterial);
 
         // === CREATE CLOCK FACES (2 circular faces made of triangles) ===
-        index = createClockFace(geometries, index, clockFace1Center, clockFaceRadius, centerY - boxDepth / 2 - 2);
-        index = createClockFace(geometries, index, clockFace2Center, clockFaceRadius, centerY - boxDepth / 2 - 2);
+        index = createClockFaceRotated(geometries, index, clockFace1Center, clockFaceRadius, true);
+        index = createClockFaceRotated(geometries, index, clockFace2Center, clockFaceRadius, true);
 
         // === CREATE CLOCK HANDS (4 small triangles) ===
         // Clock 1 hands (showing 10:15)
-        index = createClockHands(geometries, index, clockFace1Center, handLength, handWidth, 10, 15);
+        index = createClockHandsRotated(geometries, index, clockFace1Center, handLength, handWidth, 10, 15);
 
         // Clock 2 hands (showing 2:45)
-        index = createClockHands(geometries, index, clockFace2Center, handLength, handWidth, 2, 45);
+        index = createClockHandsRotated(geometries, index, clockFace2Center, handLength, handWidth, 2, 45);
 
         return java.util.Arrays.copyOf(geometries, index);
     }
 
     /**
-     * Creates a circular clock face using triangular segments.
+     * Creates a circular clock face using triangular segments (rotated to face the board).
      *
      * @param geometries array to add triangles to
      * @param startIndex starting index in the array
      * @param center     center point of the clock face
      * @param radius     radius of the clock face
-     * @param zOffset    Z offset for positioning
+     * @param faceBoard  true if facing toward the board
      * @return updated index after adding triangles
      */
-    private int createClockFace(Geometry[] geometries, int startIndex, Point center, double radius, double zOffset) {
+    private int createClockFaceRotated(Geometry[] geometries, int startIndex, Point center, double radius, boolean faceBoard) {
         int segments = 12; // 12-sided circle for smooth appearance
         int index = startIndex;
 
-        // Create circle edge points
+        // Create circle edge points (rotated 90 degrees to face the board)
         Point[] edgePoints = new Point[segments];
         for (int i = 0; i < segments; i++) {
             double angle = i * 2 * Math.PI / segments;
-            edgePoints[i] = new Point(
-                    center.getX() + radius * Math.cos(angle),
-                    center.getY(),
-                    center.getZ() + radius * Math.sin(angle)
-            );
+            if (faceBoard) {
+                // Clock face oriented in the YZ plane (facing toward board in X direction)
+                edgePoints[i] = new Point(
+                        center.getX(),
+                        center.getY() + radius * Math.cos(angle),
+                        center.getZ() + radius * Math.sin(angle)
+                );
+            } else {
+                // Original orientation (XZ plane)
+                edgePoints[i] = new Point(
+                        center.getX() + radius * Math.cos(angle),
+                        center.getY(),
+                        center.getZ() + radius * Math.sin(angle)
+                );
+            }
         }
 
         // Create triangular fan from center to edges
@@ -935,7 +952,7 @@ public class ChessBoardTest {
     }
 
     /**
-     * Creates clock hands (hour and minute hands) as small triangles.
+     * Creates clock hands (hour and minute hands) as small triangles (rotated to face the board).
      *
      * @param geometries array to add triangles to
      * @param startIndex starting index in the array
@@ -946,28 +963,28 @@ public class ChessBoardTest {
      * @param minute     minute to display (0-59)
      * @return updated index after adding triangles
      */
-    private int createClockHands(Geometry[] geometries, int startIndex, Point center, double handLength, double handWidth, int hour, int minute) {
+    private int createClockHandsRotated(Geometry[] geometries, int startIndex, Point center, double handLength, double handWidth, int hour, int minute) {
         int index = startIndex;
 
         // Calculate angles for hands
         double hourAngle = ((hour % 12) * 30 + minute * 0.5) * Math.PI / 180; // Hour hand
         double minuteAngle = (minute * 6) * Math.PI / 180; // Minute hand
 
-        // Hour hand (shorter, thicker)
+        // Hour hand (shorter, thicker) - rotated to face board
         double hourHandLength = handLength * 0.6;
         Point hourHandTip = new Point(
-                center.getX(),
-                center.getY() - 1, // Slightly in front of clock face
+                center.getX() - 1, // Slightly in front of clock face (toward board)
+                center.getY(),
                 center.getZ() + hourHandLength * Math.sin(hourAngle)
         );
         Point hourHandBase1 = new Point(
-                center.getX() - handWidth,
-                center.getY() - 1,
+                center.getX() - 1,
+                center.getY() - handWidth,
                 center.getZ() - handWidth
         );
         Point hourHandBase2 = new Point(
-                center.getX() + handWidth,
-                center.getY() - 1,
+                center.getX() - 1,
+                center.getY() + handWidth,
                 center.getZ() - handWidth
         );
 
@@ -976,20 +993,20 @@ public class ChessBoardTest {
         geometries[index++] = new Triangle(center, hourHandBase2, hourHandTip)
                 .setEmission(clockHandColor).setMaterial(clockHandMaterial);
 
-        // Minute hand (longer, thinner)
+        // Minute hand (longer, thinner) - rotated to face board
         Point minuteHandTip = new Point(
-                center.getX(),
-                center.getY() - 1, // Slightly in front of clock face
+                center.getX() - 1, // Slightly in front of clock face (toward board)
+                center.getY(),
                 center.getZ() + handLength * Math.sin(minuteAngle)
         );
         Point minuteHandBase1 = new Point(
-                center.getX() - handWidth * 0.5,
-                center.getY() - 1,
+                center.getX() - 1,
+                center.getY() - handWidth * 0.5,
                 center.getZ() - handWidth * 0.5
         );
         Point minuteHandBase2 = new Point(
-                center.getX() + handWidth * 0.5,
-                center.getY() - 1,
+                center.getX() - 1,
+                center.getY() + handWidth * 0.5,
                 center.getZ() - handWidth * 0.5
         );
 
