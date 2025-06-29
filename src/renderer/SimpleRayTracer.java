@@ -156,7 +156,8 @@ public class SimpleRayTracer extends RayTracerBase {
 
             color = color.add(
                     lightSource
-                            .getIntensity(intersection.point).scale(ktr)
+                            .getIntensity(intersection.point)
+                            .scale(ktr)
                             .scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
         }
         return color;
